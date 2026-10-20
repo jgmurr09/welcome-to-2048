@@ -1,0 +1,2595 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#131034">
+  <meta name="description" content="Step into 2048. Explore the people, systems, and everyday connections of a possible future.">
+  <title>Explore 2048</title>
+  <style data-source="styles.css">
+:root{--navy:#242a38;--blue:#1282ca;--blue-dark:#0b6da9;--orange:#f15a22;--gray:#595a5a;--cool:#7bc7e5;--light-blue:#d5e3e9;--purple:#7d6b9d;--pink:#e5018c;--yellow:#fed727;--paper:#f7f8f9;--ink:#242a38;--line:#dde2e7;--person:#1282ca;--system:#f15a22;--shared:#e5018c;--tech:#7bc7e5;--sans:Inter,'Helvetica Neue',Arial,sans-serif;--label-boost:1}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{background:var(--navy);color:var(--ink);font:14px var(--sans);-webkit-font-smoothing:antialiased}button,input{font:inherit}button,input,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;border:0;color:inherit}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}button:disabled{opacity:.45;cursor:default}a{color:var(--blue-dark)}[hidden]{display:none!important}button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}.app-shell{height:100%;width:100%}.workspace{height:100dvh;width:100%;display:grid;grid-template-columns:minmax(0,1fr) 0;overflow:hidden}.workspace.details-open{grid-template-columns:minmax(0,1fr) 380px}.map-section{position:relative;min-width:0;overflow:hidden;background:var(--navy);container-type:inline-size}.toolbar{position:absolute;inset:16px 24px auto;z-index:25;display:flex;align-items:center;gap:14px;pointer-events:none}.toolbar>*{pointer-events:auto}.search-wrap{position:relative;flex:0 1 330px;min-width:220px}.search-wrap>svg{position:absolute;top:14px;left:15px;width:17px;height:17px;fill:none;stroke:#b7c7d4;stroke-width:1.6;pointer-events:none}.search-wrap input{width:100%;height:44px;border:1px solid #657082;background:#2d3545;border-radius:5px;color:#fff;padding:12px 34px 12px 43px;font-size:12px;outline-offset:3px}.search-wrap input::placeholder{color:#c1cbd6}.search-results{position:absolute;top:52px;left:0;right:0;min-width:280px;max-height:min(440px,70dvh);overflow:auto;background:#f7f8f9;border:1px solid #b9c8d5;box-shadow:0 16px 40px #0005;border-radius:6px;padding:5px;z-index:50}.search-result{display:block;width:100%;text-align:left;padding:12px;border-radius:3px;background:transparent}.search-result:hover,.search-result:focus{background:#e7f1f7}.search-result strong{display:block;font-size:13px;font-weight:600;color:var(--navy)}.search-result small{display:block;font-size:11px;color:var(--gray);margin-top:5px}.no-results{padding:12px;font-size:12px;line-height:1.7;color:var(--gray)}.filters{display:flex;align-items:center;gap:3px;overflow:auto;scrollbar-width:none;margin-left:auto;min-width:0}.filters button{display:flex;align-items:center;gap:7px;min-height:44px;white-space:nowrap;padding:10px 12px;font-size:11px;font-weight:500;color:#d0d9e1;background:#242a38;border:1px solid transparent;border-radius:4px}.filters button:hover{background:#303b4c}.filters button.active{background:var(--blue-dark);border-color:#1282ca;color:white}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;flex-shrink:0}.dot.person{background:var(--blue)}.dot.system{background:var(--orange)}.dot.shared{background:var(--pink)}.dot.tech{background:var(--cool)}.filters .active .dot{background:#fff}.help-button{height:40px;min-width:40px;flex-shrink:0;border-radius:50%;background:#30394a;border:1px solid #657082;font-weight:600;font-size:17px;color:#e8eaea}.help-button:hover{background:var(--blue-dark)}.map-heading{position:absolute;inset:82px 24px auto;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;z-index:12;pointer-events:none}.map-heading>*{pointer-events:auto}.breadcrumb{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#d5e3e9;font-size:11px;font-weight:600;line-height:1.7;max-width:620px}.breadcrumb button{padding:0;min-height:22px;background:none;color:#d5e3e9;font-size:11px;font-weight:700;letter-spacing:.4px}.breadcrumb button:hover{color:#7bc7e5}.crumb-sep{color:#8792a2}.crumb-current{color:#f5f7fa;font-size:11px;font-weight:500}.map-heading p{font-size:11px;color:#b5c0cd;line-height:1.6;margin:5px 0 0}.view-switch{display:flex;border:1px solid #586578;border-radius:4px;padding:3px;background:#2c3442;flex-shrink:0}.view-switch button{display:flex;align-items:center;gap:6px;min-height:31px;padding:6px 9px;background:none;border-radius:2px;color:#bdc8d4;font-size:11px}.view-switch button.active{background:#e8eaea;color:var(--navy)}.view-switch button svg{width:16px;height:16px}.graph-viewport{position:absolute;inset:143px 0 76px;overflow:hidden;touch-action:none;cursor:grab;background-image:radial-gradient(#6e7a8a40 .8px,transparent .8px);background-size:24px 24px;outline-offset:-4px}.graph-viewport:active{cursor:grabbing}.graph-viewport:focus-visible{outline:2px solid var(--cool)}.graph-world{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}.edges{position:absolute;top:0;left:0;overflow:visible;pointer-events:none}.edge-path{fill:none;stroke-width:1.4;opacity:.35;pointer-events:stroke;cursor:pointer;transition:opacity .15s}.edge-path.expanded{stroke-dasharray:4 6;opacity:.29}.edge-path.edge-hot,.edge-path:hover{opacity:1;stroke-width:2.5}.edge-label{font:500 calc(12px * var(--label-boost)) var(--sans);fill:#e5edf3;paint-order:stroke;stroke:#242a38;stroke-width:6px;stroke-linejoin:round;pointer-events:none;opacity:0}.edge-label.show{opacity:1}.graph-node{position:absolute;transform:translate(-50%,-50%);width:150px;min-height:64px;display:flex;align-items:center;justify-content:center;flex-direction:column;background:none;color:#e8eaea;padding:5px 0;isolation:isolate;transition:opacity .15s}.graph-node:hover{z-index:3;filter:brightness(1.12)}.graph-node:focus-visible{outline:2px solid var(--cool);outline-offset:6px;border-radius:6px;z-index:4}.graph-node.dimmed{opacity:.25}.node-name{font-size:calc(15px * var(--label-boost));font-weight:500;line-height:1.3;letter-spacing:0}.node-kind{font-size:calc(9px * var(--label-boost));line-height:1.4;letter-spacing:.5px;margin-top:6px;color:#b5c0cd}.graph-node.person{width:160px;min-height:145px}.person-orb{position:relative;width:86px;height:86px;display:flex;align-items:center;justify-content:center;margin-bottom:11px;background:#303b4c;border:2px solid var(--node-color);border-radius:50%;box-shadow:0 0 0 5px #242a38}.portrait-fallback{font:500 35px var(--sans);color:#e8eaea}.portrait-image{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;object-fit:cover;opacity:0}.has-photo .portrait-image{opacity:1}.has-photo .portrait-fallback{visibility:hidden}.graph-node.person .node-name{font-size:calc(19px * var(--label-boost));font-weight:600;color:#fff}.graph-node.person .node-kind{font-size:calc(10px * var(--label-boost));letter-spacing:0;color:#c2cbd6;margin-top:5px}.graph-node.person.selected .person-orb{box-shadow:0 0 0 5px #242a38,0 0 0 7px #e8eaea}.note-shape{width:150px;min-height:72px;border:1px solid color-mix(in srgb,var(--node-color) 75%,transparent);background:#2a3241;border-radius:6px;padding:13px 11px;display:flex;flex-direction:column;align-items:center;justify-content:center}.note-shape .node-name{font-size:calc(14px * var(--label-boost));color:#e8eaea}.graph-node.system .note-shape{border-left:3px solid var(--orange);border-radius:4px}.graph-node.shared .note-shape{border-top:3px solid var(--pink)}.graph-node.tech{width:130px}.graph-node.tech .note-shape{width:128px;min-height:63px;border-style:dashed;border-radius:3px}.graph-node.tech .node-name{font-size:calc(12px * var(--label-boost))}.graph-node.tech .node-kind{font-size:calc(8px * var(--label-boost))}.graph-node.facet{width:180px}.graph-node.facet .note-shape{width:180px;min-height:82px;text-align:left;align-items:flex-start;padding:15px;border-left:3px solid var(--blue)}.graph-node.facet .node-name{font-size:calc(15px * var(--label-boost));font-weight:600}.graph-node.facet .node-kind{font-size:calc(9px * var(--label-boost));letter-spacing:0}.graph-node.selected:not(.person) .note-shape{outline:2px solid #e8eaea;outline-offset:3px}.scene-column{position:absolute;top:10px;transform:translateX(-50%);white-space:nowrap;font-size:calc(9px * var(--label-boost));font-weight:600;letter-spacing:1px;color:#a0adbd}.map-bottom{position:absolute;left:24px;right:24px;bottom:20px;display:flex;align-items:center;gap:18px;z-index:12;pointer-events:none}.map-bottom>*{pointer-events:auto}.zoom-controls{display:flex;align-items:center;height:40px;border:1px solid #617084;border-radius:4px;background:#2d3545;color:#f5f7f9}.zoom-controls button{height:38px;width:38px;font-size:21px;background:none;color:#e8eaea}.zoom-controls button:hover{background:#3c4a60}.zoom-controls svg{width:17px;height:17px}.zoom-controls #zoomLabel{font-size:10px;width:38px;text-align:center}.control-sep{height:18px;width:1px;background:#617084}.map-hint{font-size:11px;color:#b5c0cd;line-height:1.6}.open-details{margin-left:auto;padding:12px 15px;border-radius:4px;background:var(--blue-dark);color:#fff;font-size:12px;min-height:40px}.open-details:hover{background:#1282ca}.node-list{position:absolute;inset:146px 24px 80px;overflow:auto;scrollbar-color:#6b7d93 transparent;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));align-content:start;gap:12px;padding:4px}.list-node{padding:18px;text-align:left;background:#2c3443;border:1px solid #54647a;border-radius:5px;color:#d5e3e9}.list-node:hover,.list-node.selected{border-color:#7bc7e5;background:#334055}.list-node small{display:flex;align-items:center;gap:7px;font-size:10px;color:#b9c8d5}.list-node strong{display:block;font-weight:600;font-size:17px;line-height:1.4;color:#fff;margin:13px 0 8px}.list-node p{font-size:12px;line-height:1.7;color:#c3cdd9;margin:0}.list-arrow{margin-left:auto}.list-portrait{position:relative;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border:2px solid var(--node-color);border-radius:50%;margin-top:14px}.list-portrait .portrait-fallback{font-size:22px}.inspector{visibility:hidden;min-width:0;overflow:auto;background:var(--paper);border-left:0 solid #c9d1da;scrollbar-width:thin;scrollbar-color:#b9c9d7 transparent;overscroll-behavior:contain}.details-open .inspector{visibility:visible;border-left-width:1px}.panel-inner{padding:18px 25px 30px}.panel-topline{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0 13px;margin:0 0 22px;background:var(--paper);border-bottom:1px solid var(--line)}.panel-topline>span{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--gray)}.panel-actions{display:flex;gap:5px}.icon-button{width:34px;height:34px;padding:0;border-radius:3px;background:none;color:var(--navy);font-size:22px}.icon-button:hover{background:#e3edf4}.panel-kicker{font-size:10px;line-height:1.6;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;margin:0 0 10px}.inspector h2{font:700 30px/1.16 var(--sans);letter-spacing:-.7px;margin:0 0 13px;color:var(--navy)}.panel-description,.panel-prose{font-size:13px;line-height:1.85;color:#4d535b;margin:0 0 19px}.profile-header{display:flex;gap:16px;align-items:center;margin-bottom:18px}.profile-header h2{margin:0 0 5px}.profile-header .panel-kicker{margin:0;letter-spacing:0;text-transform:none;font-size:11px;font-weight:400}.profile-orb{position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;width:72px;height:72px;border-radius:50%;border:2px solid var(--node-color);background:#303b4c;overflow:hidden}.profile-orb .portrait-fallback{font-size:28px}.profile-role{font-weight:600;font-size:13px;line-height:1.7;margin:0 0 13px;color:var(--navy)}.profile-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}.profile-meta span{padding:7px 8px;background:#e8eef3;border-radius:3px;font-size:10px;color:#495663}.profile-summary{font-size:13px;line-height:1.8;margin:0;color:#4d535b}.panel-tabs{display:flex;gap:24px;border-bottom:1px solid #cdd7e0;margin:23px 0 21px}.panel-tabs button{padding:0 0 12px;background:none;border-bottom:3px solid transparent;margin-bottom:-1px;font-size:12px;color:#63717f;min-height:33px}.panel-tabs button.active{border-color:var(--blue);font-weight:600;color:var(--navy)}.section-label{font-size:10px;font-weight:700;letter-spacing:.7px;color:#526373;text-transform:uppercase;margin:24px 0 13px}.facet-cards{display:flex;flex-direction:column;gap:8px}.facet-card{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #d7e0e8;border-left:3px solid var(--blue);border-radius:3px;padding:14px 12px;text-align:left}.facet-card:hover{background:#eaf3f9;border-color:#7db6d7}.facet-number{color:#748291;font-size:10px}.facet-card strong{display:block;font-size:12px;line-height:1.5;font-weight:600}.facet-card small{display:block;margin-top:4px;font-size:11px;line-height:1.6;color:#65717d}.card-arrow{margin-left:auto;font-size:17px;color:var(--blue-dark)}.story-source{border-top:1px solid var(--line);margin-top:26px;padding-top:14px;font-size:10px;color:#65717d}.story-source summary{cursor:pointer;padding:5px 0;line-height:1.7}.story-source p{font-size:11px;line-height:1.8;color:#65717d}.detail-tagline{font-size:14px;line-height:1.65;font-weight:600;color:var(--navy);margin:0 0 15px}.moment{border-left:3px solid var(--blue);padding:17px 17px 18px;background:#eaf1f6;margin:22px 0}.moment .section-label{margin:0 0 10px;color:#49677c}.moment p{font-size:13px;line-height:1.85;color:#3f5260;margin:0}.tension{padding:0 0 22px;border-bottom:1px solid var(--line);margin-bottom:22px}.tension .section-label{color:#a34420}.tension p{font-size:13px;line-height:1.8;color:#4d535b;margin:0}.connection-card{display:block;width:100%;padding:14px 0;background:none;border-bottom:1px solid var(--line);text-align:left}.connection-top{display:flex;align-items:center;gap:8px}.connection-card strong{font-size:12px;line-height:1.5;font-weight:600}.connection-card:hover strong{color:var(--blue-dark)}.connection-arrow{margin-left:auto;color:var(--blue-dark);font-size:17px}.connection-card small{display:block;margin:5px 0 0 15px;font-size:10px;line-height:1.75;color:#63717e}.connection-key{font-size:10px;line-height:1.9;color:#63717e;margin:0 0 16px}.line-sample{display:inline-block;width:20px;border-top:1px solid var(--blue);vertical-align:middle;margin:0 5px}.line-sample.dashed{border-top-style:dashed}.connection-rel{padding:15px;background:#eaf1f6;border-left:3px solid var(--blue);margin:20px 0}.connection-rel p{font-size:13px;line-height:1.7;margin:6px 0;color:#3f5260}.connection-rel small{font-size:10px;color:#63717e}.people-roster{display:flex;flex-direction:column;margin-top:18px}.roster-button{display:flex;align-items:center;gap:13px;text-align:left;background:none;width:100%;padding:16px 0;border-bottom:1px solid var(--line)}.roster-avatar{position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;width:43px;height:43px;border:2px solid var(--node-color);border-radius:50%;background:#303b4c;overflow:hidden}.roster-avatar .portrait-fallback{font-size:20px}.roster-name{display:block;font-size:13px;font-weight:600}.roster-role{display:block;font-size:11px;line-height:1.6;color:#63717e;margin-top:3px}.roster-arrow{margin-left:auto;font-size:17px;color:var(--blue-dark)}.thread-bar{position:absolute;inset:auto 24px 81px;z-index:16;display:flex;align-items:center;gap:16px;background:#eaf1f6;border:1px solid #b8cddd;border-left:4px solid var(--blue);border-radius:4px;padding:14px 16px;box-shadow:0 4px 18px #0003}.thread-info{flex:1;min-width:0}.thread-info small{display:block;font-size:9px;letter-spacing:.7px;color:#63717e;margin-bottom:6px}.thread-info strong{display:block;font-size:12px;font-weight:600;line-height:1.6;color:var(--navy)}.thread-next{background:var(--blue-dark);color:#fff;border-radius:3px;font-size:11px;padding:12px 15px;white-space:nowrap}.thread-close{font-size:22px;color:#526373;background:none;padding:0 2px}.help-dialog{width:min(560px,calc(100% - 28px));max-height:90dvh;overflow:auto;border:1px solid #c1cdd7;border-radius:6px;padding:34px;background:var(--paper);box-shadow:0 24px 90px #0007;color:var(--navy)}.help-dialog::backdrop{background:#151c29c4;backdrop-filter:blur(3px)}.dialog-close{position:absolute;top:10px;right:12px;width:34px;height:34px;background:none;color:#526373;font-size:25px}.help-dialog h2{font-size:28px;font-weight:700;letter-spacing:-.6px;margin:10px 0 17px}.help-dialog p{font-size:13px;line-height:1.8;color:#526373}.help-dialog strong{font-weight:600;color:var(--navy)}.help-legend{display:flex;flex-wrap:wrap;gap:18px;padding:15px;background:#e8eef3;border-radius:3px;margin:21px 0}.help-legend span{display:flex;align-items:center;gap:7px;font-size:11px;color:#4d5d6a}.help-dialog .help-small{font-size:12px;line-height:1.85}.help-dialog details{font-size:12px;color:#526373;border-top:1px solid var(--line);padding-top:15px;margin:22px 0}.help-dialog summary{cursor:pointer;padding:5px 0}.board-link{font-size:12px}.primary-button{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;background:var(--blue-dark);color:#fff;padding:15px;border-radius:3px;font-size:12px;font-weight:500}.text-button{display:block;width:100%;padding:13px;background:none;font-size:12px;color:var(--blue-dark);margin-top:6px}.sr-only{position:absolute;width:1px;height:1px;left:-10000px;top:auto;overflow:hidden}.skip{position:absolute;top:-90px;left:20px;z-index:100;background:#e8eaea;padding:12px;color:var(--navy)}.skip:focus{top:12px}
+@container (max-width:900px){.toolbar{flex-wrap:wrap;gap:10px;left:20px;right:20px}.search-wrap{flex:1;min-width:0}.help-button{order:2}.filters{order:3;flex-basis:100%;margin-left:0;gap:4px}.filters button{min-height:38px;padding:8px 12px}.map-heading{top:128px;left:20px;right:20px}.graph-viewport{top:191px}.node-list{top:194px}.map-hint{font-size:10px}}
+@media(min-width:1700px){.workspace.details-open{grid-template-columns:minmax(0,1fr) 410px}.panel-inner{padding:20px 30px 34px}}
+@media(max-width:1100px) and (min-width:761px){.workspace.details-open{grid-template-columns:minmax(0,1fr) 350px}.panel-inner{padding:17px 21px 28px}.map-hint{display:none}}
+@media(max-width:760px){.workspace,.workspace.details-open{display:block;height:100dvh}.map-section{height:100%;width:100%}.toolbar{inset:14px 14px auto;gap:9px;flex-wrap:wrap}.search-wrap{flex:1;min-width:0}.search-wrap input{font-size:12px;height:44px}.help-button{order:2;width:40px;height:40px}.filters{order:3;flex-basis:100%;gap:3px;margin-left:0}.filters button{font-size:10px;min-height:40px;padding:9px 11px;gap:6px}.map-heading{top:126px;left:16px;right:16px;gap:10px}.map-heading p{font-size:10px;max-width:250px;line-height:1.6}.breadcrumb,.breadcrumb button,.crumb-current{font-size:10px}.breadcrumb{gap:7px;max-width:260px}.view-switch button span{display:none}.view-switch button{padding:6px 9px;min-height:32px}.graph-viewport{inset:191px 0 75px}.map-bottom{left:14px;right:14px;bottom:max(16px,env(safe-area-inset-bottom));gap:10px}.map-hint{display:none}.zoom-controls{height:42px}.zoom-controls button{height:40px;width:34px}.zoom-controls #zoomLabel{width:33px}.open-details{font-size:11px;padding:12px;min-height:42px}.node-list{inset:194px 12px 78px;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.list-node{padding:13px}.list-node strong{font-size:15px}.list-node p{font-size:11px}.list-node small{font-size:9px}.inspector{position:fixed;inset:auto 0 0;max-height:72dvh;width:100%;border:1px solid #c3cdd6;border-bottom:0;border-radius:12px 12px 0 0;z-index:60;box-shadow:0 -12px 50px #10162470;transform:translateY(110%);transition:transform .2s ease;visibility:hidden;padding-bottom:env(safe-area-inset-bottom)}.workspace.details-open .inspector{visibility:visible;transform:translateY(0)}.panel-inner{padding:13px 22px 30px}.panel-topline{top:0;padding:9px 0 12px;margin-bottom:20px}.panel-topline:before{content:'';position:absolute;top:0;left:calc(50% - 17px);width:34px;height:3px;background:#bbc7d3;border-radius:5px}.icon-button{width:37px;height:37px;font-size:23px}.inspector h2{font-size:29px}.profile-header{gap:15px}.profile-orb{width:67px;height:67px}.panel-tabs button{font-size:12px;min-height:40px}.connection-card{padding:16px 0}.facet-card{padding:15px 12px}.thread-bar{inset:auto 12px 79px;padding:12px;gap:9px}.thread-info small{font-size:8px}.thread-info strong{font-size:11px}.thread-next{padding:12px 10px;font-size:10px}.help-dialog{padding:30px 24px}.help-dialog h2{font-size:26px}.help-legend{gap:15px}.graph-node.person .node-name{font-size:calc(20px * var(--label-boost))}}
+@media(max-width:360px){.filters button{padding:9px 9px;gap:5px}.filters .dot{width:6px;height:6px}.breadcrumb{max-width:205px;gap:5px}.map-heading p{max-width:205px;font-size:9px}.zoom-controls button{width:31px}.zoom-controls #zoomLabel{width:31px}.open-details{font-size:10px;padding:11px 10px}.node-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-height:580px) and (min-width:761px){.toolbar{top:10px}.map-heading{top:70px}.graph-viewport{top:125px;bottom:60px}.map-bottom{bottom:10px}.node-list{top:128px;bottom:65px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+.connection-avatar{position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;width:27px;height:27px;border:1px solid var(--node-color);border-radius:50%;background:#303b4c;overflow:hidden}.connection-avatar .portrait-fallback{font-size:12px}.connection-card:has(.connection-avatar) small{margin-left:35px}
+/* Plain content placeholders. */
+.panel-topline{justify-content:flex-end;margin-bottom:18px;padding-bottom:8px;border-bottom:0}.profile-header{margin-bottom:25px}.profile-header h2{margin:0}.content-section{padding:16px 0;border-bottom:1px solid #e2e6ea}.content-section:first-child{padding-top:0}.content-section h3,.simple-connections h3{font-size:13px;font-weight:600;line-height:1.6;margin:0 0 8px;text-transform:none;letter-spacing:0}.section-link{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:0;text-align:left;font-size:13px;font-weight:600;line-height:1.6;background:none;color:var(--navy)}.section-link>span:last-child{font-size:13px;font-weight:400;color:#8797a6}.section-link:hover{color:var(--blue-dark)}.placeholder-copy{font-size:13px;line-height:1.8;margin:0 0 14px;color:#4d535b}.placeholder-copy[data-placeholder=true]{color:#929ca7}.content-section .placeholder-copy{margin:0}.simple-connections{margin-top:26px}.plain-link{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;background:none;border-bottom:1px solid #e2e6ea;padding:11px 0;text-align:left;font-size:12px;line-height:1.65;color:var(--navy)}.plain-link>span:last-child{color:#8797a6}.plain-link:hover{color:var(--blue-dark)}.relationship-sep{font-weight:400;color:#929ca7}.list-node .placeholder-copy{margin:0;font-size:12px;line-height:1.7;color:#aeb9c6}
+
+</style>
+  <style data-source="intro.css">
+/* The introduction is self-contained; map colors and content stay in styles.css. */
+.future-intro {
+  --future-navy: #131034;
+  --future-cyan: #00b5e7;
+  --future-pink: #ed008c;
+  --future-white: #e7eef5;
+  --future-mono: 'Courier New', Courier, monospace;
+  --journey-progress: 0;
+  --grid-period: 1700ms;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  isolation: isolate;
+  background: #030412;
+  color: var(--future-white);
+  font-family: var(--future-mono);
+}
+.future-intro button:focus-visible { outline: 3px solid #fff; outline-offset: 6px; }
+.intro-idle, .time-stage, .time-environment { position: absolute; inset: 0; }
+.intro-idle { opacity: 1; transition: opacity 280ms ease; }
+.idle-video, .idle-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.idle-video { z-index: 1; pointer-events: none; user-select: none; }
+.idle-video::-webkit-media-controls { display: none !important; }
+.idle-video::-webkit-media-controls-start-playback-button { display: none !important; }
+.idle-resume { position: absolute; z-index: 4; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; width: 70px; height: 70px; padding: 0; border: 1px solid var(--future-cyan); border-radius: 50%; background: #080c25e8; color: #c5f1ff; box-shadow: 0 0 30px #0007; }
+.idle-resume:hover { background: #003a53; }
+.idle-resume svg { width: 28px; height: 28px; fill: currentColor; stroke: none; }
+.idle-vignette {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(180deg, #030413aa, transparent 19%, transparent 69%, #030413e8 100%);
+}
+.intro-masthead {
+  position: absolute; z-index: 10;
+  top: max(32px, env(safe-area-inset-top)); left: max(38px, env(safe-area-inset-left)); right: max(38px, env(safe-area-inset-right));
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+.intro-brand { display: flex; align-items: center; gap: 14px; color: #dce8f3; }
+.intro-brand > span:first-child { font-size: 25px; font-weight: 700; letter-spacing: -1px; }
+.intro-brand > span:last-child { font-size: 10px; line-height: 1.5; letter-spacing: 1.7px; }
+.intro-brand-rule { height: 28px; width: 1px; background: #536078; }
+.idle-invitation { position: absolute; z-index: 3; bottom: 12%; left: 16px; right: 16px; text-align: center; }
+.idle-line { margin: 0 0 19px; color: #c8d6e5; font-size: 13px; letter-spacing: .4px; }
+.enter-future {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 40px;
+  min-height: 57px; padding: 16px 26px; border: 1px solid var(--future-cyan); border-radius: 1px;
+  background: #00b5e7; color: #060a24; font: 700 13px var(--future-mono); letter-spacing: 1.4px;
+  box-shadow: 5px 5px 0 #ed008c80; transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+.enter-future:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 #ed008c; background: #45d4fa; }
+.enter-future:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #ed008c; }
+.enter-future svg { width: 31px; height: 20px; stroke: currentColor; stroke-width: 1.7; fill: none; }
+.time-stage { background: radial-gradient(ellipse at 50% 53%, #171146, #060713 72%); opacity: 0; transition: opacity 280ms ease; }
+.future-intro[data-phase='departing'] .intro-idle,
+.future-intro[data-phase='travelling'] .intro-idle,
+.future-intro[data-phase='arrived'] .intro-idle,
+.future-intro[data-phase='exiting'] .intro-idle { opacity: 0; pointer-events: none; }
+.future-intro:not([data-phase='idle']) .time-stage { opacity: 1; }
+.time-environment { overflow: hidden; pointer-events: none; }
+.time-aura {
+  position: absolute; inset: 0; opacity: .45;
+  background: radial-gradient(ellipse at center, #cb007819, transparent 55%);
+  transition: opacity 500ms ease;
+}
+.time-grid {
+  position: absolute; width: 180%; height: 74%; left: -40%;
+  background-image: linear-gradient(#c5007950 1px, transparent 1px), linear-gradient(90deg, #c5007950 1px, transparent 1px);
+  background-size: 76px 76px;
+  opacity: .45;
+  mask-image: linear-gradient(transparent, #000 70%);
+}
+.time-grid-bottom { top: 54%; transform-origin: top center; transform: perspective(450px) rotateX(57deg); }
+.time-grid-top { bottom: 54%; transform-origin: bottom center; transform: perspective(450px) rotateX(-57deg); mask-image: linear-gradient(#000, transparent); }
+.time-horizon { position: absolute; left: 4%; right: 4%; top: 51%; height: 1px; background: linear-gradient(90deg, transparent, #ed008c80, transparent); opacity: .5; }
+.time-streaks { position: absolute; inset: 0; opacity: 0; transition: opacity 500ms ease; }
+.time-streak {
+  position: absolute; left: 50%; top: 50%; width: 43vmax; height: 1px; transform-origin: left center;
+  transform: rotate(var(--ray-angle)) translateX(20vmin);
+  background: linear-gradient(90deg, transparent 5%, #00b5e700 36%, #00b5e760 80%, transparent);
+}
+.future-intro[data-phase='travelling'] .time-streaks { opacity: calc(.18 + var(--journey-progress) * .42); animation: tunnel-breathe 1500ms ease-in-out infinite alternate; }
+.future-intro[data-phase='travelling'] .time-grid { animation: moving-grid var(--grid-period) linear infinite; opacity: .7; }
+.future-intro[data-phase='travelling'] .time-aura { opacity: 1; }
+@keyframes moving-grid { to { background-position: 0 76px; } }
+@keyframes tunnel-breathe { from { transform: scale(.96); } to { transform: scale(1.08); } }
+.clock-scene {
+  position: absolute; z-index: 2; top: 50%; left: 50%; width: min(1160px, 100%);
+  padding: 0 14px; text-align: center; transform: translate(-50%, -50%);
+  transition: transform 500ms cubic-bezier(.2, .6, .2, 1), opacity 460ms ease;
+}
+.clock-machine {
+  --tile-w: clamp(22px, 5.65vw, 86px);
+  --tile-h: calc(var(--tile-w) * 1.53);
+  position: relative; display: inline-block; padding: clamp(18px, 2.8vw, 34px);
+  background: linear-gradient(168deg, #242439, #10101e 28%, #151521 80%, #212133);
+  border: 1px solid #444457; border-radius: 7px;
+  box-shadow: 0 1px 0 #9aa4c02b inset, 0 -3px 0 #0008 inset, 0 14px 0 -6px #080911, 0 18px 0 -7px #414153, 0 32px 50px #0009, 0 0 90px #b7006e10;
+}
+.clock-face { display: flex; align-items: center; justify-content: center; gap: clamp(13px, 2.2vw, 29px); }
+.clock-group { position: relative; display: flex; gap: clamp(2px, .4vw, 5px); }
+.clock-tile {
+  position: relative; width: var(--tile-w); height: var(--tile-h); perspective: 550px;
+  color: #e8e8e7; background: linear-gradient(#30303f 0, #21212e 50%, #242432 50%, #2b2b39 100%); border-radius: 4px;
+  box-shadow: 0 0 0 1px #000, 0 1px 1px #9698b533, 0 5px 9px #0008;
+}
+.clock-group-year .clock-tile { color: #20b8e7; }
+.clock-tile::after { content: ''; position: absolute; z-index: 4; top: calc(50% - 1px); left: 0; right: 0; height: 2px; background: #05060ce0; box-shadow: 0 1px 1px #0009; pointer-events: none; }
+.clock-tile::before { content: ''; position: absolute; z-index: 5; top: calc(50% - 3px); left: -1px; width: 3px; height: 6px; background: #717181; border-radius: 1px; box-shadow: calc(var(--tile-w) - 1px) 0 0 #717181; }
+.flap-half { display: none; position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flap-upper { top: 0; border-radius: 4px 4px 0 0; background: linear-gradient(#30303f, #21212e); }
+.flap-lower { bottom: 0; border-radius: 0 0 4px 4px; background: linear-gradient(#242432, #2b2b39); }
+.flap-letter { position: absolute; left: 0; right: 0; display: block; height: var(--tile-h); font-family: var(--future-mono); font-size: calc(var(--tile-h) * .77); font-weight: 700; line-height: var(--tile-h); text-align: center; letter-spacing: -2px; text-shadow: 0 2px 2px #0006; }
+.flap-upper .flap-letter { top: 0; }
+.flap-lower .flap-letter { bottom: 0; }
+.flap-out { z-index: 3; transform-origin: center bottom; }
+.flap-in { z-index: 3; transform-origin: center top; transform: rotateX(90deg); }
+.clock-screw { position: absolute; width: 4px; height: 4px; background: #555465; border-radius: 50%; box-shadow: 0 0 0 1px #0006; }
+.clock-screw::after { content: ''; position: absolute; left: 1px; right: 1px; top: 2px; height: 1px; background: #1a1926; transform: rotate(-40deg); }
+.screw-tl { top: 9px; left: 9px; } .screw-tr { top: 9px; right: 9px; } .screw-bl { bottom: 9px; left: 9px; } .screw-br { bottom: 9px; right: 9px; }
+.future-intro[data-phase='arrived'] .clock-machine { box-shadow: 0 1px 0 #9aa4c02b inset, 0 -3px 0 #0008 inset, 0 14px 0 -6px #080911, 0 18px 0 -7px #414153, 0 32px 50px #0009, 0 0 90px #00b5e72a; }
+.arrival-portal { position: absolute; z-index: 4; inset: -50%; pointer-events: none; background: radial-gradient(ellipse at center, #c3f1ff80 0, #00b5e733 14%, #4035a144 27%, #14122d00 48%); opacity: 0; transform: scale(.3); }
+.future-intro[data-phase='exiting'] .arrival-portal { animation: spring-forward 500ms cubic-bezier(.3, .1, .6, 1) both; }
+.future-intro[data-phase='exiting'] .clock-scene { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+.future-intro[data-phase='exiting'] { opacity: 0; transition: opacity 500ms ease 120ms; pointer-events: none; }
+@keyframes spring-forward { 0% { opacity: 0; transform: scale(.3); } 35% { opacity: .7; } 100% { opacity: 0; transform: scale(2.3); } }
+.intro-replay-button { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border: 1px solid #657082; border-radius: 50%; background: #30394a; color: #d5e3e9; }
+.intro-replay-button:hover { background: #0b6da9; }
+.intro-replay-button svg { width: 19px; height: 19px; }
+@media (max-width: 760px) {
+  .intro-masthead { top: max(18px, env(safe-area-inset-top)); left: 20px; right: 20px; gap: 10px; }
+  .intro-brand { gap: 9px; } .intro-brand > span:first-child { font-size: 22px; }
+  .intro-brand > span:last-child { font-size: 8px; letter-spacing: 1px; }
+  .intro-replay-button { order: 2; }
+  .clock-screw { width: 3px; height: 3px; }
+  .flap-letter { letter-spacing: -1px; }
+}
+@media (max-aspect-ratio: 1/1) {
+  .idle-video, .idle-poster { width: 120%; max-width: none; left: -10%; height: 70%; }
+  .idle-invitation { bottom: 20%; }
+  .idle-line { font-size: 12px; }
+  .idle-vignette { background: linear-gradient(180deg, #030413aa, transparent 27%, transparent 65%, #030413e8 100%); }
+  .clock-scene { transform: translate(-50%, -50%); }
+}
+@media (max-width: 380px) {
+  .intro-masthead { left: 16px; right: 16px; }
+  .intro-brand > span:last-child { font-size: 7px; }
+  .clock-machine { --tile-w: clamp(20px, 5.65vw, 22px); padding-left: 10px; padding-right: 10px; }
+  .clock-face { gap: 10px; }
+  .enter-future { min-height: 56px; gap: 18px; padding: 15px 16px; font-size: 11px; letter-spacing: 1.1px; }
+  .idle-line { font-size: 11px; }
+}
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) {
+  .intro-masthead { top: 10px; left: 24px; right: 24px; }
+  .idle-invitation { bottom: 9%; }
+  .idle-line { display: none; }
+  .enter-future { min-height: 44px; padding: 12px 22px; font-size: 11px; }
+  .clock-machine { --tile-w: min(5.3vw, 11vh); padding-top: 14px; padding-bottom: 14px; }
+  .clock-scene { top: 50%; left: 50%; width: 100%; max-height: calc(100dvh - 28px); padding: 20px 14px; transform: translate(-50%, -50%); overflow-y: auto; scrollbar-width: none; }
+  .future-intro[data-phase='exiting'] .clock-scene { transform: translate(-50%, -50%) scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .future-intro *, .future-intro { animation: none !important; transition: none !important; }
+  .arrival-portal { display: none; }
+}
+
+/* The calendar owns the displayed date; CSS flaps are temporary decoration. */
+.future-intro:not([data-phase='idle']) .intro-masthead { display: none; }
+.clock-current { top: 0; z-index: 0; }
+.flap-old-bottom { z-index: 1; }
+.clock-tile.is-flipping .flap-half { display: block; }
+.clock-tile.is-flipping .flap-out { animation: clock-flip-upper var(--half-ms, 160ms) cubic-bezier(.55,.05,.85,.45) both; }
+.clock-tile.is-flipping .flap-in { animation: clock-flip-lower var(--half-ms, 160ms) cubic-bezier(.15,.55,.35,1) var(--half-ms, 160ms) both; }
+@keyframes clock-flip-upper { from { transform: rotateX(0deg); } to { transform: rotateX(-90deg); } }
+@keyframes clock-flip-lower { from { transform: rotateX(90deg); } to { transform: rotateX(0deg); } }
+
+</style>
+  
+  
+  
+  
+  
+</head>
+<body class="intro-active">
+<a class="skip" href="#graphViewport">Skip to the world map</a>
+<section class="future-intro" id="futureIntro" role="dialog" aria-modal="true" aria-labelledby="introHeading" data-phase="idle">
+  <h1 class="sr-only" id="introHeading">Future World 2048. Step into a possible future.</h1>
+  <div class="intro-idle" id="introIdle">
+    <img class="idle-poster" src="assets/future-world-poster.jpg" alt="" fetchpriority="high">
+    <video class="idle-video" id="idleVideo" src="assets/future-world-idle-web.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback poster="assets/future-world-poster.jpg" aria-hidden="true" tabindex="-1"></video>
+    <div class="idle-vignette" aria-hidden="true"></div>
+    <button type="button" class="idle-resume" id="resumeBackground" aria-label="Play background animation" title="Play background animation" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><path d="m10 6 13 8-13 8Z"/></svg></button>
+    <div class="idle-invitation">
+      <p class="idle-line">What will everyday life feel like?</p>
+      <button type="button" class="enter-future" id="enterFuture"><span>TAP TO ENTER THE FUTURE</span><svg viewBox="0 0 32 20" aria-hidden="true"><path d="M1 10h28M21 2l8 8-8 8"/></svg></button>
+    </div>
+  </div>
+
+  <div class="time-stage" id="timeStage" hidden>
+    <div class="time-environment" aria-hidden="true">
+      <div class="time-aura"></div>
+      <div class="time-grid time-grid-top"></div>
+      <div class="time-grid time-grid-bottom"></div>
+      <div class="time-streaks" id="timeStreaks"></div>
+      <div class="time-horizon"></div>
+    </div>
+    <div class="clock-scene">
+      <h2 class="sr-only" id="clockHeading" tabindex="-1">Travelling to 2048.</h2>
+      <div class="clock-machine" aria-hidden="true">
+        <span class="clock-screw screw-tl"></span><span class="clock-screw screw-tr"></span>
+        <span class="clock-screw screw-bl"></span><span class="clock-screw screw-br"></span>
+        <div class="clock-face" id="clockFace"></div>
+      </div>
+      <p class="clock-date sr-only" id="clockDate"></p>
+    </div>
+    <div class="arrival-portal" aria-hidden="true"></div>
+  </div>
+
+  <header class="intro-masthead">
+    <div class="intro-brand"><span>TANG</span><span class="intro-brand-rule"></span><span>FUTURE WORLD<br>SPRINT</span></div>
+  </header>
+  <p class="sr-only" id="introStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+</section>
+<div class="app-shell" inert aria-hidden="true">
+  <h1 class="sr-only">Explore everyday life in 2048</h1>
+  <main class="workspace" id="workspace">
+    <section class="map-section" aria-label="Interactive world map">
+      <div class="toolbar" aria-label="World navigation">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
+          <input id="searchInput" type="search" placeholder="Find people or connections" autocomplete="off" aria-label="Search all people and connections" role="combobox" aria-expanded="false" aria-controls="searchResults" aria-autocomplete="list">
+          <div class="search-results" id="searchResults" role="listbox" aria-label="Search results" hidden></div>
+        </div>
+        <div class="filters" role="group" aria-label="Explore by kind">
+          <button class="active" data-filter="all" aria-pressed="true">All</button>
+          <button data-filter="person" aria-pressed="false"><i class="dot person"></i>People</button>
+          <button data-filter="system" aria-pressed="false"><i class="dot system"></i>Systems</button>
+          <button data-filter="shared" aria-pressed="false"><i class="dot shared"></i>Shared lives</button>
+          <button data-filter="tech" aria-pressed="false"><i class="dot tech"></i>Technology</button>
+        </div>
+        <button class="intro-replay-button" id="replayIntro" aria-label="Replay the introduction" title="Replay intro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8a9 9 0 1 1-1 8M4 3v6h6M12 7v5l3 2"/></svg></button>
+        <button class="help-button" id="helpButton" aria-label="How to explore this world" title="How to explore">?</button>
+      </div>
+      <div class="map-heading">
+        <div><div class="breadcrumb" id="breadcrumb"></div><p id="mapCaption">Select a node to explore.</p></div>
+        <div class="view-switch" role="group" aria-label="View format">
+          <button id="mapView" class="active" aria-label="Map view" aria-pressed="true"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="5" cy="6" r="2.5"/><circle cx="16" cy="5" r="2.5"/><circle cx="12" cy="16" r="2.5"/><path d="m7 6 6.5-1M6 8l4.5 6M15.5 7.5l-3 6"/></svg><span>Map</span></button>
+          <button id="listView" aria-label="List view" aria-pressed="false"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M7 5h12M7 11h12M7 17h12M2 5h1M2 11h1M2 17h1"/></svg><span>List</span></button>
+        </div>
+      </div>
+      <div id="graphViewport" class="graph-viewport" tabindex="0" aria-label="Connection graph. Choose a node to explore. Drag to pan, use plus or minus to zoom, or use list view for text navigation.">
+        <div class="graph-world" id="graphWorld"><svg id="edges" class="edges" aria-hidden="true"></svg><div id="nodes"></div></div>
+      </div>
+      <div class="node-list" id="nodeList" hidden></div>
+      <div class="map-bottom">
+        <div class="zoom-controls" id="zoomControls"><button id="zoomOut" aria-label="Zoom out">−</button><span id="zoomLabel" aria-hidden="true">100%</span><button id="zoomIn" aria-label="Zoom in">+</button><span class="control-sep"></span><button id="fitMap" aria-label="Fit graph to screen" title="Fit to screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m11-5v5h-5"/></svg></button></div>
+        <span class="map-hint" id="mapHint">Drag to move · Choose a node to explore</span>
+        <button id="openDetails" class="open-details" hidden>Open details ↗</button>
+      </div>
+    </section>
+    <aside class="inspector" id="inspector" aria-label="Selected node details" aria-hidden="true" inert><div id="panelContent"></div></aside>
+  </main>
+</div>
+<div class="sr-only" id="announcement" role="status" aria-live="polite"></div>
+<dialog id="helpDialog" class="help-dialog">
+  <button class="dialog-close" id="closeHelp" aria-label="Close help">×</button>
+  <h2>Map controls</h2>
+  <p>Choose a node to open it. Drag to move around. Scroll, pinch, or use +/− to zoom. Use the fit button to recenter.</p>
+  <p>Use List for another way to browse. With the map focused, use arrow keys to pan and 0 to fit. Tab to a node and press Enter to open it.</p>
+  <a class="board-link" href="board.png" target="_blank" rel="noopener">Original connection board ↗</a>
+  <button class="text-button" id="beginExplore">Back to the map</button>
+</dialog>
+<script data-source="intro-config.js">
+// Adjust the leap and its pauses. No build step is required.
+window.FutureIntroConfig = {
+  targetDate: '2048-01-01', // YYYY-MM-DD; the opening date in the future world.
+  durationMs: 5500,       // Accelerating date flips after today's date is shown.
+  departureHoldMs: 1000,  // Pause on today's date before the clock starts.
+  arrivalHoldMs: 900      // Pause at 2048 before automatically entering the map.
+};
+
+</script>
+<script data-source="idle-player.js">
+(function () {
+  'use strict';
+  const video = document.getElementById('idleVideo');
+  const resume = document.getElementById('resumeBackground');
+  const root = document.getElementById('futureIntro');
+  if (!video || !resume || !root) return;
+
+  let wanted = false, blocked = false, pending = null, attempt = 0;
+  let watchdog = 0, retryTimer = 0, reloads = 0;
+  let lastPosition = 0, lastProgress = performance.now();
+  const active = () => wanted && !document.hidden && !root.hidden;
+
+  // Configure before the first scripted play request. Never unmute a
+  // background video, enter fullscreen, or expose native media controls.
+  video.muted = true;
+  video.defaultMuted = true;
+  video.autoplay = true;
+  video.loop = true;
+  video.playsInline = true;
+  video.controls = false;
+  video.disablePictureInPicture = true;
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('webkit-playsinline', '');
+
+  function showResume(show) { resume.hidden = !show || !active(); }
+
+  function play(gesture = false, force = false) {
+    if (!active() || (blocked && !gesture)) return;
+    // Media-ready events often arrive together. Keep a single automatic
+    // request in flight; a real user click can supersede a blocked request.
+    if (pending && !gesture) return;
+    if (!force && !video.paused && !video.ended) return;
+    const token = ++attempt;
+    if (gesture) blocked = false;
+    const failed = error => {
+      if (token !== attempt) return;
+      pending = null;
+      if (!active()) return;
+      blocked = error?.name === 'NotAllowedError';
+      if (error?.name === 'AbortError') scheduleRetry();
+      else showResume(true);
+    };
+    try {
+      const result = video.play();
+      if (result && typeof result.then === 'function') {
+        pending = result;
+        result.then(() => {
+          if (!active()) { video.pause(); return; }
+          if (token !== attempt) return;
+          pending = null;
+          blocked = false;
+          lastProgress = performance.now();
+          showResume(false);
+        }, failed);
+      } else showResume(false);
+    } catch (error) { failed(error); }
+  }
+
+  function scheduleRetry() {
+    if (!active() || blocked || retryTimer) return;
+    retryTimer = window.setTimeout(() => {
+      retryTimer = 0;
+      play();
+    }, 180);
+  }
+
+  function reload() {
+    // Reload at most once per visit to the landing screen. Repeated loads or
+    // seeks can interrupt an otherwise healthy play request in WebKit.
+    if (!active() || reloads >= 1) { showResume(true); return; }
+    reloads++;
+    attempt++;
+    pending = null;
+    lastProgress = performance.now();
+    video.load();
+    play();
+  }
+
+  function watch() {
+    if (!wanted) return;
+    if (active()) {
+      const now = performance.now(), position = Number(video.currentTime) || 0;
+      if (Math.abs(position - lastPosition) > .02) {
+        lastPosition = position;
+        lastProgress = now;
+      }
+      if (video.ended) {
+        try { video.currentTime = 0; } catch (_) {}
+        lastProgress = now;
+        play(false, true);
+      } else if (!blocked && now - lastProgress > 8000) {
+        reload();
+      } else if (video.paused && !blocked) {
+        play();
+      }
+    }
+    watchdog = window.setTimeout(watch, 750);
+  }
+
+  function show(options = {}) {
+    const returning = !wanted;
+    wanted = true;
+    blocked = false;
+    lastPosition = Number(video.currentTime) || 0;
+    lastProgress = performance.now();
+    if (returning) reloads = 0;
+    // Do not seek an initially loading clip. Only rewind on a real return
+    // from the clock/map, after metadata exists.
+    if (options.restart && returning && video.readyState >= 1) {
+      try { video.currentTime = 0; } catch (_) {}
+    }
+    showResume(false);
+    play();
+    window.clearTimeout(watchdog);
+    watchdog = window.setTimeout(watch, 750);
+  }
+
+  function hide() {
+    wanted = false;
+    attempt++;
+    pending = null;
+    window.clearTimeout(watchdog);
+    window.clearTimeout(retryTimer);
+    watchdog = retryTimer = 0;
+    showResume(false);
+    video.pause();
+  }
+
+  function userPlay() {
+    if (!active()) return;
+    // The call stays directly inside the click handler so a browser that
+    // requires a gesture can authorize it. No timeout or await precedes it.
+    if (video.error) {
+      attempt++;
+      pending = null;
+      video.load();
+    }
+    play(true, true);
+  }
+
+  resume.addEventListener('click', event => { event.stopPropagation(); userPlay(); });
+  root.addEventListener('click', userPlay);
+  video.addEventListener('loadeddata', () => play());
+  video.addEventListener('canplay', () => play());
+  video.addEventListener('pause', scheduleRetry);
+  video.addEventListener('ended', () => {
+    if (!active()) return;
+    try { video.currentTime = 0; } catch (_) {}
+    play(false, true);
+  });
+  video.addEventListener('timeupdate', () => {
+    if (active() && Math.abs(video.currentTime - lastPosition) > .02) {
+      lastPosition = video.currentTime;
+      lastProgress = performance.now();
+    }
+  });
+  video.addEventListener('playing', () => {
+    if (!active()) { video.pause(); return; }
+    blocked = false;
+    lastProgress = performance.now();
+    showResume(false);
+  });
+  video.addEventListener('error', () => { if (active()) showResume(true); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      attempt++;
+      pending = null;
+      video.pause();
+    } else if (wanted) {
+      lastProgress = performance.now();
+      play();
+    }
+  });
+  window.addEventListener('pageshow', () => { if (wanted) play(); });
+  window.FutureIdlePlayer = {show, hide};
+  show();
+})();
+
+</script>
+<script data-source="data.js">
+/* Prototype content. Fill description fields to replace the lorem ipsum.
+   Add character photos with portrait: "portraits/<name>.jpg". */
+window.AtlasData = {
+  "nodes": [
+    {
+      "id": "sophia",
+      "type": "person",
+      "name": "Sophia",
+      "initial": "S",
+      "portrait": null,
+      "portraitPosition": "50% 35%",
+      "color": "#7bc7e5",
+      "x": 210,
+      "y": 390,
+      "description": ""
+    },
+    {
+      "id": "leo",
+      "type": "person",
+      "name": "Leo",
+      "initial": "L",
+      "portrait": null,
+      "portraitPosition": "50% 35%",
+      "color": "#fed727",
+      "x": 515,
+      "y": 245,
+      "description": ""
+    },
+    {
+      "id": "ken",
+      "type": "person",
+      "name": "Ken",
+      "initial": "K",
+      "portrait": null,
+      "portraitPosition": "50% 35%",
+      "color": "#1282ca",
+      "x": 885,
+      "y": 320,
+      "description": ""
+    },
+    {
+      "id": "veronica",
+      "type": "person",
+      "name": "Veronica",
+      "initial": "V",
+      "portrait": null,
+      "portraitPosition": "50% 35%",
+      "color": "#e5018c",
+      "x": 565,
+      "y": 600,
+      "description": ""
+    },
+    {
+      "id": "catherine",
+      "type": "person",
+      "name": "Catherine",
+      "initial": "C",
+      "portrait": null,
+      "portraitPosition": "50% 35%",
+      "color": "#7d6b9d",
+      "x": 875,
+      "y": 680,
+      "description": ""
+    },
+    {
+      "id": "wealth",
+      "type": "system",
+      "name": "Wealth gap",
+      "x": 180,
+      "y": 100,
+      "label": "Wealth gap",
+      "related": [
+        "sophia",
+        "leo",
+        "ken",
+        "sophia-home",
+        "leo-work"
+      ],
+      "description": ""
+    },
+    {
+      "id": "materials",
+      "type": "system",
+      "name": "Regional materials",
+      "x": 1035,
+      "y": 105,
+      "related": [
+        "ken",
+        "leo",
+        "ken-work",
+        "climate",
+        "geography"
+      ],
+      "description": ""
+    },
+    {
+      "id": "climate",
+      "type": "system",
+      "name": "Climate change",
+      "x": 1030,
+      "y": 505,
+      "related": [
+        "sophia",
+        "leo",
+        "ken",
+        "veronica",
+        "catherine",
+        "geography",
+        "materials"
+      ],
+      "description": ""
+    },
+    {
+      "id": "geography",
+      "type": "system",
+      "name": "Rural / suburban / urban",
+      "x": 175,
+      "y": 675,
+      "label": "Where you live",
+      "related": [
+        "sophia",
+        "sophia-work",
+        "veronica",
+        "catherine",
+        "climate"
+      ],
+      "description": ""
+    },
+    {
+      "id": "trucking",
+      "type": "shared",
+      "name": "Leo Trucking",
+      "x": 310,
+      "y": 230,
+      "related": [
+        "sophia",
+        "leo",
+        "autonomous",
+        "robotics",
+        "climate",
+        "leo-work"
+      ],
+      "description": ""
+    },
+    {
+      "id": "vacation",
+      "type": "shared",
+      "name": "Vacation",
+      "x": 775,
+      "y": 155,
+      "related": [
+        "leo",
+        "ken",
+        "wealth",
+        "climate",
+        "leo-home",
+        "ken-third"
+      ],
+      "description": ""
+    },
+    {
+      "id": "volunteer",
+      "type": "shared",
+      "name": "Community nonprofit",
+      "x": 515,
+      "y": 425,
+      "label": "Leo’s nonprofit",
+      "related": [
+        "leo",
+        "veronica",
+        "trucking",
+        "gardening",
+        "veronica-third"
+      ],
+      "description": ""
+    },
+    {
+      "id": "gardening",
+      "type": "shared",
+      "name": "Online summer gardening",
+      "x": 765,
+      "y": 570,
+      "label": "Summer gardening",
+      "related": [
+        "veronica",
+        "catherine",
+        "v-glasses",
+        "c-glasses",
+        "climate",
+        "catherine-health"
+      ],
+      "description": ""
+    },
+    {
+      "id": "autonomous",
+      "type": "tech",
+      "name": "Autonomous mobile health unit",
+      "x": 65,
+      "y": 480,
+      "label": "Mobile health unit",
+      "related": [
+        "sophia",
+        "robotics",
+        "trucking",
+        "climate",
+        "sophia-work"
+      ],
+      "description": ""
+    },
+    {
+      "id": "robotics",
+      "type": "tech",
+      "name": "Robotic medical assistance",
+      "x": 235,
+      "y": 565,
+      "label": "Medical robotics",
+      "related": [
+        "sophia",
+        "autonomous",
+        "sophia-work",
+        "sophia-tech"
+      ],
+      "description": ""
+    },
+    {
+      "id": "kitchen",
+      "type": "tech",
+      "name": "Health-tech kitchen",
+      "x": 525,
+      "y": 85,
+      "label": "Health-tech kitchen",
+      "related": [
+        "leo",
+        "leo-health",
+        "wealth",
+        "trucking"
+      ],
+      "description": ""
+    },
+    {
+      "id": "v-glasses",
+      "type": "tech",
+      "name": "Veronica’s mixed-reality glasses",
+      "x": 520,
+      "y": 745,
+      "label": "Veronica’s glasses",
+      "related": [
+        "veronica",
+        "gardening",
+        "c-glasses",
+        "veronica-tech"
+      ],
+      "description": ""
+    },
+    {
+      "id": "c-glasses",
+      "type": "tech",
+      "name": "Catherine’s mixed-reality glasses",
+      "x": 1015,
+      "y": 745,
+      "label": "Catherine’s glasses",
+      "related": [
+        "catherine",
+        "gardening",
+        "v-glasses",
+        "wealth",
+        "catherine-work"
+      ],
+      "description": ""
+    },
+    {
+      "id": "sophia-work",
+      "type": "facet",
+      "name": "Work, income & education",
+      "person": "sophia",
+      "key": "work",
+      "label": "Work & learning",
+      "related": [
+        "robotics",
+        "autonomous",
+        "trucking",
+        "wealth"
+      ],
+      "description": ""
+    },
+    {
+      "id": "sophia-home",
+      "type": "facet",
+      "name": "Home & family",
+      "person": "sophia",
+      "key": "home",
+      "label": "Home & family",
+      "related": [
+        "wealth",
+        "geography",
+        "climate"
+      ],
+      "description": ""
+    },
+    {
+      "id": "sophia-tech",
+      "type": "facet",
+      "name": "Technology",
+      "person": "sophia",
+      "key": "tech",
+      "label": "Technology",
+      "related": [
+        "autonomous",
+        "robotics",
+        "wealth",
+        "climate"
+      ],
+      "description": ""
+    },
+    {
+      "id": "sophia-health",
+      "type": "facet",
+      "name": "Food & health",
+      "person": "sophia",
+      "key": "health",
+      "label": "Food & health",
+      "related": [
+        "climate",
+        "geography",
+        "gardening"
+      ],
+      "description": ""
+    },
+    {
+      "id": "sophia-third",
+      "type": "facet",
+      "name": "Third places",
+      "person": "sophia",
+      "key": "third",
+      "label": "Third places",
+      "related": [
+        "geography",
+        "volunteer",
+        "sophia-health"
+      ],
+      "description": ""
+    },
+    {
+      "id": "leo-work",
+      "type": "facet",
+      "name": "Work, income & education",
+      "person": "leo",
+      "key": "work",
+      "label": "Work & learning",
+      "related": [
+        "trucking",
+        "wealth",
+        "materials",
+        "sophia"
+      ],
+      "description": ""
+    },
+    {
+      "id": "leo-home",
+      "type": "facet",
+      "name": "Home & family",
+      "person": "leo",
+      "key": "home",
+      "label": "Home & family",
+      "related": [
+        "wealth",
+        "vacation",
+        "kitchen"
+      ],
+      "description": ""
+    },
+    {
+      "id": "leo-tech",
+      "type": "facet",
+      "name": "Technology",
+      "person": "leo",
+      "key": "tech",
+      "label": "Technology",
+      "related": [
+        "trucking",
+        "kitchen",
+        "materials"
+      ],
+      "description": ""
+    },
+    {
+      "id": "leo-health",
+      "type": "facet",
+      "name": "Food & health",
+      "person": "leo",
+      "key": "health",
+      "label": "Food & health",
+      "related": [
+        "kitchen",
+        "volunteer",
+        "climate"
+      ],
+      "description": ""
+    },
+    {
+      "id": "leo-third",
+      "type": "facet",
+      "name": "Third places",
+      "person": "leo",
+      "key": "third",
+      "label": "Third places",
+      "related": [
+        "volunteer",
+        "trucking",
+        "veronica"
+      ],
+      "description": ""
+    },
+    {
+      "id": "ken-work",
+      "type": "facet",
+      "name": "Work, income & education",
+      "person": "ken",
+      "key": "work",
+      "label": "Work & learning",
+      "related": [
+        "materials",
+        "wealth",
+        "climate",
+        "leo"
+      ],
+      "description": ""
+    },
+    {
+      "id": "ken-home",
+      "type": "facet",
+      "name": "Home & family",
+      "person": "ken",
+      "key": "home",
+      "label": "Home & family",
+      "related": [
+        "climate",
+        "wealth",
+        "materials"
+      ],
+      "description": ""
+    },
+    {
+      "id": "ken-tech",
+      "type": "facet",
+      "name": "Technology",
+      "person": "ken",
+      "key": "tech",
+      "label": "Technology",
+      "related": [
+        "wealth",
+        "vacation",
+        "c-glasses"
+      ],
+      "description": ""
+    },
+    {
+      "id": "ken-health",
+      "type": "facet",
+      "name": "Food & health",
+      "person": "ken",
+      "key": "health",
+      "label": "Food & health",
+      "related": [
+        "climate",
+        "materials",
+        "wealth"
+      ],
+      "description": ""
+    },
+    {
+      "id": "ken-third",
+      "type": "facet",
+      "name": "Third places",
+      "person": "ken",
+      "key": "third",
+      "label": "Third places",
+      "related": [
+        "vacation",
+        "leo",
+        "wealth"
+      ],
+      "description": ""
+    },
+    {
+      "id": "veronica-work",
+      "type": "facet",
+      "name": "Work, income & education",
+      "person": "veronica",
+      "key": "work",
+      "label": "Work & learning",
+      "related": [
+        "gardening",
+        "v-glasses",
+        "catherine",
+        "wealth"
+      ],
+      "description": ""
+    },
+    {
+      "id": "veronica-home",
+      "type": "facet",
+      "name": "Home & family",
+      "person": "veronica",
+      "key": "home",
+      "label": "Home & family",
+      "related": [
+        "climate",
+        "volunteer",
+        "geography"
+      ],
+      "description": ""
+    },
+    {
+      "id": "veronica-tech",
+      "type": "facet",
+      "name": "Technology",
+      "person": "veronica",
+      "key": "tech",
+      "label": "Technology",
+      "related": [
+        "v-glasses",
+        "c-glasses",
+        "gardening"
+      ],
+      "description": ""
+    },
+    {
+      "id": "veronica-health",
+      "type": "facet",
+      "name": "Food & health",
+      "person": "veronica",
+      "key": "health",
+      "label": "Food & health",
+      "related": [
+        "gardening",
+        "climate",
+        "catherine"
+      ],
+      "description": ""
+    },
+    {
+      "id": "veronica-third",
+      "type": "facet",
+      "name": "Third places",
+      "person": "veronica",
+      "key": "third",
+      "label": "Third places",
+      "related": [
+        "volunteer",
+        "leo",
+        "gardening"
+      ],
+      "description": ""
+    },
+    {
+      "id": "catherine-work",
+      "type": "facet",
+      "name": "Work, income & education",
+      "person": "catherine",
+      "key": "work",
+      "label": "Work & learning",
+      "related": [
+        "gardening",
+        "c-glasses",
+        "wealth",
+        "veronica"
+      ],
+      "description": ""
+    },
+    {
+      "id": "catherine-home",
+      "type": "facet",
+      "name": "Home & family",
+      "person": "catherine",
+      "key": "home",
+      "label": "Home & family",
+      "related": [
+        "climate",
+        "geography",
+        "wealth"
+      ],
+      "description": ""
+    },
+    {
+      "id": "catherine-tech",
+      "type": "facet",
+      "name": "Technology",
+      "person": "catherine",
+      "key": "tech",
+      "label": "Technology",
+      "related": [
+        "c-glasses",
+        "v-glasses",
+        "wealth"
+      ],
+      "description": ""
+    },
+    {
+      "id": "catherine-health",
+      "type": "facet",
+      "name": "Food & health",
+      "person": "catherine",
+      "key": "health",
+      "label": "Food & health",
+      "related": [
+        "gardening",
+        "climate",
+        "veronica-health"
+      ],
+      "description": ""
+    },
+    {
+      "id": "catherine-third",
+      "type": "facet",
+      "name": "Third places",
+      "person": "catherine",
+      "key": "third",
+      "label": "Third places",
+      "related": [
+        "gardening",
+        "veronica",
+        "geography"
+      ],
+      "description": ""
+    }
+  ],
+  "edges": [
+    {
+      "a": "wealth",
+      "b": "sophia",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "wealth",
+      "b": "leo",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "materials",
+      "b": "leo",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "materials",
+      "b": "ken",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "climate",
+      "b": "sophia",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "climate",
+      "b": "leo",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "climate",
+      "b": "ken",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "climate",
+      "b": "veronica",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "climate",
+      "b": "catherine",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "geography",
+      "b": "sophia",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "trucking",
+      "b": "sophia",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "trucking",
+      "b": "leo",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "vacation",
+      "b": "leo",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "vacation",
+      "b": "ken",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "volunteer",
+      "b": "leo",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "volunteer",
+      "b": "veronica",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "gardening",
+      "b": "veronica",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "gardening",
+      "b": "catherine",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "autonomous",
+      "b": "sophia",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "robotics",
+      "b": "sophia",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "kitchen",
+      "b": "leo",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "v-glasses",
+      "b": "veronica",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "c-glasses",
+      "b": "catherine",
+      "source": "board",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia",
+      "b": "sophia-work",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-work",
+      "b": "robotics",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-work",
+      "b": "autonomous",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-work",
+      "b": "trucking",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-work",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia",
+      "b": "sophia-home",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-home",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-home",
+      "b": "geography",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-home",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia",
+      "b": "sophia-tech",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-tech",
+      "b": "autonomous",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-tech",
+      "b": "robotics",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-tech",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-tech",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia",
+      "b": "sophia-health",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-health",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-health",
+      "b": "geography",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-health",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia",
+      "b": "sophia-third",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-third",
+      "b": "geography",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-third",
+      "b": "volunteer",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "sophia-third",
+      "b": "sophia-health",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo",
+      "b": "leo-work",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-work",
+      "b": "trucking",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-work",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-work",
+      "b": "materials",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-work",
+      "b": "sophia",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo",
+      "b": "leo-home",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-home",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-home",
+      "b": "vacation",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-home",
+      "b": "kitchen",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo",
+      "b": "leo-tech",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-tech",
+      "b": "trucking",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-tech",
+      "b": "kitchen",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-tech",
+      "b": "materials",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo",
+      "b": "leo-health",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-health",
+      "b": "kitchen",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-health",
+      "b": "volunteer",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-health",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo",
+      "b": "leo-third",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-third",
+      "b": "volunteer",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-third",
+      "b": "trucking",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "leo-third",
+      "b": "veronica",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken",
+      "b": "ken-work",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-work",
+      "b": "materials",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-work",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-work",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-work",
+      "b": "leo",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken",
+      "b": "ken-home",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-home",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-home",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-home",
+      "b": "materials",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken",
+      "b": "ken-tech",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-tech",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-tech",
+      "b": "vacation",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-tech",
+      "b": "c-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken",
+      "b": "ken-health",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-health",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-health",
+      "b": "materials",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-health",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken",
+      "b": "ken-third",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-third",
+      "b": "vacation",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-third",
+      "b": "leo",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "ken-third",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica",
+      "b": "veronica-work",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-work",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-work",
+      "b": "v-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-work",
+      "b": "catherine",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-work",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica",
+      "b": "veronica-home",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-home",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-home",
+      "b": "volunteer",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-home",
+      "b": "geography",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica",
+      "b": "veronica-tech",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-tech",
+      "b": "v-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-tech",
+      "b": "c-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-tech",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica",
+      "b": "veronica-health",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-health",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-health",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-health",
+      "b": "catherine",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica",
+      "b": "veronica-third",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-third",
+      "b": "volunteer",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-third",
+      "b": "leo",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "veronica-third",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine",
+      "b": "catherine-work",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-work",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-work",
+      "b": "c-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-work",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-work",
+      "b": "veronica",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine",
+      "b": "catherine-home",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-home",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-home",
+      "b": "geography",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-home",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine",
+      "b": "catherine-tech",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-tech",
+      "b": "c-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-tech",
+      "b": "v-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-tech",
+      "b": "wealth",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine",
+      "b": "catherine-health",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-health",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-health",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-health",
+      "b": "veronica-health",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine",
+      "b": "catherine-third",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-third",
+      "b": "gardening",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-third",
+      "b": "veronica",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "catherine-third",
+      "b": "geography",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "wealth",
+      "b": "ken",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "wealth",
+      "b": "catherine",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "materials",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "gardening",
+      "b": "climate",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "trucking",
+      "b": "autonomous",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    },
+    {
+      "a": "v-glasses",
+      "b": "c-glasses",
+      "source": "expanded",
+      "label": "",
+      "description": ""
+    }
+  ],
+  "facetLabels": {
+    "work": "Work & learning",
+    "home": "Home & family",
+    "tech": "Technology",
+    "health": "Food & health",
+    "third": "Third places"
+  },
+  "boardCount": 18,
+  "year": 2048
+};
+
+</script>
+<script data-source="app.js">
+(function () {
+  'use strict';
+  const {nodes,edges} = window.AtlasData;
+  const byId = new Map(nodes.map(n=>[n.id,n]));
+  const $ = id=>document.getElementById(id);
+  const mobile = ()=>window.matchMedia('(max-width: 760px)').matches;
+  const typeNames = {person:'Person',system:'System',shared:'Shared life',tech:'Technology',facet:'Area of life'};
+  const palette = {system:'#f15a22',shared:'#e5018c',tech:'#7bc7e5',facet:'#1282ca',person:'#1282ca'};
+  const state={selected:null,filter:mobile()?'person':'all',view:'map',panelOpen:false,activeEdge:null,historyDepth:0,scale:1,x:0,y:0,scene:null,ignoreClick:0};
+  const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const color = n=>n.color||palette[n.type]||palette.facet;
+  const baseNodes=nodes.filter(n=>n.type!=='facet');
+  function currentFromURL(){try{const id=decodeURIComponent(location.hash.replace(/^#\/?/,''));return byId.has(id)?id:null;}catch(_){return null;}}
+  function announce(s){$('announcement').textContent=s;}
+  function boardNeighbors(id){return edges.filter(e=>e.source==='board'&&(e.a===id||e.b===id)).map(e=>e.a===id?e.b:e.a);}
+  function connections(id){
+    const found=new Map();
+    edges.forEach(e=>{if(e.a===id||e.b===id){const other=e.a===id?e.b:e.a;if(other!==id&&byId.has(other))found.set(other,{node:byId.get(other),label:e.label,source:e.source});}});
+    (byId.get(id)?.related||[]).forEach(other=>{if(byId.has(other)&&!found.has(other))found.set(other,{node:byId.get(other),label:'',source:'expanded'});});
+    return [...found.values()].sort((a,b)=>(a.source==='board'?0:1)-(b.source==='board'?0:1));
+  }
+  function navigate(id, options={}){
+    if(id&&!byId.has(id))return;
+    state.selected=id; state.activeEdge=options.edge||null;
+    state.panelOpen=!!id;
+    if(!options.fromHistory){state.historyDepth++;history.pushState({atlas:true},'',id?'#/'+encodeURIComponent(id):location.pathname+location.search);}
+    render();
+    if(id){announce(byId.get(id).name+'. '+typeNames[byId.get(id).type]+'. Details opened.');const heading=$('inspector').querySelector('h2');if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}}
+  }
+  function home(){state.filter=mobile()?'person':'all';navigate(null);}
+  function goBack(){
+    if(state.historyDepth>0){history.back();}
+    else {const n=byId.get(state.selected);navigate(n?.person||null);}
+  }
+  window.addEventListener('popstate',()=>{state.historyDepth=Math.max(0,state.historyDepth-1);navigate(currentFromURL(),{fromHistory:true});});
+  function overviewIds(){
+    if(state.filter==='all')return baseNodes.map(n=>n.id);
+    if(state.filter==='person')return baseNodes.filter(n=>n.type==='person'||n.type==='shared').map(n=>n.id);
+    const wanted=new Set(baseNodes.filter(n=>n.type===state.filter).map(n=>n.id));
+    [...wanted].forEach(id=>boardNeighbors(id).forEach(other=>wanted.add(other)));
+    return [...wanted];
+  }
+  function separateNotes(ids,positions){
+    const size=id=>{const type=byId.get(id).type;return type==='person'?[166,168]:type==='tech'?[136,86]:[158,106];};
+    // Resolve collisions once per scene; retain the board's broad arrangement.
+    for(let pass=0;pass<160;pass++){
+      let overlaps=0;
+      for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++){
+        const a=positions.get(ids[i]),b=positions.get(ids[j]),sa=size(ids[i]),sb=size(ids[j]);
+        const dx=b.x-a.x,dy=b.y-a.y,ox=(sa[0]+sb[0])/2+18-Math.abs(dx),oy=(sa[1]+sb[1])/2+18-Math.abs(dy);
+        if(ox<=0||oy<=0)continue;
+        overlaps++;const amount=(Math.min(ox,oy)+.5)/2;
+        if(ox<oy){const sign=dx<0?-1:1;a.x-=sign*amount;b.x+=sign*amount;}
+        else{const sign=dy<0?-1:1;a.y-=sign*amount;b.y+=sign*amount;}
+      }
+      if(!overlaps)break;
+    }
+  }
+  function makeScene(){
+    const selected=byId.get(state.selected), positions=new Map(), labels=[];
+    let ids;
+    if(!selected){
+      ids=overviewIds();
+      const compact={sophia:[100,300],leo:[240,80],ken:[470,240],veronica:[250,490],catherine:[460,655],wealth:[65,70],materials:[435,50],climate:[495,475],geography:[85,685],trucking:[80,155],vacation:[440,80],volunteer:[295,300],gardening:[430,480],autonomous:[0,395],robotics:[135,435],kitchen:[240,-45],'v-glasses':[145,570],'c-glasses':[505,690]};
+      ids.forEach(id=>{const n=byId.get(id),p=mobile()?compact[id]:[n.x,n.y];positions.set(id,{x:p[0],y:p[1]});});
+    }else if(selected.type==='person'){
+      const facets=nodes.filter(n=>n.person===selected.id);
+      const neighbors=boardNeighbors(selected.id);
+      ids=[selected.id,...facets.map(n=>n.id),...(mobile()?[]:neighbors)];
+      if(mobile()){
+        positions.set(selected.id,{x:255,y:75});
+        facets.forEach((n,i)=>{const p=[[130,245],[375,245],[130,425],[375,425],[255,600]][i];positions.set(n.id,{x:p[0],y:p[1]});});
+      } else {
+        positions.set(selected.id,{x:170,y:390});
+        facets.forEach((n,i)=>positions.set(n.id,{x:520,y:85+i*151}));
+        neighbors.forEach((id,i)=>positions.set(id,{x:940,y:90+i*(600/Math.max(1,neighbors.length-1))}));
+        labels.push({x:170,text:'THE PERSON'},{x:520,text:'AREAS OF LIFE'},{x:940,text:'CONNECTED THREADS'});
+      }
+    }else{
+      const curated=[...(selected.person?[selected.person]:[]),...(selected.related||[]),...boardNeighbors(selected.id)];
+      ids=[selected.id,...[...new Set(curated)].filter(id=>id!==selected.id&&byId.has(id)).slice(0,mobile()?6:9)];
+      const cx=mobile()?300:560,cy=mobile()?340:400,rx=mobile()?255:390,ry=mobile()?270:300;
+      positions.set(selected.id,{x:cx,y:cy});
+      ids.slice(1).forEach((id,i)=>{const a=(-Math.PI/2)+(2*Math.PI*i/(ids.length-1));positions.set(id,{x:cx+Math.cos(a)*rx,y:cy+Math.sin(a)*ry});});
+    }
+    if(!selected)separateNotes(ids,positions);
+    const visible=new Set(ids), sceneEdges=edges.filter(e=>visible.has(e.a)&&visible.has(e.b)&&(!selected?e.source==='board':true));
+    if(selected){ids.slice(1).forEach(id=>{if(!sceneEdges.some(e=>(e.a===id&&e.b===selected.id)||(e.b===id&&e.a===selected.id)))sceneEdges.push({a:selected.id,b:id,label:'',source:'expanded'});});}
+    return {ids,positions,edges:sceneEdges,labels,mobile:mobile()};
+  }
+  function portrait(n){
+    const src=typeof n.portrait==='string'&&/^(?:https?:\/\/|data:image\/|blob:|(?:\.\/)?portraits\/)/i.test(n.portrait)?n.portrait:null;
+    const position=/^[\d.\s%a-z-]+$/i.test(n.portraitPosition||'')?n.portraitPosition:'50% 35%';
+    return '<span class="portrait-fallback" aria-hidden="true">'+esc(n.initial)+'</span>'+(src?'<img class="portrait-image" data-portrait="'+n.id+'" src="'+esc(src)+'" alt="" decoding="async" style="object-position:'+esc(position)+'">':'');
+  }
+  function bindPortraits(){
+    document.querySelectorAll('[data-portrait]').forEach(img=>{
+      if(img._atlasPortraitBound)return;img._atlasPortraitBound=true;
+      const show=()=>img.parentElement.classList.add('has-photo');
+      img.addEventListener('load',show,{once:true});
+      img.addEventListener('error',()=>{img.hidden=true;img.parentElement.classList.remove('has-photo');},{once:true});
+      if(img.complete&&img.naturalWidth>0)show();
+    });
+  }
+  function nodeHTML(n){
+    const cls='graph-node '+n.type+(state.selected===n.id?' selected':'')+'';
+    const content=n.type==='person'?'<span class="person-orb">'+portrait(n)+'</span><span class="node-name">'+esc(n.name)+'</span>':'<span class="note-shape"><span class="node-name">'+esc(n.label||n.name)+'</span><span class="node-kind">'+esc(n.type==='facet'?'Area of life':typeNames[n.type])+'</span></span>';
+    return '<button class="'+cls+'" data-node="'+n.id+'" style="--node-color:'+color(n)+';left:'+state.scene.positions.get(n.id).x+'px;top:'+state.scene.positions.get(n.id).y+'px" aria-label="'+esc(n.name+', '+typeNames[n.type]+'. Explore details')+'"'+(state.selected===n.id?' aria-current="true"':'')+'>'+content+'</button>';
+  }
+  function edgeColor(e){const a=byId.get(e.a),b=byId.get(e.b);return color(a.type==='person'||a.type==='facet'?b:a);}
+  function edgeGeometry(e){
+    const a=state.scene.positions.get(e.a),b=state.scene.positions.get(e.b),vertical=Math.abs(b.y-a.y)>Math.abs(b.x-a.x);
+    const dx=b.x-a.x,dy=b.y-a.y;
+    return {d:vertical?`M ${a.x} ${a.y} C ${a.x} ${a.y+dy*.45} ${b.x} ${b.y-dy*.45} ${b.x} ${b.y}`:`M ${a.x} ${a.y} C ${a.x+dx*.45} ${a.y} ${b.x-dx*.45} ${b.y} ${b.x} ${b.y}`,x:(a.x+b.x)/2,y:(a.y+b.y)/2-9};
+  }
+  function renderScene(){
+    state.scene=makeScene();
+    $('nodes').innerHTML=state.scene.ids.map(id=>nodeHTML(byId.get(id))).join('')+state.scene.labels.map(l=>'<span class="scene-column" style="left:'+l.x+'px">'+l.text+'</span>').join('');
+    $('edges').setAttribute('width','1400');$('edges').setAttribute('height','1100');
+    $('edges').innerHTML=state.scene.edges.map((e,i)=>{const p=edgeGeometry(e);return '<g><path class="edge-path '+e.source+'" data-edge="'+i+'" d="'+p.d+'" stroke="'+edgeColor(e)+'"><title>'+esc(byId.get(e.a).name+' → '+byId.get(e.b).name+(e.label?': '+e.label:''))+'</title></path><text class="edge-label" data-edge-label="'+i+'" x="'+p.x+'" y="'+p.y+'" text-anchor="middle">'+esc(e.label)+'</text></g>';}).join('');
+    const visibleNodes=state.scene.ids.map(id=>byId.get(id));
+    $('nodeList').innerHTML=visibleNodes.map(n=>'<button class="list-node'+(n.id===state.selected?' selected':'')+'" data-node="'+n.id+'" style="--node-color:'+color(n)+'"><small><i class="dot" style="background:'+color(n)+'"></i>'+typeNames[n.type]+'<span class="list-arrow">↗</span></small>'+(n.type==='person'?'<span class="list-portrait" style="--node-color:'+color(n)+'">'+portrait(n)+'</span>':'')+'<strong>'+esc(n.name)+'</strong>'+placeholderParagraph(n)+'</button>').join('');
+    document.querySelectorAll('[data-node]').forEach(el=>{
+      el.addEventListener('click',()=>{if(Date.now()<state.ignoreClick)return;navigate(el.dataset.node);});
+      if(el.classList.contains('graph-node')){
+        el.addEventListener('pointerenter',()=>highlightNode(el.dataset.node));
+        el.addEventListener('pointerleave',()=>highlightNode(null));
+        el.addEventListener('focus',()=>highlightNode(el.dataset.node));
+        el.addEventListener('blur',()=>highlightNode(null));
+      }
+    });
+    document.querySelectorAll('[data-edge]').forEach(el=>{
+      el.addEventListener('click',ev=>{ev.stopPropagation();if(Date.now()<state.ignoreClick)return;const e=state.scene.edges[Number(el.dataset.edge)];navigate(e.a,{edge:e});});
+      el.addEventListener('pointerenter',()=>{el.classList.add('edge-hot');document.querySelector('[data-edge-label="'+el.dataset.edge+'"]')?.classList.add('show');});
+      el.addEventListener('pointerleave',()=>{el.classList.remove('edge-hot');document.querySelector('[data-edge-label="'+el.dataset.edge+'"]')?.classList.remove('show');});
+    });
+    bindPortraits();
+    requestAnimationFrame(fit);
+  }
+  function highlightNode(id){
+    const linked=new Set(id?[id,...state.scene.edges.filter(e=>e.a===id||e.b===id).map(e=>e.a===id?e.b:e.a)]:[]);
+    document.querySelectorAll('.graph-node').forEach(el=>el.classList.toggle('dimmed',!!id&&!linked.has(el.dataset.node)));
+    document.querySelectorAll('[data-edge]').forEach(el=>{const e=state.scene.edges[Number(el.dataset.edge)],hot=!!id&&(e.a===id||e.b===id);el.classList.toggle('edge-hot',hot);document.querySelector('[data-edge-label="'+el.dataset.edge+'"]')?.classList.toggle('show',hot&&state.selected!==null);});
+  }
+  function fit(){
+    if(!state.scene)return;
+    const w=$('graphViewport').clientWidth,h=$('graphViewport').clientHeight;
+    if(!w||!h)return;
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    state.scene.ids.forEach(id=>{const p=state.scene.positions.get(id),n=byId.get(id),nw=n.type==='facet'?180:n.type==='person'?160:150,nh=n.type==='person'?140:85;minX=Math.min(minX,p.x-nw/2);maxX=Math.max(maxX,p.x+nw/2);minY=Math.min(minY,p.y-nh/2);maxY=Math.max(maxY,p.y+nh/2);});
+    if(state.scene.labels.length)minY=Math.min(minY,-5);
+    const pad=mobile()?16:30;
+    state.scale=Math.min((w-pad*2)/(maxX-minX),(h-pad*2)/(maxY-minY),1.25);
+    state.scale=Math.max(.18,state.scale);
+    state.x=(w-(maxX-minX)*state.scale)/2-minX*state.scale;
+    state.y=(h-(maxY-minY)*state.scale)/2-minY*state.scale;
+    applyTransform();
+  }
+  function applyTransform(){$('graphWorld').style.setProperty('--label-boost',String(Math.max(1,Math.min(1.5,.82/state.scale))));$('graphWorld').style.transform=`translate(${state.x}px,${state.y}px) scale(${state.scale})`;$('zoomLabel').textContent=Math.round(state.scale*100)+'%';}
+  function zoomAt(factor,x=$('graphViewport').clientWidth/2,y=$('graphViewport').clientHeight/2){const old=state.scale;state.scale=Math.max(.18,Math.min(2.8,old*factor));const ratio=state.scale/old;state.x=x-(x-state.x)*ratio;state.y=y-(y-state.y)*ratio;applyTransform();}
+  const topLine = ()=>'<div class="panel-topline"><div class="panel-actions">'+(state.selected?'<button class="icon-button" data-back aria-label="Back to previous layer" title="Previous layer">←</button>':'')+'<button class="icon-button" data-close-panel aria-label="Close details" title="Close details">×</button></div></div>';
+  const lorem='Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+  function placeholderParagraph(item={}){
+    const text=typeof item.description==='string'?item.description.trim():'';
+    return '<p class="placeholder-copy"'+(text?'':' data-placeholder="true"')+'>'+esc(text||lorem)+'</p>';
+  }
+  function rosterHTML(){return nodes.filter(n=>n.type==='person').map(n=>'<button class="roster-button" data-link="'+n.id+'"><span class="roster-avatar" style="--node-color:'+color(n)+'">'+portrait(n)+'</span><span class="roster-name">'+esc(n.name)+'</span><span class="roster-arrow">↗</span></button>').join('');}
+  function renderWelcome(){return topLine('')+'<h2>People</h2><div class="people-roster">'+rosterHTML()+'</div>';}
+  function connectionLinks(n){
+    const list=connections(n.id).filter(c=>n.type!=='person'||c.node.type!=='facet');
+    if(!list.length)return '';
+    return '<section class="simple-connections"><h3>Connections</h3>'+list.map(c=>'<button class="plain-link" data-link="'+c.node.id+'"><span>'+esc(c.node.name)+'</span><span aria-hidden="true">↗</span></button>').join('')+'</section>';
+  }
+  function renderPerson(n){
+    const facets=nodes.filter(f=>f.person===n.id);
+    return topLine('')+'<div class="profile-header"><div class="profile-orb" style="--node-color:'+color(n)+'">'+portrait(n)+'</div><h2>'+esc(n.name)+'</h2></div>'+(n.description?placeholderParagraph(n):'')+'<div class="simple-sections">'+facets.map(f=>'<section class="content-section"><h3><button class="section-link" data-link="'+f.id+'"><span>'+esc(f.name)+'</span><span aria-hidden="true">↗</span></button></h3>'+placeholderParagraph(f)+'</section>').join('')+'</div>'+connectionLinks(n);
+  }
+  function renderDetail(n){
+    return topLine('')+(n.person?'<p class="panel-kicker">'+esc(byId.get(n.person).name)+'</p>':'')+'<h2>'+esc(n.name)+'</h2>'+placeholderParagraph(n)+connectionLinks(n);
+  }
+  function renderRelationship(e){
+    const a=byId.get(e.a),b=byId.get(e.b);
+    return topLine('')+'<h2>'+esc(a.name)+' <span class="relationship-sep" aria-hidden="true">↔</span> '+esc(b.name)+'</h2>'+placeholderParagraph(e)+'<div class="simple-connections"><button class="plain-link" data-link="'+a.id+'"><span>'+esc(a.name)+'</span><span aria-hidden="true">↗</span></button><button class="plain-link" data-link="'+b.id+'"><span>'+esc(b.name)+'</span><span aria-hidden="true">↗</span></button></div>';
+  }
+  function renderPanel(){
+    const n=byId.get(state.selected),panel=$('inspector');
+    $('panelContent').innerHTML='<div class="panel-inner">'+(state.activeEdge?renderRelationship(state.activeEdge):n?(n.type==='person'?renderPerson(n):renderDetail(n)):renderWelcome())+'</div>';
+    panel.classList.toggle('is-open',state.panelOpen);
+    $('workspace').classList.toggle('details-open',state.panelOpen);
+    panel.inert=!state.panelOpen;panel.setAttribute('aria-hidden',String(!state.panelOpen));
+    $('openDetails').hidden=state.panelOpen||(!mobile()&&!n);
+    $('openDetails').textContent=n?'Open details ↗':'People ↗';
+    bindPortraits();
+    document.querySelectorAll('[data-link]').forEach(el=>el.addEventListener('click',()=>navigate(el.dataset.link)));
+    panel.querySelector('[data-back]')?.addEventListener('click',goBack);
+    panel.querySelector('[data-close-panel]')?.addEventListener('click',()=>{state.panelOpen=false;renderPanel();if(!$('openDetails').hidden)$('openDetails').focus({preventScroll:true});else $('graphViewport').focus({preventScroll:true});requestAnimationFrame(fit);});
+  }
+  function renderChrome(){
+    const n=byId.get(state.selected);
+    $('breadcrumb').innerHTML='<button data-crumb-home>2048 / WORLD</button>'+(n?.person?'<span class="crumb-sep">/</span><button data-crumb-parent="'+n.person+'">'+esc(byId.get(n.person).name.toUpperCase())+'</button>':'')+(n?'<span class="crumb-sep">/</span><span class="crumb-current">'+esc((n.label||n.name).toUpperCase())+'</span>':'<span class="crumb-sep">/</span><span class="crumb-current">'+(state.filter==='all'?'ALL CONNECTIONS':state.filter==='person'?'PEOPLE & THEIR TIES':state.filter==='system'?'LARGER FORCES':state.filter==='shared'?'SHARED LIVES':'EVERYDAY TECHNOLOGY')+'</span>');
+    $('mapCaption').textContent='Select a node to explore.';
+    $('breadcrumb').querySelector('[data-crumb-home]').addEventListener('click',home);
+    $('breadcrumb').querySelector('[data-crumb-parent]')?.addEventListener('click',el=>navigate(el.currentTarget.dataset.crumbParent));
+    document.querySelectorAll('[data-filter]').forEach(el=>{const active=state.filter===el.dataset.filter&&!n;el.classList.toggle('active',active);el.setAttribute('aria-pressed',String(active));});
+    $('graphViewport').hidden=state.view!=='map';$('nodeList').hidden=state.view!=='list';$('zoomControls').hidden=state.view!=='map';
+    ['map','list'].forEach(v=>{$(v+'View').classList.toggle('active',state.view===v);$(v+'View').setAttribute('aria-pressed',String(state.view===v));});
+    $('mapHint').textContent=state.view==='map'?'Drag to move · Choose a node to explore':'Choose a card to see what connects.';
+  }
+  function render(){renderChrome();renderScene();renderPanel();$('inspector').scrollTop=0;}
+  function setView(view){state.view=view;renderChrome();if(view==='map')requestAnimationFrame(fit);}
+  document.querySelectorAll('[data-home]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();home();}));
+  document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',()=>{state.filter=el.dataset.filter;navigate(null);}));
+  $('mapView').addEventListener('click',()=>setView('map'));$('listView').addEventListener('click',()=>setView('list'));
+  $('zoomIn').addEventListener('click',()=>zoomAt(1.25));$('zoomOut').addEventListener('click',()=>zoomAt(.8));$('fitMap').addEventListener('click',fit);
+  $('openDetails').addEventListener('click',()=>{state.panelOpen=true;renderPanel();$('inspector').querySelector('[data-close-panel]')?.focus({preventScroll:true});});
+  function showHelp(){if(!$('helpDialog').open)$('helpDialog').showModal();}
+  $('helpButton').addEventListener('click',showHelp);
+  $('closeHelp').addEventListener('click',()=>$('helpDialog').close());$('beginExplore').addEventListener('click',()=>$('helpDialog').close());
+  $('helpDialog').addEventListener('click',e=>{if(e.target===$('helpDialog')){const r=$('helpDialog').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('helpDialog').close();}});
+  // Search all layers, including details that are not visible in the current map.
+  const input=$('searchInput'),results=$('searchResults');let searchMatches=[];
+  function closeSearch(){results.hidden=true;input.setAttribute('aria-expanded','false');input.removeAttribute('aria-activedescendant');}
+  function runSearch(){
+    const q=input.value.trim().toLowerCase();
+    if(!q){closeSearch();return;}
+    searchMatches=nodes.map(n=>({n,score:(n.name.toLowerCase().includes(q)?5:0)+([n.label,n.description,n.person?byId.get(n.person).name:'',typeNames[n.type]].filter(Boolean).join(' ').toLowerCase().includes(q)?1:0)})).filter(r=>r.score>0).sort((a,b)=>b.score-a.score).slice(0,9).map(r=>r.n);
+    results.innerHTML=searchMatches.length?searchMatches.map((n,i)=>'<button class="search-result" id="search-result-'+i+'" role="option" aria-selected="false" data-search-node="'+n.id+'"><strong>'+esc(n.name)+'</strong><small>'+typeNames[n.type]+(n.person?' · '+byId.get(n.person).name:'')+'</small></button>').join(''):'<p class="no-results">No results.</p>';
+    results.hidden=false;input.setAttribute('aria-expanded','true');
+    results.querySelectorAll('[data-search-node]').forEach(el=>el.addEventListener('click',()=>{navigate(el.dataset.searchNode);input.value='';closeSearch();}));
+  }
+  input.addEventListener('input',runSearch);input.addEventListener('focus',()=>{if(input.value.trim())runSearch();});
+  input.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearch();input.blur();}if(e.key==='ArrowDown'&&searchMatches.length&&!results.hidden){e.preventDefault();results.querySelector('button')?.focus();}if(e.key==='Enter'&&searchMatches.length&&!results.hidden){e.preventDefault();navigate(searchMatches[0].id);input.value='';closeSearch();}});
+  results.addEventListener('keydown',e=>{const opts=[...results.querySelectorAll('button')],i=opts.indexOf(document.activeElement);if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();opts[(i+(e.key==='ArrowDown'?1:-1)+opts.length)%opts.length]?.focus();}if(e.key==='Escape'){closeSearch();input.focus();}});
+  document.addEventListener('pointerdown',e=>{if(!e.target.closest('.search-wrap'))closeSearch();});
+  // Pan and pinch use one transform, keeping node and line geometry aligned.
+  const viewport=$('graphViewport'),pointers=new Map();let lastPinch=null,dragged=false;
+  function pointerPoint(e){const r=viewport.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
+  function pinchState(){const p=[...pointers.values()];return p.length<2?null:{x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2,d:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)};}
+  viewport.addEventListener('pointerdown',e=>{if(e.button&&e.pointerType!=='touch')return;const p=pointerPoint(e);pointers.set(e.pointerId,{...p,startX:p.x,startY:p.y});dragged=false;lastPinch=pinchState();});
+  viewport.addEventListener('pointermove',e=>{
+    if(!pointers.has(e.pointerId))return;
+    const old=pointers.get(e.pointerId),p=pointerPoint(e);pointers.set(e.pointerId,{...old,...p});
+    if(pointers.size>1){const next=pinchState();if(lastPinch&&lastPinch.d>0){zoomAt(next.d/lastPinch.d,lastPinch.x,lastPinch.y);state.x+=next.x-lastPinch.x;state.y+=next.y-lastPinch.y;applyTransform();}lastPinch=next;dragged=true;viewport.setPointerCapture(e.pointerId);e.preventDefault();}
+    else if(dragged||Math.hypot(p.x-old.startX,p.y-old.startY)>5){state.x+=p.x-old.x;state.y+=p.y-old.y;dragged=true;applyTransform();viewport.setPointerCapture(e.pointerId);e.preventDefault();}
+  });
+  function pointerEnd(e){if(!pointers.has(e.pointerId))return;pointers.delete(e.pointerId);lastPinch=pinchState();if(dragged){state.ignoreClick=Date.now()+250;}if(viewport.hasPointerCapture(e.pointerId))viewport.releasePointerCapture(e.pointerId);if(pointers.size===1){const [id,p]=[...pointers.entries()][0];pointers.set(id,{...p,startX:p.x,startY:p.y});}}
+  window.addEventListener('pointerup',pointerEnd);window.addEventListener('pointercancel',pointerEnd);
+  viewport.addEventListener('wheel',e=>{e.preventDefault();const p=pointerPoint(e),delta=e.deltaY*(e.deltaMode===1?16:1);zoomAt(Math.exp(-delta*.0015),p.x,p.y);},{passive:false});
+  viewport.addEventListener('keydown',e=>{if(e.target!==viewport)return;let handled=true;switch(e.key){case '+':case '=':zoomAt(1.2);break;case '-':zoomAt(1/1.2);break;case '0':fit();break;case 'ArrowLeft':state.x+=40;break;case 'ArrowRight':state.x-=40;break;case 'ArrowUp':state.y+=40;break;case 'ArrowDown':state.y-=40;break;default:handled=false;}if(handled){e.preventDefault();applyTransform();}});
+  let resizeFrame;new ResizeObserver(()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{const nextMobile=mobile();if(state.scene&&state.scene.mobile!==nextMobile){renderScene();renderPanel();}else fit();});}).observe(viewport);
+  state.selected=currentFromURL();if(state.selected)state.panelOpen=true;
+  render();
+  // The content model is intentionally exposed for source maintenance and validation.
+  window.AtlasApp={navigate,home,fit,getState:()=>({...state}),connections,makeScene};
+})();
+
+</script>
+<script data-source="intro-clock.js">
+(function () {
+  'use strict';
+
+  const DAY = 86400000;
+  const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+  // Calendar arithmetic uses whole UTC days. The departure date is taken from
+  // the visitor's local calendar first, so daylight saving cannot skip a day.
+  function parseDate(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value));
+    if (!match) return null;
+    const [, year, month, day] = match.map(Number);
+    if (year < 1000 || year > 9999) return null;
+    const stamp = Date.UTC(year, month - 1, day);
+    const d = new Date(stamp);
+    return d.getUTCFullYear() === year && d.getUTCMonth() === month - 1 && d.getUTCDate() === day ? stamp : null;
+  }
+
+  function localToday(date = new Date()) {
+    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  function dateParts(stamp) {
+    const d = new Date(stamp);
+    return [MONTHS[d.getUTCMonth()], String(d.getUTCDate()).padStart(2, '0'), String(d.getUTCFullYear())];
+  }
+
+  function dateLabel(stamp) { return dateParts(stamp).join(' '); }
+  function spokenDate(stamp) {
+    return new Date(stamp).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'});
+  }
+
+  function makeTimeline(start, destination, duration) {
+    if (start >= destination) return [{at: 0, stamp: destination, interval: 0, flipMs: 0}];
+    // Keep each mechanical flip readable as the trip duration changes.
+    const count = Math.min(20, Math.max(10, Math.floor(duration / 300)));
+    const fastestInterval = Math.min(280, duration / count * .85);
+    const weights = Array.from({length: count}, (_, i) => Math.pow(1 - i / (count - 1), 2));
+    const weightSum = weights.reduce((a, b) => a + b, 0);
+    const extraTime = duration - fastestInterval * count;
+    const startDay = Math.round(start / DAY), endDay = Math.round(destination / DAY);
+    let elapsed = 0;
+    return weights.map((weight, i) => {
+      const at = elapsed;
+      const interval = i === count - 1 ? duration - elapsed : fastestInterval + extraTime * weight / weightSum;
+      elapsed += interval;
+      // The first flip moves just one day. Later flips cover months and years.
+      const progress = i / (count - 1);
+      const day = startDay + 1 + Math.round((endDay - startDay - 1) * Math.pow(progress, 2.15));
+      return {at, stamp: (i === count - 1 ? endDay : day) * DAY, interval, flipMs: Math.min(900, interval * .9)};
+    });
+  }
+
+  // Also usable in a plain Node process for calendar and timing checks.
+  if (typeof document === 'undefined') {
+    if (typeof module !== 'undefined') module.exports = {parseDate, localToday, dateParts, dateLabel, makeTimeline};
+    return;
+  }
+
+  const config = window.FutureIntroConfig || {};
+  const target = parseDate(config.targetDate) ?? parseDate('2048-01-01');
+  const duration = Math.min(12000, Math.max(3000, Number(config.durationMs) || 5500));
+  const departureHold = Math.min(2500, Math.max(400, Number(config.departureHoldMs) || 1000));
+  const arrivalHold = Math.min(2500, Math.max(400, Number(config.arrivalHoldMs) || 900));
+  const $ = id => document.getElementById(id);
+  const root = $('futureIntro'), shell = document.querySelector('.app-shell');
+  const idle = $('introIdle'), stage = $('timeStage');
+  const enter = $('enterFuture'), heading = $('clockHeading');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const timers = new Set();
+  let phase = 'idle', generation = 0, departure = localToday();
+
+  class FlipTile {
+    constructor(group, value) {
+      this.el = document.createElement('span');
+      this.el.className = 'clock-tile';
+      this.el.innerHTML = '<span class="clock-current flap-letter"></span>' +
+        '<span class="flap-half flap-lower flap-old-bottom"><span class="flap-letter"></span></span>' +
+        '<span class="flap-half flap-upper flap-out"><span class="flap-letter"></span></span>' +
+        '<span class="flap-half flap-lower flap-in"><span class="flap-letter"></span></span>';
+      group.append(this.el);
+      this.letters = [...this.el.querySelectorAll('.flap-letter')];
+      this.timer = 0;
+      this.write(value);
+    }
+
+    write(value) {
+      this.value = value;
+      this.el.setAttribute('data-value', value);
+      this.letters.forEach(letter => { letter.textContent = value; });
+    }
+
+    stop() {
+      window.clearTimeout(this.timer);
+      this.timer = 0;
+      this.el.classList.remove('is-flipping');
+      this.write(this.value);
+    }
+
+    set(next, ms = 0) {
+      if (next === this.value) return;
+      const previous = this.value;
+      this.stop();
+      // The full, unanimated readout is always current. Temporary flaps only
+      // cover it during the effect and are removed by an independent timer.
+      this.write(next);
+      if (!ms || reducedMotion.matches) return;
+      this.letters[1].textContent = previous;
+      this.letters[2].textContent = previous;
+      this.letters[3].textContent = next;
+      this.el.style.setProperty('--half-ms', (ms / 2) + 'ms');
+      void this.el.offsetWidth;
+      this.el.classList.add('is-flipping');
+      this.timer = window.setTimeout(() => {
+        this.timer = 0;
+        this.el.classList.remove('is-flipping');
+      }, ms + 12);
+    }
+  }
+
+  const tiles = [];
+  ['month', 'day', 'year'].forEach((kind, i) => {
+    const group = document.createElement('div');
+    group.className = 'clock-group clock-group-' + kind;
+    [...dateParts(departure)[i]].forEach(letter => { tiles.push(new FlipTile(group, letter)); });
+    $('clockFace').append(group);
+  });
+  for (let i = 0; i < 32; i++) {
+    const ray = document.createElement('span');
+    ray.className = 'time-streak';
+    ray.style.setProperty('--ray-angle', (i * 360 / 32) + 'deg');
+    $('timeStreaks').append(ray);
+  }
+
+  function showDate(stamp, ms = 0) {
+    [...dateParts(stamp).join('')].forEach((letter, i) => tiles[i].set(letter, ms * (.94 + (i % 3) * .025)));
+    $('clockDate').textContent = spokenDate(stamp);
+  }
+  function setPhase(next) { phase = next; root.dataset.phase = next; }
+  function announce(text) { $('introStatus').textContent = text; }
+  function later(fn, delay) {
+    const token = generation;
+    const timer = window.setTimeout(() => {
+      timers.delete(timer);
+      if (token === generation) fn();
+    }, delay);
+    timers.add(timer);
+  }
+  function cancelJourney() {
+    generation++;
+    timers.forEach(timer => window.clearTimeout(timer));
+    timers.clear();
+    tiles.forEach(tile => tile.stop());
+  }
+
+  function arrive() {
+    cancelJourney();
+    showDate(target);
+    setPhase('arrived');
+    heading.textContent = 'You have arrived in ' + dateParts(target)[2] + '.';
+    announce('You have arrived. ' + spokenDate(target) + '. Entering the world.');
+    heading.focus({preventScroll: true});
+    later(complete, arrivalHold);
+  }
+
+  function begin() {
+    if (phase !== 'idle') return;
+    cancelJourney();
+    departure = localToday();
+    showDate(departure);
+    window.FutureIdlePlayer?.hide();
+    idle.setAttribute('inert', '');
+    idle.setAttribute('aria-hidden', 'true');
+    stage.hidden = false;
+    setPhase('departing');
+    heading.textContent = 'Travelling from ' + spokenDate(departure) + ' to ' + spokenDate(target) + '.';
+    heading.focus({preventScroll: true});
+    announce(heading.textContent);
+    if (departure >= target) { arrive(); return; }
+
+    const frames = makeTimeline(departure, target, duration);
+    // Each date is scheduled directly. Neither requestAnimationFrame nor
+    // animation finish events are allowed to control calendar progression.
+    frames.forEach(frame => {
+      later(() => {
+        setPhase('travelling');
+        showDate(frame.stamp, frame.flipMs);
+        const progress = Math.min(1, (frame.at + frame.interval) / duration);
+        root.style.setProperty('--journey-progress', progress);
+        root.style.setProperty('--grid-period', Math.round(1700 - progress * 900) + 'ms');
+      }, departureHold + frame.at);
+    });
+    later(arrive, departureHold + duration);
+  }
+
+  function revealMap() {
+    root.hidden = true;
+    window.FutureIdlePlayer?.hide();
+    shell.removeAttribute('inert');
+    shell.removeAttribute('aria-hidden');
+    document.body.classList.remove('intro-active');
+    document.querySelector('.skip').removeAttribute('tabindex');
+    window.AtlasApp?.fit();
+    const n = $('inspector').getAttribute('aria-hidden') === 'false' ? $('inspector').querySelector('h2') : null;
+    const focus = n || $('graphViewport');
+    if (n) n.setAttribute('tabindex', '-1');
+    focus.focus({preventScroll: true});
+    $('announcement').textContent = 'Welcome to 2048. Choose a person or connection to explore.';
+  }
+
+  function complete() {
+    if (root.hidden || phase !== 'arrived') return;
+    cancelJourney();
+    if (reducedMotion.matches) revealMap();
+    else { setPhase('exiting'); later(revealMap, 640); }
+  }
+
+  function reset() {
+    cancelJourney();
+    root.hidden = false;
+    shell.setAttribute('inert', '');
+    shell.setAttribute('aria-hidden', 'true');
+    document.body.classList.add('intro-active');
+    document.querySelector('.skip').setAttribute('tabindex', '-1');
+    setPhase('idle');
+    idle.removeAttribute('inert');
+    idle.removeAttribute('aria-hidden');
+    stage.hidden = true;
+    departure = localToday();
+    showDate(departure);
+    root.style.setProperty('--journey-progress', 0);
+    root.style.setProperty('--grid-period', '1700ms');
+    heading.textContent = 'Travelling to ' + dateParts(target)[2] + '.';
+    announce('');
+    window.FutureIdlePlayer?.show({restart: true});
+    enter.focus({preventScroll: true});
+  }
+
+  enter.addEventListener('click', begin);
+  $('replayIntro').addEventListener('click', reset);
+  document.querySelector('.skip').addEventListener('click', event => {
+    if (!root.hidden) event.preventDefault();
+  });
+  root.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && phase !== 'idle') { event.preventDefault(); reset(); return; }
+    if (event.key !== 'Tab') return;
+    const resume = $('resumeBackground');
+    const actions = phase === 'idle' ? (resume.hidden ? [enter] : [resume, enter]) : [];
+    if (!actions.length) { event.preventDefault(); heading.focus({preventScroll: true}); return; }
+    const first = actions[0], last = actions[actions.length - 1];
+    if (!actions.includes(document.activeElement)) { event.preventDefault(); first.focus(); }
+    else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) tiles.forEach(tile => tile.stop());
+  });
+  reset();
+})();
+
+</script>
+</body>
+</html>
