@@ -1,0 +1,1 @@
+Add technology images here, set the card's `image` path in `technology-config.js`, then run `python3 build-local.py`. Empty `title` values leave cards as blank slots. An image is optional; a card works with a title, summary and detail alone.
