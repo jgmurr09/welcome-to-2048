@@ -1,0 +1,1 @@
+Add voice recordings here. Set the corresponding `audio` path and `audioTranscript` in `character-config.js`, then rebuild with `python3 build-local.py`. The player appears only when a recording is configured and never autoplays.

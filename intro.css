@@ -4,7 +4,7 @@
   --future-cyan: #00b5e7;
   --future-pink: #ed008c;
   --future-white: #e7eef5;
-  --future-mono: 'Courier New', Courier, monospace;
+  --future-mono: Roboto, Arial, sans-serif;
   --journey-progress: 0;
   --grid-period: 1700ms;
   position: fixed;

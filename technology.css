@@ -1,0 +1,76 @@
+.technology-screen { position:fixed; inset:var(--hub-header-h) 0 0; overflow:auto; overscroll-behavior:contain; color:#eeeafa; background:radial-gradient(ellipse at 80% 0,#39265055,transparent 55%),#111126; }
+.technology-main { width:min(1260px,calc(100% - 80px)); margin:auto; padding:48px 0 70px; }
+.technology-main h1 { font-size:clamp(34px,4vw,56px); font-weight:400; letter-spacing:-1px; line-height:1.2; margin:0 0 48px; }
+.technology-main h2 { font-size:27px; font-weight:400; line-height:1.35; margin:0 0 24px; }
+.technology-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+.technology-card { display:flex; flex-direction:column; min-width:0; border:1px solid #c6b8e132; border-radius:8px; overflow:hidden; background:#1b1930; }
+.technology-art { position:relative; min-height:135px; display:grid; place-items:center; background:radial-gradient(ellipse at center,#638ba229,transparent 70%),#17172c; color:#acdce8; }
+.technology-art svg,.technology-detail-icon svg { width:64px; height:64px; fill:none; stroke:currentColor; stroke-width:1.25; stroke-linejoin:round; stroke-linecap:round; }
+.technology-art img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.technology-card-content { flex:1; display:flex; flex-direction:column; padding:24px; }
+.technology-card h3 { font-size:22px; font-weight:500; line-height:1.35; margin:0 0 15px; }
+.technology-card p { font-size:16px; line-height:1.75; color:#c0b9d1; margin:0 0 24px; }
+.technology-card-actions { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-top:auto; }
+.technology-card-actions button { min-height:48px; padding:12px 16px; background:#cfeff2; color:#172637; border:1px solid transparent; border-radius:4px; font-size:15px; text-align:left; }
+.technology-card-actions button+button { color:#d5cae7; background:transparent; padding-inline:0; }
+.technology-card-actions button:hover { border-color:#97ebed; }
+.technology-card-actions button+button:hover { color:#baf1f3; border-color:transparent; }
+.team-technology-section { margin-top:64px; padding-top:44px; border-top:1px solid #c6b8e12e; }
+.technology-placeholder { min-height:320px; border:1px dashed #c6b8e13a; border-radius:8px; padding:24px; background:#ffffff02; color:#b4a9c8; }
+.technology-empty-art { height:130px; display:grid; place-items:center; border:1px dashed #b1a2cb30; border-radius:5px; background:#ffffff02; color:#9b8bad; font-size:35px; font-weight:300; }
+.technology-placeholder h3 { margin:24px 0 20px; font-size:18px; font-weight:400; }
+.technology-empty-lines { display:grid; gap:11px; }
+.technology-empty-lines span { height:6px; background:#b0a2c41c; border-radius:10px; }
+.technology-empty-lines span:last-child { width:67%; }
+.technology-dialog { width:min(660px,calc(100% - 32px)); max-height:88dvh; overflow:auto; padding:38px; border:1px solid #baacd64d; border-radius:10px; background:#1b182e; color:#f0eafa; }
+.technology-dialog::backdrop { background:#080715ce; backdrop-filter:blur(7px); }
+.technology-dialog-close { position:absolute; top:12px; right:12px; width:44px; height:44px; font-size:28px; color:#d7cbe7; background:transparent; }
+.technology-detail-icon { color:#acdce8; margin:4px 0 24px; }
+.technology-dialog h2 { font-size:32px; font-weight:400; line-height:1.3; margin:0 20px 20px 0; }
+.technology-dialog h3 { font-size:18px; font-weight:500; line-height:1.5; margin:28px 0 14px; }
+.technology-dialog p { font-size:17px; line-height:1.85; color:#c7bed6; margin:0; }
+.technology-people { display:flex; gap:10px; flex-wrap:wrap; }
+.technology-people button { padding:12px 16px; min-height:48px; border:1px solid #b5a1d151; border-radius:4px; color:#e0d4ef; background:#a789cb12; font-size:16px; }
+.technology-explore { display:block; width:100%; margin-top:28px; padding:16px; min-height:52px; border-radius:4px; background:#cfeff2; color:#172637; font-size:16px; text-align:left; line-height:1.5; }
+.technology-screen button:focus-visible { outline:3px solid #b7f4ff; outline-offset:4px; }
+@media(max-width:1050px) { .technology-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) {
+  .technology-main { width:calc(100% - 32px); padding-top:30px; }
+  .technology-main h1 { font-size:35px; margin-bottom:34px; }
+  .technology-main h2 { font-size:24px; }
+  .technology-grid { grid-template-columns:minmax(0,1fr); gap:18px; }
+  .technology-art { min-height:130px; }
+  .technology-card-content { padding:22px; }
+  .technology-card h3 { font-size:23px; }
+  .technology-dialog { padding:30px 24px; }
+  .technology-dialog h2 { font-size:29px; }
+}
+@media(min-width:900px) and (min-height:1350px) and (max-aspect-ratio:4/5) {
+  .technology-main { width:min(1900px,calc(100% - 96px)); padding-top:48px; }
+  .technology-main h1 { font-size:64px; margin-bottom:58px; }
+  .technology-main h2 { font-size:38px; margin-bottom:32px; }
+  .technology-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; }
+  .technology-art { min-height:190px; }
+  .technology-art svg { width:90px; height:90px; }
+  .technology-card-content { padding:32px; }
+  .technology-card h3 { font-size:30px; }
+  .technology-card p { font-size:24px; }
+  .technology-card-actions button { font-size:22px; min-height:68px; }
+  .technology-placeholder { min-height:400px; padding:32px; }
+  .technology-empty-art { height:190px; }
+  .technology-placeholder h3 { font-size:26px; }
+  .technology-dialog { width:min(850px,calc(100% - 96px)); padding:50px; }
+  .technology-dialog h2 { font-size:44px; }
+  .technology-dialog p { font-size:26px; }
+  .technology-dialog h3 { font-size:28px; }
+  .technology-people button,.technology-explore { font-size:24px; min-height:72px; }
+  .technology-dialog-close { width:64px; height:64px; font-size:38px; }
+}
+@media(min-width:1800px) and (min-height:2800px) and (max-aspect-ratio:4/5) {
+  .technology-main h1 { font-size:90px; }
+  .technology-card h3 { font-size:42px; }
+  .technology-card p { font-size:32px; }
+  .technology-card-actions button { font-size:30px; min-height:90px; }
+  .technology-art { min-height:260px; }
+  .technology-placeholder { min-height:520px; }
+}

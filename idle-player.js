@@ -20,8 +20,15 @@
   video.controls = false;
   video.disablePictureInPicture = true;
   video.setAttribute('muted', '');
+  video.setAttribute('autoplay', '');
   video.setAttribute('playsinline', '');
   video.setAttribute('webkit-playsinline', '');
+  // Assign the source only after the inline/muted properties are in place.
+  // This also avoids relying on the HTML parser's first autoplay attempt.
+  if (video.dataset.src && !video.getAttribute('src')) {
+    video.src = video.dataset.src;
+    video.load();
+  }
 
   function showResume(show) { resume.hidden = !show || !active(); }
 
@@ -142,7 +149,9 @@
   resume.addEventListener('click', event => { event.stopPropagation(); userPlay(); });
   root.addEventListener('click', userPlay);
   video.addEventListener('loadeddata', () => play());
+  video.addEventListener('loadedmetadata', () => play());
   video.addEventListener('canplay', () => play());
+  video.addEventListener('canplaythrough', () => play());
   video.addEventListener('pause', scheduleRetry);
   video.addEventListener('ended', () => {
     if (!active()) return;
@@ -168,11 +177,14 @@
       pending = null;
       video.pause();
     } else if (wanted) {
+      blocked = false;
       lastProgress = performance.now();
       play();
     }
   });
-  window.addEventListener('pageshow', () => { if (wanted) play(); });
+  window.addEventListener('pageshow', () => {
+    if (wanted) { blocked = false; lastProgress = performance.now(); play(); }
+  });
   window.FutureIdlePlayer = {show, hide};
   show();
 })();

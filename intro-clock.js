@@ -196,10 +196,15 @@
   function revealMap() {
     root.hidden = true;
     window.FutureIdlePlayer?.hide();
-    shell.removeAttribute('inert');
-    shell.removeAttribute('aria-hidden');
     document.body.classList.remove('intro-active');
     document.querySelector('.skip').removeAttribute('tabindex');
+    if (window.FutureLanding) {
+      window.FutureLanding.arrive();
+      return;
+    }
+    shell.hidden = false;
+    shell.removeAttribute('inert');
+    shell.removeAttribute('aria-hidden');
     window.AtlasApp?.fit();
     const n = $('inspector').getAttribute('aria-hidden') === 'false' ? $('inspector').querySelector('h2') : null;
     const focus = n || $('graphViewport');
@@ -217,7 +222,9 @@
 
   function reset() {
     cancelJourney();
+    window.FutureLanding?.hideForIntro();
     root.hidden = false;
+    shell.hidden = true;
     shell.setAttribute('inert', '');
     shell.setAttribute('aria-hidden', 'true');
     document.body.classList.add('intro-active');

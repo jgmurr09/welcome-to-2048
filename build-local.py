@@ -5,6 +5,7 @@ The resulting index.html opens directly without a server or separate script load
 """
 
 from pathlib import Path
+import base64
 import re
 
 
@@ -16,6 +17,11 @@ def build():
     def style(match):
         name = match.group(1)
         css = (folder / name).read_text(encoding="utf-8")
+        def embed_font(font_match):
+            font_file = folder / font_match.group(1)
+            encoded = base64.b64encode(font_file.read_bytes()).decode("ascii")
+            return "url('data:font/woff2;base64," + encoded + "')"
+        css = re.sub(r"url\('([^']+\.woff2)'\)", embed_font, css)
         if "</style" in css.lower():
             raise ValueError(f"Unexpected closing style tag in {name}")
         return f'<style data-source="{name}">\n{css}\n</style>'
@@ -30,8 +36,8 @@ def build():
 
     page = re.sub(r'<link rel="stylesheet" href="([^"?#]+)">', style, page)
     page = re.sub(r'<script defer src="([^"?#]+)"></script>', script, page)
-    if len(scripts) != 5:
-        raise ValueError("Expected the five application scripts in the page template")
+    if len(scripts) != 12:
+        raise ValueError("Expected the twelve application scripts in the page template")
     page = page.replace("</body>", "\n".join(scripts) + "\n</body>")
     (folder / "index.html").write_text(page, encoding="utf-8")
     print("Built index.html with all page styles and scripts included.")

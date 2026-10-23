@@ -1,0 +1,65 @@
+@font-face { font-family:Roboto; font-style:normal; font-weight:300; font-display:swap; src:url('assets/fonts/Roboto-300.woff2') format('woff2'); }
+@font-face { font-family:Roboto; font-style:normal; font-weight:400; font-display:swap; src:url('assets/fonts/Roboto-400.woff2') format('woff2'); }
+@font-face { font-family:Roboto; font-style:normal; font-weight:500; font-display:swap; src:url('assets/fonts/Roboto-500.woff2') format('woff2'); }
+@font-face { font-family:Roboto; font-style:normal; font-weight:700; font-display:swap; src:url('assets/fonts/Roboto-700.woff2') format('woff2'); }
+:root { --sans:Roboto,Arial,sans-serif; --hub-mono:Roboto,Arial,sans-serif; --hub-header-h:90px; }
+body,input,button,dialog { font-family:var(--sans); }
+.future-intro { --future-mono:Roboto,Arial,sans-serif; }
+.hub-hero h1 { font-family:Inter,'Helvetica Neue',Arial,sans-serif; }
+.hub-brand { min-height:74px; padding:6px 0; }
+.tang-logo { display:block; width:170px; height:68px; object-fit:contain; }
+.intro-tang-logo { display:block; width:210px; height:84px; object-fit:contain; }
+.hub-nav button { font-size:14px; min-height:48px; }
+.nav-short { display:none; }
+.hub-return { min-height:44px; font-size:13px; }
+.hub-year { font-family:var(--sans); font-size:14px; letter-spacing:0; }
+.hub-hero { padding-top:48px; }
+.hub-hero h1 { margin-bottom:38px; }
+.portal-art svg { opacity:.95; }
+.section-heading h2 { font-weight:400; }
+.person-info strong { font-weight:500; }
+.scene-switch>span,.scene-switch button,.hub-replay { font:400 14px var(--sans); letter-spacing:0; text-transform:none; min-height:44px; }
+.hub-dialog p { font-size:16px; }
+.hub-dialog-links button { min-height:48px; font-size:15px; }
+.hub-dialog .dialog-close { width:44px; height:44px; }
+.breadcrumb,.breadcrumb button,.crumb-current { font-family:var(--sans); letter-spacing:0; }
+@media(max-width:1100px) and (min-width:761px) {
+  .hub-chrome { padding-inline:22px; gap:16px; }
+  .tang-logo { width:140px; height:56px; }
+  .hub-nav { gap:16px; }
+  .hub-nav button { font-size:12px; }
+  .hub-return { font-size:11px; padding:8px; }
+}
+@media(max-width:760px) {
+  :root { --hub-header-h:126px; }
+  .hub-chrome { padding-inline:16px; }
+  .hub-brand { height:76px; min-height:76px; padding-block:8px; }
+  .tang-logo { width:140px; height:56px; }
+  .hub-nav { height:50px; gap:8px; justify-content:space-between; overflow:visible; }
+  .hub-nav button { min-height:48px; min-width:64px; font-size:14px; flex-shrink:0; }
+  .nav-full { display:none; }
+  .nav-short { display:inline; }
+  .hub-return { font-size:11px; }
+  .hub-hero { padding-top:32px; }
+  .hub-hero h1 { margin-bottom:30px; }
+  .intro-tang-logo { width:165px; height:66px; }
+  .scene-switch>span,.scene-switch button,.hub-replay { font-size:12px; }
+}
+@media(min-width:900px) and (min-height:1350px) and (max-aspect-ratio:4/5) {
+  :root { --hub-header-h:200px; }
+  .hub-chrome { flex-wrap:wrap; align-content:flex-start; padding:0 40px; gap:0; }
+  .hub-brand { height:110px; }
+  .tang-logo { width:240px; height:96px; }
+  .hub-return { margin-left:auto; min-height:64px; font-size:20px; }
+  .hub-nav { order:3; flex-basis:100%; justify-content:space-between; height:90px; gap:15px; }
+  .hub-nav button { min-height:72px; font-size:22px; }
+  .scene-switch>span,.scene-switch button,.hub-replay { font-size:20px; min-height:64px; }
+}
+@media(min-width:1800px) and (min-height:2800px) and (max-aspect-ratio:4/5) {
+  :root { --hub-header-h:280px; }
+  .hub-brand { height:150px; }
+  .tang-logo { width:330px; height:132px; }
+  .hub-nav { height:130px; }
+  .hub-nav button { min-height:100px; font-size:32px; }
+  .hub-return { min-height:88px; font-size:28px; }
+}

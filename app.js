@@ -21,9 +21,13 @@
   }
   function navigate(id, options={}){
     if(id&&!byId.has(id))return;
+    if(byId.get(id)?.type==='person' && window.FutureLanding?.isReady()) {
+      window.FutureLanding.openCharacter(id);
+      return;
+    }
     state.selected=id; state.activeEdge=options.edge||null;
     state.panelOpen=!!id;
-    if(!options.fromHistory){state.historyDepth++;history.pushState({atlas:true},'',id?'#/'+encodeURIComponent(id):location.pathname+location.search);}
+    if(!options.fromHistory){state.historyDepth++;history.pushState({atlas:true,futureScreen:'world',themeContext:window.FutureLanding?.themeContext?.()||null},'',id?'#/'+encodeURIComponent(id):location.pathname+location.search);}
     render();
     if(id){announce(byId.get(id).name+'. '+typeNames[byId.get(id).type]+'. Details opened.');const heading=$('inspector').querySelector('h2');if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}}
   }

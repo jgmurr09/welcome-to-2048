@@ -5,26 +5,37 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#131034">
   <meta name="description" content="Step into 2048. Explore the people, systems, and everyday connections of a possible future.">
-  <title>Explore 2048</title>
+  <title>Welcome to 2048 — Future World Sprint</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="intro.css">
+  <link rel="stylesheet" href="landing.css">
+  <link rel="stylesheet" href="characters.css">
+  <link rel="stylesheet" href="technology.css">
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="fonts.css">
   <script defer src="intro-config.js"></script>
   <script defer src="idle-player.js"></script>
   <script defer src="data.js"></script>
+  <script defer src="character-config.js"></script>
+  <script defer src="technology-config.js"></script>
   <script defer src="app.js"></script>
+  <script defer src="landing-config.js"></script>
+  <script defer src="landing.js"></script>
+  <script defer src="characters.js"></script>
+  <script defer src="technology.js"></script>
+  <script defer src="themes.js"></script>
   <script defer src="intro-clock.js"></script>
 </head>
 <body class="intro-active">
-<a class="skip" href="#graphViewport">Skip to the world map</a>
+<a class="skip" href="#landingTitle">Skip to content</a>
 <section class="future-intro" id="futureIntro" role="dialog" aria-modal="true" aria-labelledby="introHeading" data-phase="idle">
   <h1 class="sr-only" id="introHeading">Future World 2048. Step into a possible future.</h1>
   <div class="intro-idle" id="introIdle">
     <img class="idle-poster" src="assets/future-world-poster.jpg" alt="" fetchpriority="high">
-    <video class="idle-video" id="idleVideo" src="assets/future-world-idle-web.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback poster="assets/future-world-poster.jpg" aria-hidden="true" tabindex="-1"></video>
+    <video class="idle-video" id="idleVideo" data-src="assets/future-world-idle-web.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback poster="assets/future-world-poster.jpg" aria-hidden="true" tabindex="-1"></video>
     <div class="idle-vignette" aria-hidden="true"></div>
     <button type="button" class="idle-resume" id="resumeBackground" aria-label="Play background animation" title="Play background animation" hidden><svg viewBox="0 0 28 28" aria-hidden="true"><path d="m10 6 13 8-13 8Z"/></svg></button>
     <div class="idle-invitation">
-      <p class="idle-line">What will everyday life feel like?</p>
       <button type="button" class="enter-future" id="enterFuture"><span>TAP TO ENTER THE FUTURE</span><svg viewBox="0 0 32 20" aria-hidden="true"><path d="M1 10h28M21 2l8 8-8 8"/></svg></button>
     </div>
   </div>
@@ -50,11 +61,63 @@
   </div>
 
   <header class="intro-masthead">
-    <div class="intro-brand"><span>TANG</span><span class="intro-brand-rule"></span><span>FUTURE WORLD<br>SPRINT</span></div>
+    <img class="intro-tang-logo" src="assets/tang-logo-white.png" alt="TANG">
   </header>
   <p class="sr-only" id="introStatus" role="status" aria-live="polite" aria-atomic="true"></p>
 </section>
-<div class="app-shell" inert aria-hidden="true">
+<header class="hub-chrome" id="hubHeader" hidden inert aria-hidden="true">
+  <button type="button" class="hub-brand" id="hubBrand" aria-label="Return to the 2048 landing page">
+    <img class="tang-logo" src="assets/tang-logo-white.png" alt="TANG">
+  </button>
+  <nav class="hub-nav" aria-label="Main navigation">
+    <button type="button" data-hub-nav="world" aria-current="page" aria-label="Explore the World"><span class="nav-full">Explore the World</span><span class="nav-short" aria-hidden="true">World</span></button>
+    <button type="button" data-hub-nav="people" aria-label="Meet the People"><span class="nav-full">Meet the People</span><span class="nav-short" aria-hidden="true">People</span></button>
+    <button type="button" data-hub-nav="technology" aria-label="Explore the Technology"><span class="nav-full">Explore the Technology</span><span class="nav-short" aria-hidden="true">Technology</span></button>
+    <button type="button" data-hub-nav="about" aria-label="About the Event"><span class="nav-full">About the Event</span><span class="nav-short" aria-hidden="true">About</span></button>
+  </nav>
+  <span class="hub-year" id="hubYear"><i aria-hidden="true"></i> 2048</span>
+  <button type="button" class="hub-return" id="hubReturn" hidden>← Back to landing</button>
+</header>
+
+<div class="landing-screen" id="landingScreen" data-background="future" hidden inert aria-hidden="true">
+  <main class="hub-main">
+    <section class="hub-hero" id="worldSection" aria-labelledby="landingTitle">
+      <h1 id="landingTitle" tabindex="-1">Welcome to <em>2048</em></h1>
+      <button type="button" class="world-portal" id="worldPortal" aria-label="Enter the World. Open the interactive 2048 connection map.">
+        <span class="portal-art" id="portalMap" aria-hidden="true"></span>
+      </button>
+    </section>
+
+    <section class="hub-people" id="peopleSection" aria-labelledby="peopleHeading">
+      <div class="section-heading">
+        <h2 id="peopleHeading" tabindex="-1">Meet the People of Tomorrow</h2>
+      </div>
+      <div class="character-gallery" id="peopleGallery" role="group" aria-label="Five people of 2048"></div>
+    </section>
+
+    <section class="hub-themes" id="themesSection" aria-labelledby="themesHeading">
+      <div class="section-heading">
+        <h2 id="themesHeading" tabindex="-1">Explore the Themes</h2>
+      </div>
+      <div class="theme-grid" id="themeGrid"></div>
+      <section class="theme-explorer" id="themeExplorer" aria-labelledby="themeExplorerTitle" hidden></section>
+    </section>
+
+    <footer class="hub-footer">
+      <div class="scene-switch" role="group" aria-label="Landing background">
+        <span>Scene</span>
+        <button type="button" data-background-choice="future" aria-pressed="true">Future</button>
+        <button type="button" data-background-choice="research" aria-pressed="false">Research board</button>
+      </div>
+      <button type="button" class="hub-replay" id="hubReplay">↶ Replay arrival</button>
+    </footer>
+  </main>
+</div>
+
+<main class="character-screen" id="characterScreen" aria-label="Character story and connections" hidden inert aria-hidden="true"></main>
+<main class="technology-screen" id="technologyScreen" aria-label="Technology catalogue" hidden inert aria-hidden="true"></main>
+
+<div class="app-shell hub-world" hidden inert aria-hidden="true">
   <h1 class="sr-only">Explore everyday life in 2048</h1>
   <main class="workspace" id="workspace">
     <section class="map-section" aria-label="Interactive world map">
@@ -100,8 +163,13 @@
   <h2>Map controls</h2>
   <p>Choose a node to open it. Drag to move around. Scroll, pinch, or use +/− to zoom. Use the fit button to recenter.</p>
   <p>Use List for another way to browse. With the map focused, use arrow keys to pan and 0 to fit. Tab to a node and press Enter to open it.</p>
-  <a class="board-link" href="board.png" target="_blank" rel="noopener">Original connection board ↗</a>
+  <a class="board-link" href="assets/research-board.jpg" target="_blank" rel="noopener">Original connection board ↗</a>
   <button class="text-button" id="beginExplore">Back to the map</button>
+</dialog>
+<dialog class="hub-dialog" id="hubDialog" aria-labelledby="hubDialogTitle">
+  <button type="button" class="dialog-close" id="hubDialogClose" aria-label="Close dialog">×</button>
+  <h2 id="hubDialogTitle"></h2>
+  <div id="hubDialogContent"></div>
 </dialog>
 </body>
 </html>
