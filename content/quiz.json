@@ -1,0 +1,400 @@
+{
+  "title": "Your day in 2048",
+  "intro": "Choose the parts of everyday life you want to explore. Your choices will bring those pieces of 2048 together here, and your results will stay in this tab while you look around.",
+  "questions": [
+    {
+      "id": "home",
+      "title": "Where would you like to wake up?",
+      "options": [
+        {
+          "id": "water",
+          "title": "Close to fresh water",
+          "detail": "A home near the lakes.",
+          "people": {
+            "leo": 3
+          },
+          "themes": {
+            "climate": 3,
+            "geography": 1
+          },
+          "node": "climate",
+          "source": "characters.leo.sections.home",
+          "icon": "climate",
+          "world": "Fresh water and a more sustainable climate draw people toward the Great Lakes. Leo chose to live there for those reasons, as well as its location for his business. Access to a home at that level depends on resources.",
+          "sources": [
+            "themes.climate",
+            "characters.leo.sections.home"
+          ]
+        },
+        {
+          "id": "city",
+          "title": "In a connected neighborhood",
+          "detail": "People and community nearby.",
+          "people": {
+            "catherine": 3,
+            "ken": 1
+          },
+          "themes": {
+            "geography": 3
+          },
+          "node": "geography",
+          "source": "characters.catherine.sections.home",
+          "icon": "people",
+          "world": "Home is connected to the people around it. Catherine lives alone, but friends and neighbors form an important part of her community. Virtual community tools also appear in her daily life.",
+          "sources": [
+            "characters.catherine.sections.home",
+            "characters.catherine.sections.tech"
+          ]
+        },
+        {
+          "id": "rural",
+          "title": "Somewhere with more room",
+          "detail": "A rural home connected to the wider world.",
+          "people": {
+            "sophia": 2,
+            "veronica": 2
+          },
+          "themes": {
+            "geography": 3,
+            "education": 1
+          },
+          "node": "geography",
+          "source": "characters.veronica.sections.home",
+          "icon": "gardening",
+          "world": "A rural home can stay connected to a wider world. Veronica’s local satellite school links to a larger school district, while she keeps both virtual and in-person friendships.",
+          "sources": [
+            "characters.veronica.sections.work",
+            "characters.veronica.sections.home"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "daytime",
+      "title": "What would you like to spend your day doing?",
+      "options": [
+        {
+          "id": "care",
+          "title": "Bring care to people",
+          "detail": "Explore robotic assistance and mobile healthcare.",
+          "people": {
+            "sophia": 4
+          },
+          "themes": {
+            "geography": 1,
+            "wealth": 1
+          },
+          "node": "autonomous",
+          "source": "characters.sophia.sections.work",
+          "icon": "volunteer",
+          "world": "Healthcare can travel to people. Sophia’s technical training supports her work as a robotic assisted paramedic in rural Wyoming. Autonomous mobile health units are another way the world brings care to remote places.",
+          "sources": [
+            "characters.sophia.sections.work",
+            "artifacts.autonomous"
+          ]
+        },
+        {
+          "id": "build",
+          "title": "Keep things moving",
+          "detail": "Explore logistics, manufacturing, and automation.",
+          "people": {
+            "leo": 2,
+            "ken": 2
+          },
+          "themes": {
+            "materials": 3
+          },
+          "node": "trucking",
+          "source": "characters.leo.sections.work",
+          "icon": "trucking",
+          "world": "Automation changes how things move. Leo’s company uses autonomous long-haul trucks and people for the last mile. Ken works with technology at the center of military logistics.",
+          "sources": [
+            "characters.leo.sections.work",
+            "characters.ken.sections.tech"
+          ]
+        },
+        {
+          "id": "learn",
+          "title": "Learn something and put it to use",
+          "detail": "Explore school, robotics, and new paths into work.",
+          "people": {
+            "veronica": 3,
+            "ken": 1
+          },
+          "themes": {
+            "education": 4
+          },
+          "node": "education",
+          "source": "characters.veronica.sections.work",
+          "icon": "education",
+          "world": "Learning is connected to the things people want to do. Veronica’s rural school links to a larger network, and her interests include robotics. Ken’s associate’s degree was supported by the military.",
+          "sources": [
+            "characters.veronica.sections.work",
+            "characters.ken.sections.work"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "title": "How would you like to get your food?",
+      "options": [
+        {
+          "id": "grow",
+          "title": "Grow some of it at home",
+          "detail": "Vegetables, microgreens, and community knowledge.",
+          "people": {
+            "catherine": 2,
+            "veronica": 2
+          },
+          "themes": {
+            "climate": 2
+          },
+          "node": "kitchen",
+          "source": "artifacts.kitchen",
+          "icon": "gardening",
+          "world": "Growing food becomes part of home life. The kitchen concept includes microgreens, vegetables, and mushrooms to lower food costs and support healthier living. Catherine and Veronica also grow vegetables.",
+          "sources": [
+            "artifacts.kitchen",
+            "characters.catherine.sections.health",
+            "characters.veronica.sections.health"
+          ]
+        },
+        {
+          "id": "market",
+          "title": "Visit the local market",
+          "detail": "Fresh food and a reason to meet the neighbors.",
+          "people": {
+            "sophia": 3
+          },
+          "themes": {
+            "geography": 2
+          },
+          "node": "geography",
+          "source": "characters.sophia.sections.health",
+          "icon": "people",
+          "world": "Food can create a reason to go into the community. Sophia gets locally grown and made food at a nearby farmers market. She would like to grow more herself if she had the time.",
+          "sources": [
+            "characters.sophia.sections.health"
+          ]
+        },
+        {
+          "id": "personalized",
+          "title": "Have meals tailored to me",
+          "detail": "Explore food matched to nutritional needs.",
+          "people": {
+            "catherine": 2,
+            "veronica": 1
+          },
+          "themes": {
+            "wealth": 2
+          },
+          "node": "wearable",
+          "source": "characters.catherine.sections.health",
+          "icon": "kitchen",
+          "world": "Meals can be personalized around nutritional needs. Catherine combines delivered meals with vegetables from her indoor and outdoor gardens. Veronica’s family also uses personalized meals.",
+          "sources": [
+            "characters.catherine.sections.health",
+            "characters.veronica.sections.health"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "care",
+      "title": "What would matter most in your healthcare?",
+      "options": [
+        {
+          "id": "independence",
+          "title": "Stay independent for longer",
+          "detail": "Support that fits around home and community.",
+          "people": {
+            "catherine": 4
+          },
+          "themes": {
+            "geography": 1
+          },
+          "node": "wearable",
+          "source": "characters.catherine.sections.tech",
+          "icon": "home",
+          "world": "Technology can help people live alone for longer. Catherine uses a virtual assistant, smart in-home health, a healthcare-linked wearable, and virtual community tools. She still worries about who will care for her as she gets older.",
+          "sources": [
+            "truths.elder",
+            "characters.catherine.sections.tech",
+            "characters.catherine.sections.home"
+          ]
+        },
+        {
+          "id": "prevention",
+          "title": "Catch problems earlier",
+          "detail": "Explore the benefits and tradeoffs of bio tracking.",
+          "people": {
+            "sophia": 2,
+            "ken": 2
+          },
+          "themes": {
+            "wealth": 3
+          },
+          "node": "wearable",
+          "source": "truths.bio",
+          "icon": "wearable",
+          "world": "Preventative care is a priority, with bio tracking informing health, diet, medicine, and activity. The tradeoff is real: the world describes higher healthcare costs for people who do not track.",
+          "sources": [
+            "truths.bio"
+          ]
+        },
+        {
+          "id": "choice",
+          "title": "Have more say over my data",
+          "detail": "Compare who can choose to opt out.",
+          "people": {
+            "leo": 3
+          },
+          "themes": {
+            "wealth": 4
+          },
+          "node": "wealth",
+          "source": "characters.leo.sections.tech",
+          "icon": "wealth",
+          "world": "The ability to opt out is uneven. Leo can afford to choose less everyday health tracking. Sophia’s wearable helps her save on insurance, and Ken’s tracker was issued by the Marines.",
+          "sources": [
+            "characters.leo.sections.tech",
+            "characters.sophia.sections.tech",
+            "characters.ken.sections.tech"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "community",
+      "title": "What would you make time for after the day is done?",
+      "options": [
+        {
+          "id": "garden",
+          "title": "Learn or grow something with others",
+          "detail": "Follow Catherine and Veronica’s gardening connection.",
+          "people": {
+            "catherine": 2,
+            "veronica": 2
+          },
+          "themes": {
+            "education": 2
+          },
+          "node": "gardening",
+          "source": "characters.veronica.sections.third",
+          "icon": "gardening",
+          "world": "Community can form around learning and growing food. Catherine teaches online gardening classes that Veronica attends. Gardening and volunteering help both of them stay active and connected.",
+          "sources": [
+            "characters.veronica.sections.third",
+            "characters.catherine.sections.third"
+          ]
+        },
+        {
+          "id": "family",
+          "title": "Time with my family",
+          "detail": "Follow Ken’s life as a father and Marine.",
+          "people": {
+            "ken": 4
+          },
+          "themes": {
+            "geography": 1
+          },
+          "node": "vacation",
+          "source": "characters.ken.sections.third",
+          "icon": "people",
+          "world": "Family time has to fit around work and care. Ken raises his son in on-base housing and sometimes struggles with childcare coverage. They get to the beach when they can.",
+          "sources": [
+            "characters.ken.sections.home",
+            "characters.ken.sections.third"
+          ]
+        },
+        {
+          "id": "outside",
+          "title": "Get out on the water or a trail",
+          "detail": "Explore Leo’s recreation and who can access it.",
+          "people": {
+            "leo": 3
+          },
+          "themes": {
+            "wealth": 2,
+            "climate": 1
+          },
+          "node": "vacation",
+          "source": "characters.leo.sections.third",
+          "icon": "vacation",
+          "world": "The outdoors is also shaped by access. Leo spends time on his boat and hikes in state-reserved and private recreation areas. His wealth gives him choices that few can readily afford.",
+          "sources": [
+            "characters.leo.sections.third",
+            "characters.leo.sections.health"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "question",
+      "title": "Which question would you want to look into first?",
+      "options": [
+        {
+          "id": "access",
+          "title": "Who can afford these choices?",
+          "detail": "Compare care, housing, and recreation across incomes.",
+          "people": {
+            "sophia": 1,
+            "ken": 1
+          },
+          "themes": {
+            "wealth": 5
+          },
+          "node": "wealth",
+          "source": "themes.wealth",
+          "icon": "wealth",
+          "world": "New options do not reach everyone equally. Income affects access to food, care, housing, and recreation. Comparing Leo’s choices with Ken’s and Sophia’s makes those differences visible.",
+          "sources": [
+            "themes.wealth",
+            "characters.leo.sections.health",
+            "characters.sophia.sections.home"
+          ]
+        },
+        {
+          "id": "climate",
+          "title": "Where can people build a stable home?",
+          "detail": "Follow climate, migration, and access to fresh water.",
+          "people": {
+            "ken": 2,
+            "leo": 1
+          },
+          "themes": {
+            "climate": 5
+          },
+          "node": "climate",
+          "source": "themes.climate",
+          "icon": "climate",
+          "world": "Climate change puts pressure on where people can build a stable life. Ken’s childhood displacement and Leo’s choice of the Great Lakes show very different experiences of moving home.",
+          "sources": [
+            "themes.climate"
+          ]
+        },
+        {
+          "id": "change",
+          "title": "What skills and connections will matter?",
+          "detail": "Follow learning, automation, and community.",
+          "people": {
+            "veronica": 2
+          },
+          "themes": {
+            "education": 4,
+            "materials": 1
+          },
+          "node": "education",
+          "source": "themes.education",
+          "icon": "education",
+          "world": "Skills and relationships develop through several paths. Satellite schools, technical training, military-supported degrees, and community classes all have a place in this world. Automation changes the skills people need.",
+          "sources": [
+            "themes.education",
+            "truths.robotics"
+          ]
+        }
+      ]
+    }
+  ]
+}

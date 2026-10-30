@@ -1,0 +1,235 @@
+{
+  "world": {
+    "title": "The world in 2048",
+    "paragraphs": [
+      "Climate change, unequal resources, and new technology shape everyday life in this possible future. People live longer, automation is common, and care and food can be more personalized. Access still varies with income and where someone lives.",
+      "Start with an orange theme tile on the map. Read the notes beside the people, then compare their experiences with the filters. Pink cards connect shared activities; cyan circles connect the technology they use."
+    ],
+    "sources": [
+      "truths.global",
+      "truths.health",
+      "truths.robotics",
+      "truths.elder",
+      "themes.wealth",
+      "themes.geography"
+    ]
+  },
+  "themes": {
+    "climate": {
+      "title": "Climate change",
+      "paragraphs": [
+        "Natural disasters are becoming more frequent and more severe. People move away from disaster-prone places, disrupting housing, food supplies, and local economies. Competition over land and other resources adds to wider instability.",
+        "These changes reach people differently. Ken left the climate-endangered Marshall Islands as a child. Leo could afford a home near the fresh water and more sustainable climate of the Great Lakes. Veronica hopes to use technology to develop plant-based diets that reduce climate harm."
+      ],
+      "notes": {
+        "leo": {
+          "text": "Could afford a home in the Great Lakes climate haven.",
+          "sources": [
+            "themes.climate",
+            "characters.leo.sections.home"
+          ]
+        },
+        "ken": {
+          "text": "Left the Marshall Islands as a child and fears displacement again.",
+          "sources": [
+            "themes.climate",
+            "characters.ken.sections.home"
+          ]
+        },
+        "veronica": {
+          "text": "Hopes to develop plant-based renewable diets that reduce climate harm.",
+          "sources": [
+            "themes.climate"
+          ]
+        }
+      },
+      "sources": [
+        "themes.climate"
+      ]
+    },
+    "wealth": {
+      "title": "Wealth gap",
+      "paragraphs": [
+        "Income changes the choices people can make about care, food, housing, and recreation. Leo is in the top 1%. Catherine and Veronica sit in the middle to upper-middle group, while Ken and Sophia are in the lower to lower-middle group.",
+        "The difference is visible in everyday life. Leo can afford a mobile doctor, household staff, and private recreation, and can choose less health tracking. Sophia uses a wearable to lower insurance costs while weighing the cost of a home and a family. Ken relies on fixed military pay, on-base housing, and base food services."
+      ],
+      "notes": {
+        "leo": {
+          "text": "Top 1%: private care, household staff, and more choice over tracking.",
+          "sources": [
+            "themes.wealth",
+            "characters.leo.sections.health",
+            "characters.leo.sections.home",
+            "characters.leo.sections.tech"
+          ]
+        },
+        "ken": {
+          "text": "Fixed military pay; on-base housing and food services support his family.",
+          "sources": [
+            "themes.wealth",
+            "characters.ken.sections.work",
+            "characters.ken.sections.home",
+            "characters.ken.sections.health"
+          ]
+        },
+        "sophia": {
+          "text": "Low to middle income; homeownership and starting a family raise cost questions.",
+          "sources": [
+            "characters.sophia.sections.work",
+            "characters.sophia.sections.home"
+          ]
+        },
+        "veronica": {
+          "text": "Her middle-income parents support her; she also has an allowance.",
+          "sources": [
+            "characters.veronica.sections.work"
+          ]
+        },
+        "catherine": {
+          "text": "Retired with a full pension and fixed retirement income.",
+          "sources": [
+            "characters.catherine.sections.work"
+          ]
+        }
+      },
+      "sources": [
+        "themes.wealth",
+        "characters.leo.sections.health",
+        "characters.leo.sections.home",
+        "characters.leo.sections.tech",
+        "characters.sophia.sections.tech",
+        "characters.sophia.sections.home",
+        "characters.ken.sections.work",
+        "characters.ken.sections.home",
+        "characters.ken.sections.health"
+      ]
+    },
+    "geography": {
+      "title": "Where you live",
+      "paragraphs": [
+        "Leo lives in the suburbs, Catherine and Ken in urban settings, and Veronica and Sophia in rural communities. Those settings connect people to different forms of work, education, care, and community.",
+        "Veronica attends a local satellite schoolhouse linked to a larger school network. Sophia travels through rural Wyoming as a robotic assisted paramedic. Ken and his son live in military housing in Hawaii, while Catherine lives alone with friends and neighbors nearby. Leo chose the Great Lakes for its climate, fresh water, business location, and boating."
+      ],
+      "notes": {
+        "leo": {
+          "text": "Suburb: a Great Lakes home near his business and the water.",
+          "sources": [
+            "themes.geography",
+            "characters.leo.sections.home"
+          ]
+        },
+        "ken": {
+          "text": "Urban: on-base military housing in Hawaii with his son.",
+          "sources": [
+            "themes.geography",
+            "characters.ken.sections.home"
+          ]
+        },
+        "sophia": {
+          "text": "Rural: rents with her partner and serves communities around Wyoming.",
+          "sources": [
+            "themes.geography",
+            "characters.sophia.sections.home",
+            "characters.sophia.sections.work"
+          ]
+        },
+        "veronica": {
+          "text": "Rural: a satellite school connects her to a wider school district.",
+          "sources": [
+            "themes.geography",
+            "characters.veronica.sections.work"
+          ]
+        },
+        "catherine": {
+          "text": "Urban: lives alone and has a community of friends and neighbors.",
+          "sources": [
+            "themes.geography",
+            "characters.catherine.sections.home"
+          ]
+        }
+      },
+      "sources": [
+        "themes.geography",
+        "characters.veronica.sections.work",
+        "characters.sophia.sections.work",
+        "characters.ken.sections.home",
+        "characters.catherine.sections.home",
+        "characters.leo.sections.home"
+      ]
+    },
+    "education": {
+      "title": "Education",
+      "paragraphs": [
+        "Learning follows several paths in this world. Veronica’s satellite school connects her rural community to a larger network, and her ambitions in robotics may take her beyond a traditional school-to-college route.",
+        "Ken earned an associate’s degree through the Marine Corps. Sophia trained at a technical school and would consider more education if it made financial sense and helped her care for more people. Leo holds a BA but credits experience and entrepreneurship for his success. Catherine values nursing school as both professional preparation and a chance to learn about life away from home."
+      ],
+      "notes": {
+        "leo": {
+          "text": "Holds a BA, but credits experience and entrepreneurship for his success.",
+          "sources": [
+            "themes.education",
+            "characters.leo.sections.work"
+          ]
+        },
+        "ken": {
+          "text": "Earned an associate’s degree with military support.",
+          "sources": [
+            "themes.education",
+            "characters.ken.sections.work"
+          ]
+        },
+        "sophia": {
+          "text": "Trained at a technical school for robotic assisted paramedicine.",
+          "sources": [
+            "themes.education",
+            "characters.sophia.sections.work"
+          ]
+        },
+        "veronica": {
+          "text": "A satellite school supports her interests in robotics and technology.",
+          "sources": [
+            "themes.education",
+            "characters.veronica.sections.work"
+          ]
+        },
+        "catherine": {
+          "text": "Values college and nursing school as foundations for her life’s work.",
+          "sources": [
+            "themes.education"
+          ]
+        }
+      },
+      "sources": [
+        "themes.education"
+      ]
+    },
+    "materials": {
+      "title": "Regional materials",
+      "paragraphs": [
+        "Control over critical raw materials creates tension between Russia, China, and the United States. The world described here relies on domestic stockpiles and manufacturing, allied supply, and mining from the sea floor and space asteroids.",
+        "Those supply systems connect directly to Ken’s work in an advanced-manufacturing materials warehouse and Leo’s autonomous trucking business. Their roles show how a global resource issue reaches the movement and storage of everyday goods."
+      ],
+      "notes": {
+        "leo": {
+          "text": "His trucking company moves cargo using autonomous long-haul vehicles.",
+          "sources": [
+            "characters.leo.sections.work"
+          ]
+        },
+        "ken": {
+          "text": "Works in logistics at an advanced-manufacturing materials warehouse.",
+          "sources": [
+            "characters.ken.sections.work"
+          ]
+        }
+      },
+      "sources": [
+        "themes.materials",
+        "truths.global",
+        "truths.supply",
+        "characters.ken.sections.work",
+        "characters.leo.sections.work"
+      ]
+    }
+  }
+}
