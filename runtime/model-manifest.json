@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 2,
+  "interface": {
+    "name": "wllama",
+    "version": "3.8.1",
+    "source": "https://github.com/ngxson/wllama",
+    "license": "MIT"
+  },
+  "runtime": {
+    "backend": "llama.cpp WASM",
+    "threads": 1,
+    "gpuLayers": "Automatic WebGPU when available; CPU WASM fallback",
+    "storage": "RAM only",
+    "access": "Bundled static site assets, no tools",
+    "compatibilityVersion": "3.8.1"
+  },
+  "model": {
+    "name": "SmolLM2-360M-Instruct-Q4_K_M",
+    "author": "HuggingFaceTB",
+    "quantizer": "bartowski",
+    "source": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF",
+    "baseSource": "https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct",
+    "revision": "7be6f65f1db715fe5dc5a4634c0d459b4eed42ec",
+    "license": "Apache-2.0",
+    "size": 270590880,
+    "sha256": "2fa3f013dcdd7b99f9b237717fa0b12d75bbb89984cc1274be1471a465bac9c2",
+    "parts": [
+      {
+        "path": "runtime/models/smollm2-360m/model-00.part",
+        "size": 50331648,
+        "sha256": "2c57741609775c107155dd27aa9d1af3ab77fd7732517c907068b74a0eab6bf8"
+      },
+      {
+        "path": "runtime/models/smollm2-360m/model-01.part",
+        "size": 50331648,
+        "sha256": "7ec2e68ba6d4e8b4fef1f4654957d2be71c80dea8fa0fdec92c6f1759fc8d72b"
+      },
+      {
+        "path": "runtime/models/smollm2-360m/model-02.part",
+        "size": 50331648,
+        "sha256": "743d45dcb2b6e31e67095bfe973f9fa50eec11a16a9ccf22c35d67014be29fce"
+      },
+      {
+        "path": "runtime/models/smollm2-360m/model-03.part",
+        "size": 50331648,
+        "sha256": "7f4332cb11127e6733d10040601b7d41ca068f59405c66f31ab0c51cdf709094"
+      },
+      {
+        "path": "runtime/models/smollm2-360m/model-04.part",
+        "size": 50331648,
+        "sha256": "90231b6d49361ac6577895f80c14686a0b35b4314e5b6d5dbaca9164ffac089c"
+      },
+      {
+        "path": "runtime/models/smollm2-360m/model-05.part",
+        "size": 18932640,
+        "sha256": "fdf1d60fa8b56c74c61c0a3875815946b98042da3e9d6a746a3bdee8b0a5115c"
+      }
+    ]
+  },
+  "vendorFiles": [
+    {
+      "path": "runtime/wllama/esm/index.js",
+      "size": 382633,
+      "sha256": "e5506753e41a59c11f61f2c52422045be9fc76e32a7e47f037aaad5df4ec723e"
+    },
+    {
+      "path": "runtime/wllama/esm/wasm/wllama.wasm",
+      "size": 8763949,
+      "sha256": "551f13439366eff11e057b1b91fe46a7fdac29d56d67372d4c5f19a549dfe70c"
+    },
+    {
+      "path": "runtime/wllama-compat/wasm/wllama.js",
+      "size": 171615,
+      "sha256": "2649eeb408988841c372e54805adfa25aed5d02f850c09add78c2f3ac0f3fce1"
+    },
+    {
+      "path": "runtime/wllama-compat/wasm/wllama.wasm",
+      "size": 16005007,
+      "sha256": "2db3f67d0bcc19cdf8f14f129e46cab691bff898954808f8a2dc4c586eb5bb68"
+    }
+  ],
+  "notes": [
+    "Model is byte-split for GitLab file limits; Blob concatenation restores the original GGUF.",
+    "Vendor code is unchanged. CacheManager receives an inert RAM-only backend; loadModel consumes a Blob.",
+    "AI-generated conversation is imaginative, can be wrong, and is not canonical source text."
+  ]
+}
