@@ -1,92 +1,57 @@
-# Welcome to 2048 — updated local preview
+# Run and edit
 
-1. Extract the **entire ZIP** into a fresh folder.
-2. Open **index.html** in your browser.
-3. Choose **TAP TO ENTER THE FUTURE**, then use the navigation to explore.
+1. Extract all files into a fresh folder.
+2. Open `index.html` for a local review.
+3. Enter through the clock and Leo’s tour, or use the small Skip control in the upper right.
 
-No installation, server, or internet connection is required. Keep the extracted files and folders together. Roboto is bundled and embedded in the entry page.
+The entry page embeds the application JavaScript, styles, fonts, and JSON. Keep assets, supplied portraits, runtime files, and `persona-worker.js` beside it. Browser AI needs HTTP/HTTPS; direct-file review uses the source-based replies.
 
-## What changed
-
-- The five landing themes now open branching paths with the subcategories and character assignments from the supplied boards. Each character has a short introduction tied to the selected theme, and **Back to themes** restores the selected branch. See **themes/README.md** for the complete mapping and editing instructions.
-- Removed the button, caption and decorative labels over the landing map. The entire map preview remains clickable.
-- Replaced the header and arrival-screen branding with the supplied TANG logo.
-- Applied Roboto throughout the interface. The **Welcome to 2048** heading retains its previous display font.
-- Removed decorative taglines, spaced overlines and small marketing captions. Useful bios, technology descriptions and navigation labels remain.
-- Added a dedicated **Explore the Technology** catalog with the five technologies from the map first, followed by twelve blank technology cards for other teams.
-- Applied Sophia's shared profile layout to every character. Each profile retains its own portrait, bio, stories and accent color.
-- Kept the names across the top for quick character switching. **Meet the People** opens the last visited profile, starting with Sophia.
-- Expanded each character graph to include connected technologies, systems, shared activities and nearby people. Graph positions stay stable while selecting an area of life. **List** offers a text alternative.
-
-## Explore the technology
-
-The map technologies have a short summary, **Read more**, and **View on map**. Read more opens a detail view with links to connected people. The blank cards do not pretend to contain finished technology or have inactive buttons.
-
-To add another team's technology, edit a blank entry in **technology-config.js**:
-
-```javascript
-{
-  id: 'team-technology-01',
-  title: 'Your technology name',
-  summary: 'A short description for the card.',
-  detail: 'More information shown when someone chooses Read more.',
-  image: 'technologies/your-image.jpg', // Or null to keep the icon.
-  people: ['sophia'],                 // Existing person IDs, or [].
-  node: null                         // An existing world node ID, if applicable.
-}
-```
-
-Fill `title` to turn a blank into a normal card. A map button appears only when `node` matches an existing world node. Add more entries to create more cards. Empty cards remain after the five map technologies and appear in the same order as the configuration.
-
-The five existing technologies use their names and descriptions from `data.js`, with short draft summaries in `technology-config.js` when the existing descriptions are empty.
-
-## Add portraits, voice and story images
-
-- **Portrait:** put your image in `portraits/`, then set the person's `portrait` path in `data.js`. `portraitPosition` controls the crop. Portraits are shared by the landing page, profile and full map.
-- **Bio and descriptions:** fill the existing `description` fields in `data.js`; these override the draft profile copy.
-- **Draft profile stories:** edit the person's `stories` in `character-config.js`.
-- **Voice:** put a recording in `audio/`, then set `audio` and `audioTranscript` in the person's `character-config.js` entry. Native audio controls appear when a recording is configured and never autoplay.
-- **Story image:** put an image in `scenes/`, then set `scene` in `character-config.js`.
-- **Technology image:** put images in `technologies/` and set the card's `image` path.
-
-After any source changes, rebuild the entry page:
-
-```bash
-python3 build-local.py
-```
-
-Then refresh **index.html**. Python is only needed to rebuild; the supplied page is already built.
-
-## Responsive behavior
-
-Phone layouts stack the profile content and use short navigation labels: World, People, Technology and About. The five-person selector scrolls horizontally. Graph nodes keep readable sizes and flow into additional rows; they are not shrunk into a tiny desktop overview. Selecting an area brings its story into view.
-
-Portrait kiosks use larger type and controls. Dedicated styles support 1080 × 1920 and 2160 × 3840. Pages scroll normally, and the site does not auto-reset while someone is exploring.
-
-## Main source files
+## Source files
 
 | File | Purpose |
 | --- | --- |
-| `page.template.html` | Page structure and header navigation |
-| `fonts.css` | Bundled Roboto, supplied logo sizes and mobile header labels |
-| `landing.js`, `landing.css` | Landing page, screen routing and browser history |
-| `landing-config.js` | Theme subcategories, character assignments and introductions |
-| `themes.js`, `themes.css` | Responsive theme branches, profile links and return paths |
-| `characters.js`, `characters.css` | Shared Sophia profile, wider graphs and character switching |
-| `character-config.js` | Character draft stories, audio and scene paths |
-| `technology.js`, `technology.css` | Technology catalog and detail views |
-| `technology-config.js` | Existing summaries and editable team cards |
-| `data.js`, `app.js`, `styles.css` | Existing world map, descriptions, search and navigation |
-| `idle-player.js`, `intro-clock.js`, `intro.css` | Muted video playback and the date clock |
-| `build-local.py` | Embeds styles, scripts and Roboto in `index.html` |
-| `assets/fonts/` | Local Roboto files, license and copyright notice |
+| `content/world.json` | Unchanged supplied characters, themes, truths, artifacts, and approved corrections |
+| `content/presentation.json` | Cleaner theme prose, per-person map notes, and source IDs |
+| `content/onboarding.json` | Four Leo story screens and four interface guide steps |
+| `content/quiz.json` | Questions, icons, tailored result text, destinations, and sources |
+| `content/chat-replies.json` | Source-grounded first-person replies for five personas |
+| `content/personas.json` | Topic chips, voice notes, and future model policy |
+| `app.js` | Map, open profile sections, technology, publications, and centered chat |
+| `connections.js` | Graph relationships, world coordinates, and profile maps |
+| `quiz.js` | Six-choice flow, in-visit results, editing, and map routes |
+| `world-ui.js` | Supplied portraits, escaped text, bracketed backgrounds, and icons |
+| `onboarding.js`, `tour.js` | Reading-paced dialogue, cast reveal, and guided controls |
+| `persona-runtime.js`, `persona-worker.js` | Same-site, memory-only semantic question matching |
+| `runtime/model-manifest.json` | Pinned model/runtime versions, checksums, and file list |
+| `styles.css`, `intro.css` | Responsive interface and clock styling |
+| `intro-clock.js`, `idle-player.js`, `idle-reset.js` | Calendar, silent looping video, and inactivity reset |
+| `build-local.py` | Generates the offline entry page from source |
+| `prepare-pages.py`, `.gitlab-ci.yml` | Verified static output and manual Pages deployment job |
+| `verify.js`, `verify-dom.cjs` | Core data checks and optional interaction tests |
 
-This ZIP is a local review copy. The video, world data and date-clock implementation are preserved. No public deployment or GitHub change was made by this update.
+## Rebuild
 
-## Verification
+```bash
+python3 build-local.py
+node verify.js
+```
 
-The theme update was checked against all supplied mappings: five themes, eleven subcategories and eighteen character paths, plus two regional map destinations. All branches were opened in the browser. The theme view was checked at 320 × 740, 390 × 844, 768 × 1024, 1080 × 1920 and 2160 × 3840, with no overlapping branch controls or overflowing theme panels. Profile links open the intended area of life; theme context, return buttons, quick character switching and browser Back were exercised. Kiosk theme controls have minimum heights of 64px at 1080 × 1920 and 88px at 2160 × 3840. This remains Chromium viewport testing; physical kiosks and Safari were not available for verification. The video, autoplay logic, date clock and existing world content are unchanged by this theme update.
+Refresh `index.html` afterward. Edit source JSON and `page.template.html` rather than generated `world-data.js`, `icons-data.js`, or `index.html`.
 
-Checked all five shared profiles at 320 × 740 and 1080 × 1920, with additional checks at 390 × 844 and a 2160 × 3840 portrait view. The expanded graphs had no overlapping or clipped nodes. Technology cards were checked at 320 × 740, 768 × 1024, 1080 × 1920 and 2160 × 3840 without horizontal overflow. These are responsive Chromium viewport checks, not physical-device or Safari tests.
+Optional interaction checks use jsdom 26.1.0: install it with `npm install --no-save jsdom@26.1.0`, then run `node verify-dom.cjs`. These simulate interaction without checking visual layout.
 
-Verified the supplied logo loads, Roboto loads from the bundled font data, the Welcome heading keeps its original font, the removed captions and map overlay are absent, and the catalog contains five map cards followed by twelve blank team cards. Tested technology details, links to the map and people, character switching from the wider graph, keyboard list selection, browser Back and mobile story scrolling. No application JavaScript errors were observed. Source syntax, local assets, graph references and the ZIP structure passed checks.
+## Map and profile editing
+
+World theme tiles are the theme navigation. Location and income filters change which people are in focus without moving their nodes. Their labels stay with the map, while theme notes appear next to portraits. The right panel contains only theme context and source references.
+
+Activities can be shown or hidden. Technology can follow the selected person, show everyone’s connections, or be hidden. Click a technology or activity to open its connection window. Click Meet or Chat in the selected-person bar for that person.
+
+Profiles render all five supplied life areas. Their source passages are unchanged. The small map links to other people, themes, activities, and technology. External robotic knee support still has no invented personal owner.
+
+To add publication media later, update `renderAbout()` in `app.js`. Keep each publication header and replace its bracketed square with the approved cover, file, and destination. No file upload or device-file reader is included.
+
+## Session behavior
+
+Quiz choices, results, messages, and drafts live in memory for the current visit. Moving among tabs preserves them. Reloading or the 150-second idle reset clears them. Source model weights and public story vectors may stay in memory across an idle reset; no conversations are retained in the model.
+
+The clock and video behavior are preserved. High-speed calendar entries advance through every consecutive date, while the screen shows a continuous flip blur. The video is muted, autoplaying, and looping. Device/browser policy still controls playback and arrival sound.

@@ -1,1 +1,3 @@
-Add technology images here, set the card's `image` path in `technology-config.js`, then run `python3 build-local.py`. Empty `title` values leave cards as blank slots. An image is optional; a card works with a title, summary and detail alone.
+# Technology concepts
+
+Four supplied concepts appear in the catalog. Canonical descriptions remain in content/world.json. Background media uses bracketed descriptions until approved artwork is available. A separate placeholder is ready for more team concepts. Solid navigation icons are licensed under assets/icons/.

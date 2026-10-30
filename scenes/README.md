@@ -1,1 +1,3 @@
-Add story images here. Set `scene` in the corresponding `character-config.js` entry, then rebuild with `python3 build-local.py`. This image appears in that person's selected story area.
+# Background placeholders
+
+Decorative scene line art and the pixel city have been removed. `world-ui.js` returns bracketed descriptions for backgrounds that still need approved media. The supplied character sketches and the interactive connection graph remain.
