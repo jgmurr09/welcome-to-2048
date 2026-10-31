@@ -1,0 +1,481 @@
+{
+  "version": 1,
+  "year": 2048,
+  "characters": [
+    {
+      "id": "leo",
+      "name": "Leo",
+      "age": 55,
+      "gender": "MALE",
+      "ethnicity": "Caucasian",
+      "role": "Executive/Founder",
+      "color": "#F2CF75",
+      "setting": "Great Lakes",
+      "incomeGroup": "top",
+      "placeGroup": "suburb",
+      "crop": [
+        155,
+        112,
+        339,
+        330
+      ],
+      "sections": {
+        "work": "Leo's the Founding Executive of Leo Trucking Company which handles long-haul autonomous trucking and manual last-mile delivery.\nIncome: top 1% tax bracket\nEducation: BA\nMore so than his formal education, credits past experience and an entrepreneurial spirit for his company's success.\nIn addition to Leo's Trucking Company, Leo also own a 501c3 that supplies automated medical equipment to lesser-served populations.",
+        "health": "\"Wealth is health!\" Even though he's 55, Leo looks/feels/acts 35. Given his 1% income level, Leo can afford:\na carnivorous diet Mmmm steak\npersonalized healthcare with a mobile doctor\naccess to third space areas for exercise. with privatized land making up the bulk of rec spaces, this is a commodity few can readiily afford.",
+        "home": "Married to his second wife who also has kids from a previous marriage, Leo has a fairly large mixed family living in their Great Lakes area home.\nThey chose the Great Lakes area due to eco-sustainability and because it's central location for Leo's trucking and logistics business. They're also huge boaters, so proximity to clean, fresh lakes is a plus.\nLeo employs staff for the house and kids and has a personal assistant who handles all the \"lame day-to-day stuff.\"",
+        "third": "Leo owns a boat - let's be honest, it's probably more of a yacht - and spends as much time as he can on nearby lakes.\nWhen he's not on the water, he loves a good hike in state-reserved and privately owned recreation areas near his estate.",
+        "tech": "Leo can afford to be more autonomous from everyday tech, such as health monitoring wearables and the like (his choice). Instead, he interacts with tech via automation like drone delivery of goods to his boat (nothing like a drone-delivered case of beer and fresh lunch!) and driverless cargo shipping for his business."
+      }
+    },
+    {
+      "id": "sophia",
+      "name": "Sophia",
+      "age": 38,
+      "gender": "FEMALE",
+      "ethnicity": "Multiracial",
+      "role": "Robotic Assisted Paramedic",
+      "color": "#73D2DD",
+      "setting": "Rural Wyoming",
+      "incomeGroup": "lower",
+      "placeGroup": "rural",
+      "crop": [
+        766,
+        592,
+        267,
+        345
+      ],
+      "sections": {
+        "work": "Sophia works as a Robotic Assisted Paramedic that services the rural areas in and around Wyoming. She received training for this career through a technical school in the area.\nIncome: She's considered low to middle income.",
+        "health": "Sophia enjoys bespoke, locally grown and made food, usually obtained from a nearby farmers market. She'd love to grow more of her own food if given the time.\nShe's active in her off time - mostly thanks to yoga - and uses legalized psychadelics.",
+        "home": "Sophia and her life partner rent a home in the hopes that they can eventually buy a forever home in their area. While she's not 100% sure she can afford having kids, she's exploring options to someday have a family.",
+        "third": "Sophia's third spaces consist of the farmer's market, her local yoga studio, and her rural community.",
+        "tech": "Sophia uses tech professionally and personally, much like her peers. Professionally, her services in the healthcare industry are entirely reliant on robotics, automation, and tech. Her only wish is that she could help more people.\nPersonally, she has a bio-tracker wearable that allows her to save money on health insurance and has a phone as well as a laptop."
+      }
+    },
+    {
+      "id": "ken",
+      "name": "Ken",
+      "age": 25,
+      "gender": "MALE",
+      "ethnicity": "Marshallese-American",
+      "role": "USMC, Logistics Specialist",
+      "color": "#68B9FA",
+      "setting": "Hawaii",
+      "incomeGroup": "lower",
+      "placeGroup": "urban",
+      "crop": [
+        390,
+        574,
+        319,
+        352
+      ],
+      "sections": {
+        "work": "Ken is an Enlisted Logistics Specialist for the marines (advanced manufacturing materials warehouse). He recently earned his Associate's Degree with support from the military.\nIncome: Fixed military income",
+        "health": "While they try to maintain a healthy diet, Ken and his son rely on military base food services and supplement with fast food out of convenience.",
+        "home": "Ken and his 5 year old son live on-base in military housing in Hawaii.\nAs a single father, Ken sometimes struggles with childcare coverage, but he takes his role as a father very seriously and views his military service as a foundation for his family. Largely because he had to flee the Marshall Islands as a child, Ken fears being displaced again.",
+        "third": "As a single dad in the service, Ken doesn't have much time for a 3rd space. But they get to the beach whenever they can. In fact, that's where he met Leo while they were on vacation in Hawaii.",
+        "tech": "Ken uses tech professionally and personally. As a Logistics Specialists, Tech resides at the heart of most of his professional functions.\nPersonally, he has a bio-tracker wearable that was issued to him by the marines as well as a phone and a computer."
+      }
+    },
+    {
+      "id": "veronica",
+      "name": "Veronica",
+      "age": 12,
+      "gender": "FEMALE",
+      "ethnicity": "Caucasian",
+      "role": "7th Grade",
+      "color": "#F287C8",
+      "setting": "Rural community",
+      "incomeGroup": "middle",
+      "placeGroup": "rural",
+      "crop": [
+        20,
+        590,
+        316,
+        351
+      ],
+      "sections": {
+        "work": "Veronica is a 7th grader who attends school remotely via a smaller, satellite school house that's virtually connected within her rural school district. This allows her to learn virtually based in a more rural area while enjoying the resources of a bigger school district.\nIncome: Under the care of her parents, they're middle-income. She also has her allowance.",
+        "health": "Veronica:\neats fresh veggies from her garden\npersonalized delivery meals based on her family's nutritional needs\nhobbies such as soccer, gardening, robotics, gaming, and volunteering that keep her active.",
+        "home": "Veronica has a stable home environment where they live about 90 minutes from a major metropolis.\nShe looks up to influencers and science advocates and hopes to push tech into plant-based renewable diets someday.\nShe enjoys both virtual and in-person friend groups and engages her community both virtually and in-person.",
+        "third": "Veronica's third spaces consist of the soccer pitch, her virtual and in-person friend groups, and her online community gardening classes (as taught by Catherine)\nHobbies: soccer, gaming, gardening, robotics\nVeronica volunteers for Leo's nonprofit which brings medical robotics and tech to lesser served communities.",
+        "tech": "Veronica employs this tech on a daily basis:\nbio-tracker wearable\nphone\ntablet\ncomputer\nsmart in-home health\nvirtual community tools\nVR entertainment & gaming"
+      }
+    },
+    {
+      "id": "catherine",
+      "name": "Catherine",
+      "age": 75,
+      "gender": "FEMALE",
+      "ethnicity": "Asian American",
+      "role": "Retired RN",
+      "color": "#B6A4E4",
+      "setting": "Urban community",
+      "incomeGroup": "middle",
+      "placeGroup": "urban",
+      "crop": [
+        560,
+        105,
+        312,
+        334
+      ],
+      "sections": {
+        "work": "Catherine is retired with a full pension, having worked for 20+ years as a RN.\nIncome: Fixed (retirement) 401K",
+        "health": "Given her age and fixed income, Catherine:\neats fresh veggies from her main outdoor garden as well as her smaller, indoor garden.\nhas personalized delivered meals based on her nutritional needs\nhobbies such as gardening and volunteering that keep her active and fulfilled.\nwaning hearing and a knee replacement",
+        "home": "Catherine lost her husband to COVID and lives alone. One of her biggest concerns is who will take care of her as she gets older.\nShe has found a community through friends and neighbors",
+        "third": "Community: life long friends nearby; connections in local younger community has grown\nHobbies: community gardening, volunteering, VR entertainment, virtual travel, hanging out with the local community",
+        "tech": "Catherine employs this tech on a daily basis:\nbio-tracker wearable tied to her healthcare\nvirtual AI assistant\nsmart in-home health\nvirtual community tools\nVR travel & entertainment"
+      }
+    }
+  ],
+  "themes": [
+    {
+      "id": "climate",
+      "title": "Climate Change",
+      "scene": "climate",
+      "color": "#00B5E7",
+      "text": "The number and scale of natural disasters is increasing due to climate change, leading to a sense of global instability. This leads to migration away from disaster-prone areas both internal to the U.S. and external. This disrupts food supply and housing, shifts local and regional economies, and increases general frustration. Geopolitical tensions (land, sea, space) also arise from climate issues.\n\nVeronica looks up to influencers and science advocates and hopes to push tech into plant-based renewable diets someday in the hopes of creating a world less prone to climate change. Ken is a refugee due to the volatility of the climate-endangered Marshall Islands. Leo - in large part because he's one of the few people who can afford real estate at this level - chose the climate haven of the Great Lakes area for his home. Fresh water, clean air, and sustainable climate-preserving practices are often more readily accessible to the richest among us. (see also: wealth gap)",
+      "people": [
+        "ken",
+        "leo",
+        "veronica",
+        "sophia",
+        "catherine"
+      ],
+      "lenses": [
+        {
+          "id": "all",
+          "title": "All perspectives"
+        }
+      ],
+      "perspectives": {
+        "ken": "home",
+        "leo": "home",
+        "veronica": "home",
+        "sophia": "work",
+        "catherine": "health"
+      },
+      "nodes": [
+        "climate",
+        "wealth",
+        "geography",
+        "autonomous",
+        "gardening",
+        "vacation"
+      ]
+    },
+    {
+      "id": "wealth",
+      "title": "Wealth Gap",
+      "scene": "wealth",
+      "color": "#ED008C",
+      "text": "Tax Bracket\nLower Middle to Lower Class - Ken, Sophia\nUpper Middle to Middle Class - Catherine, Veronica\nTop 1% - Leo",
+      "people": [
+        "leo",
+        "catherine",
+        "veronica",
+        "ken",
+        "sophia"
+      ],
+      "lenses": [
+        {
+          "id": "all",
+          "title": "All perspectives"
+        },
+        {
+          "id": "top",
+          "title": "Top 1%"
+        },
+        {
+          "id": "middle",
+          "title": "Upper Middle to Middle Class"
+        },
+        {
+          "id": "lower",
+          "title": "Lower Middle to Lower Class"
+        }
+      ],
+      "perspectives": {
+        "ken": "home",
+        "leo": "health",
+        "veronica": "work",
+        "sophia": "home",
+        "catherine": "work"
+      },
+      "nodes": [
+        "wealth",
+        "kitchen",
+        "vacation",
+        "autonomous",
+        "geography",
+        "climate"
+      ]
+    },
+    {
+      "id": "geography",
+      "title": "Rural vs Suburb vs City",
+      "scene": "geography",
+      "color": "#1282CA",
+      "text": "Suburb - Leo\nUrban - Catherine, Ken\nRural - Veronica, Sophia",
+      "people": [
+        "leo",
+        "catherine",
+        "ken",
+        "veronica",
+        "sophia"
+      ],
+      "lenses": [
+        {
+          "id": "all",
+          "title": "All settings"
+        },
+        {
+          "id": "suburb",
+          "title": "Suburb"
+        },
+        {
+          "id": "urban",
+          "title": "Urban"
+        },
+        {
+          "id": "rural",
+          "title": "Rural"
+        }
+      ],
+      "perspectives": {
+        "ken": "home",
+        "leo": "home",
+        "veronica": "work",
+        "sophia": "work",
+        "catherine": "home"
+      },
+      "nodes": [
+        "geography",
+        "autonomous",
+        "climate",
+        "gardening"
+      ]
+    },
+    {
+      "id": "education",
+      "title": "Education",
+      "scene": "education",
+      "color": "#F2CF75",
+      "text": "k-12 - Veronica attends school at a local satellite oneroom schoolhouse that's virtually connected to a larger school network in her rural area. She has dreams of working in tech and robotics, so her educational goals are centered around that goal. With that, she realizes those goals may fall outside of the \"more traditional 'Kinder through College' model from 20 years ago.\ntech/\nassociate's degree - Thanks to the Marine Corps, Ken has earned his Associate's Degree that aligns with his professional experience in Logistics and Supply. Sophia received training for her career as a Robotic Assisted Paramedic through a technical school in her rural Wyoming area. She'd consider more education, but only if it made fiscal sense while also enabling her to help more people.\nhigher ed -Leo holds a BA from an accredited institute of higher learning, but he credits his past experience and an entrepreneurial spirit for his professional success, more so than his formal education. Depending on their goals, he may or may not encourage his children to get a higher ed degree. Catherine is a retired RN who looks back on her college and nursing school experience fondly and as a foundation for her life's work. Though the world might be shifting towards a more autonomous education system, she sees a lot of benefit to \"learning life\" while you're \"finally out of the house\" in your late teens and early 20's.",
+      "people": [
+        "veronica",
+        "ken",
+        "sophia",
+        "leo",
+        "catherine"
+      ],
+      "lenses": [
+        {
+          "id": "all",
+          "title": "All paths"
+        },
+        {
+          "id": "k12",
+          "title": "K–12",
+          "people": [
+            "veronica"
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "Technical / Associate's Degree",
+          "people": [
+            "ken",
+            "sophia"
+          ]
+        },
+        {
+          "id": "higher",
+          "title": "Higher Education",
+          "people": [
+            "leo",
+            "catherine"
+          ]
+        }
+      ],
+      "perspectives": {
+        "ken": "work",
+        "leo": "work",
+        "veronica": "work",
+        "sophia": "work",
+        "catherine": "work"
+      },
+      "nodes": [
+        "education",
+        "v-glasses",
+        "c-glasses",
+        "gardening",
+        "robotics"
+      ]
+    },
+    {
+      "id": "materials",
+      "title": "Regional Materials",
+      "scene": "materials",
+      "color": "#F15A22",
+      "text": "In 2048 we see the population shift to live around fresh water. Adversaries monopolize raw materials, making us self sufficient while still relying on allies for some materials and utilizing the sea floor and space asteroids for mining for materials. These are the rising tension between Russia, China, and the U.S. due to their control over critical material mining.",
+      "people": [
+        "ken",
+        "leo"
+      ],
+      "lenses": [
+        {
+          "id": "all",
+          "title": "Connected lives"
+        }
+      ],
+      "perspectives": {
+        "ken": "work",
+        "leo": "work"
+      },
+      "nodes": [
+        "materials",
+        "trucking",
+        "climate"
+      ]
+    }
+  ],
+  "truths": [
+    {
+      "id": "global",
+      "title": "Global truths",
+      "text": "cultural divides: natural vs enhanced, have vs have nots\ndesire for community more pronounced\nlarge stockpiles of raw materials for U.S. based manufacturing\nClimate crises\nGreater personalization\nnon-traditional career paths\ncollege education (and advanced education in general) more of a formality"
+    },
+    {
+      "id": "wearables",
+      "title": "Wearables",
+      "text": "scalable levels of invasiveness\nmicrochips are starting to appear\nprovide health + diagnostics\ninforms diet, meds, activity\nin various forms beyond just rings, watches, etc."
+    },
+    {
+      "id": "family",
+      "title": "Family",
+      "text": "multi-generational housing\nsmaller family units\ncontinuation of birth rate decline"
+    },
+    {
+      "id": "health",
+      "title": "Health",
+      "text": "longer life spans\ntiered models of access to food, meds, etc.\nmore bespoke as well\nuniversal basic healthcare\ndiagnostics are cheaper and faster\nanimal based protein is more scarce and more expensive\nhydroponics is more popular"
+    },
+    {
+      "id": "ai",
+      "title": "Robotics / AI",
+      "text": "robotics / automation in daily life (increased comfort)\ndomestic manufacturing + fabrication\nsame-day availability + delivery"
+    },
+    {
+      "id": "bio",
+      "title": "Bio Tracking",
+      "text": "Gen specific tracking\nWearables / machines will provide validation for mental health\nhealthcare more expensive if not bio tracking\nbio tracking options will be available\npreventative care prioritized"
+    },
+    {
+      "id": "robotics",
+      "title": "Robotics + machines",
+      "text": "robot abilities replace the need for humans to learn certain skills\npeople more comfortable with robotics in daily life\nevery supply chain automated"
+    },
+    {
+      "id": "delivery",
+      "title": "Delivery",
+      "text": "computer / ai operated methods of delivery are standard\nhome owners will have more delivery need\nexperience where medicine takes hours and supply takes days"
+    },
+    {
+      "id": "trust",
+      "title": "Trust",
+      "text": "\"Opt-in\" for sharing of data -> benefits + trade offs of not opting-in seem worse\npressure for \"tech-enabling\" to be default not the premium in the world (i.e., face scan @ airport)\nthere will increasingly be more private doctors"
+    },
+    {
+      "id": "money",
+      "title": "Money",
+      "text": "there will be some sort of basic universal health care\nbasic health needs will be available outside the traditional \"hospital\" system\naccessibility is personalized\nadaptation is more built into our surroundings"
+    },
+    {
+      "id": "elder",
+      "title": "Elder Care",
+      "text": "People will live longer\ntech will allow people to live alone longer\nthe gap between retirement + needing care will be bigger\nmulti generational housing communities will increase + become more popular\npeople will continue to work\nretirement will be gradual / more flexible"
+    },
+    {
+      "id": "children",
+      "title": "Children's Health and Wellness",
+      "text": "kids will wear health monitors + locations\nmore \"singletons\"\nlimited social media\nvia software\nparents will be older\nhealth treated holistically from 'toddler to teen'\ndiscussing mental health will become norm"
+    },
+    {
+      "id": "medicine",
+      "title": "Medicine + supplements",
+      "text": "Custom bespoke medicine for everyone\nlarger cultural divide between natural and enhanced individuals\ncontinued supplement fads and misinformation\n3D printing medication at home\nmore diseases are treatable"
+    },
+    {
+      "id": "supply",
+      "title": "Supply",
+      "text": "robotic deliver of everything\nlarger stockpiles of materials and aggregates\nphysical retail will be cool again\nhydroponics based agriculture on a larger and more local scale\nbetter transportation between rural and urban communities"
+    },
+    {
+      "id": "hospitals",
+      "title": "Hospitals + ERs",
+      "text": "tests will be more efficient and cheaper\nrobots are streamlining throughput at hospitals\nrobotic assisted paramedics\nshortage of health care professionals\nbio taken based care and currency"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "kitchen",
+      "title": "Kitchen",
+      "scene": "garden",
+      "people": [
+        "leo",
+        "catherine",
+        "veronica"
+      ],
+      "text": "To lower food costs, and increase healthy living where humans are living longer, families will have in home gardens with micro greens, veggies and mushrooms made instead of having to shop for them"
+    },
+    {
+      "id": "knee",
+      "title": "External Robotic Knee Support",
+      "scene": "knee",
+      "people": [],
+      "text": "Knee injuries can be addressed through external robotic support rather than surgery. This device can be removed and worn as needed and controlled via app controlls"
+    },
+    {
+      "id": "autonomous",
+      "title": "Autonomous mobile health unit",
+      "scene": "care",
+      "people": [
+        "sophia"
+      ],
+      "text": "For emergency medical movement or as a local remote clinic for out patient surgical procedures. Ground and aero variants for remote areas of speed of response. Comms reachback for human assisted surgery."
+    },
+    {
+      "id": "wearable",
+      "title": "Wearble tech",
+      "scene": "health",
+      "people": [
+        "sophia",
+        "ken",
+        "veronica",
+        "catherine"
+      ],
+      "text": "will be integrated into everyday objects. People will be able to leave their main device at home and rely on wearable tech"
+    }
+  ],
+  "corrections": [
+    {
+      "path": "characters.veronica.sections.home",
+      "before": "Catherine has a stable home environment",
+      "after": "Veronica has a stable home environment",
+      "authorized": true
+    },
+    {
+      "path": "characters.veronica.sections.tech",
+      "before": "Catherine employs this tech on a daily basis:",
+      "after": "Veronica employs this tech on a daily basis:",
+      "authorized": true
+    },
+    {
+      "path": "themes.wealth.text",
+      "before": "Top 1% - Ken",
+      "after": "Top 1% - Leo",
+      "authorized": true
+    }
+  ]
+}

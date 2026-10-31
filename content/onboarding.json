@@ -1,0 +1,62 @@
+[
+  {
+    "id": "arrival",
+    "mode": "dialogue",
+    "title": "Leo welcomes you",
+    "scene": "arrival",
+    "text": "That was quite a jump. Take a second. I’m Leo. You’re in 2048, and a few things have changed. I run a trucking company. The long-haul trucks drive themselves now, and people handle the last mile. I also run a nonprofit that gets automated medical equipment to communities that need it."
+  },
+  {
+    "id": "leo",
+    "mode": "dialogue",
+    "title": "Life with Leo",
+    "scene": "lakes",
+    "text": "My family and I live near the Great Lakes. Fresh water, a sustainable climate, and a good location for the business made the choice easy. The boating helped, too. I’m fortunate. I can afford a mobile doctor, help at home, and private places to get outside. I can even choose to skip health tracking. Those choices aren’t available to everyone."
+  },
+  {
+    "id": "people",
+    "mode": "dialogue",
+    "title": "Meet the people",
+    "scene": "people",
+    "text": "You should meet a few people before you decide what you think of this place. Ken is a Marine and a single dad. He left the Marshall Islands as a child and worries about being displaced again. Sophia brings robotic-assisted care to rural Wyoming. Veronica volunteers for my nonprofit and takes Catherine’s gardening classes. Catherine is a retired nurse who lives alone. Their lives will show you things mine won’t."
+  },
+  {
+    "id": "connections",
+    "mode": "dialogue",
+    "title": "The world around Leo",
+    "scene": "connections",
+    "text": "I spend time on the lakes, but that’s only one corner of this world. My trucking company connects me to Sophia, and Ken and I met on vacation. Veronica volunteers for my nonprofit. On the map, you can follow those relationships and see how climate, money, where we live, and technology shape our choices. Let me show you how to use it."
+  },
+  {
+    "id": "themes",
+    "mode": "guide",
+    "title": "Choose a world theme",
+    "target": "#graphViewport",
+    "text": "Start with an orange world-theme tile, like Climate change or Where you live. A short note appears beside the people connected to that theme so you can compare what that theme means in their life. The explanation on the right gives you the wider picture.",
+    "action": "theme"
+  },
+  {
+    "id": "filters",
+    "mode": "guide",
+    "title": "Compare people in the map",
+    "target": "#mapFilters",
+    "text": "These are filters you can use. Choose Suburb, Urban, or Rural to focus on where people live. The income buttons let you compare access and resources. Education lets you compare school, technical training, associate’s degrees, and college. These filters stay here as you explore different themes. All settings, All incomes, and All paths reset those filters.",
+    "action": "filter"
+  },
+  {
+    "id": "layers",
+    "mode": "guide",
+    "title": "Choose the connections you see",
+    "target": "#connectionControls",
+    "text": "Use the Shared activities checkbox to show the pink cards. The Technology buttons are another set of controls: show the selected person’s devices, show them all, or hide them. Click a person to change whose technology appears. These controls help you open up the map a little at a time.",
+    "action": "layer"
+  },
+  {
+    "id": "navigation",
+    "mode": "guide",
+    "title": "Keep exploring",
+    "target": ".hub-header nav",
+    "text": "Meet the People shows each person’s whole profile. Explore the Technology takes you to the objects. Your Day in 2048 builds a picture from your choices and keeps it here while you explore. About the Event will hold the one-pager, magazine, and graphic novel. You can come back to this map any time.",
+    "action": "navigation"
+  }
+]
