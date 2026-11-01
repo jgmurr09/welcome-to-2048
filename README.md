@@ -1,4 +1,4 @@
-# Welcome to 2048, round 4
+# Welcome to 2048 
 
 Extract the entire ZIP, then open **index.html**. Full browser AI needs the folder served over HTTP or HTTPS; see **WASM_SETUP.md**. The included model makes this archive much larger than the earlier rounds.
 
