@@ -1,0 +1,45 @@
+name: Deploy 2048 with model files
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download repository and model files
+        uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Verify model and prepare website
+        run: python3 prepare-pages.py --output public
+
+      - name: Upload prepared website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4
