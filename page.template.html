@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" data-portraits="supplied">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#131034">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="description" content="Explore everyday life in 2048 through five people, their stories, and the forces connecting their world.">
+  <title>Welcome to 2048: Everyday futures</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="intro.css">
+  <script defer src="world-data.js"></script>
+  <script defer src="experience-config.js"></script>
+  <script defer src="intro-config.js"></script>
+  <script defer src="data.js"></script>
+  <script defer src="icons-data.js"></script>
+  <script defer src="world-ui.js"></script>
+  <script defer src="connections.js"></script>
+  <script defer src="conversation.js"></script>
+  <script defer src="persona-runtime.js"></script>
+  <script defer src="quiz.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="idle-player.js"></script>
+  <script defer src="intro-clock.js"></script>
+  <script defer src="onboarding.js"></script>
+  <script defer src="tour.js"></script>
+  <script defer src="idle-reset.js"></script>
+</head>
+<body class="intro-active">
+  <a class="skip" href="#mainTitle" tabindex="-1">Skip to content</a>
+  <section class="future-intro" id="futureIntro" role="dialog" aria-modal="true" aria-labelledby="introHeading" data-phase="idle">
+    <h1 class="sr-only" id="introHeading">Welcome to 2048</h1>
+    <div class="intro-idle" id="introIdle">
+      <img class="idle-poster" src="assets/future-world-poster.jpg" alt="" fetchpriority="high">
+      <video class="idle-video" id="idleVideo" data-src="assets/future-world-idle-web.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback poster="assets/future-world-poster.jpg" aria-hidden="true" tabindex="-1"></video>
+      <div class="idle-vignette" aria-hidden="true"></div>
+      <button type="button" class="idle-resume" id="resumeBackground" aria-label="Play background animation" hidden>▶</button>
+      <button type="button" class="skip-arrival" id="skipArrival">SKIP TO EXPLORING ↗</button><div class="idle-invitation"><button type="button" class="enter-future" id="enterFuture"><span>TAP TO ENTER THE FUTURE</span><span aria-hidden="true">↗</span></button></div>
+    </div>
+    <div class="time-stage" id="timeStage" hidden>
+      <div class="time-environment" aria-hidden="true"><div class="time-aura"></div><div class="time-grid time-grid-top"></div><div class="time-grid time-grid-bottom"></div><div class="time-streaks" id="timeStreaks"></div><div class="time-horizon"></div><div class="launch-tunnel"></div></div>
+      <div class="clock-scene"><h2 class="sr-only" id="clockHeading" tabindex="-1">Travelling to 2048.</h2><div class="clock-machine" aria-hidden="true"><span class="clock-screw screw-tl"></span><span class="clock-screw screw-tr"></span><span class="clock-screw screw-bl"></span><span class="clock-screw screw-br"></span><div class="clock-face" id="clockFace"></div></div><p class="clock-date sr-only" id="clockDate"></p></div>
+      <div class="arrival-portal" aria-hidden="true"></div>
+    </div>
+    <header class="intro-masthead"><img class="intro-tang-logo" src="assets/tang-logo-white.png" alt="TANG"></header>
+    <p class="sr-only" id="introStatus" role="status" aria-live="polite"></p>
+  </section>
+  <section id="onboarding" class="onboarding" hidden inert role="dialog" aria-modal="true" aria-labelledby="onboardTitle">
+    <header class="onboard-header"><img src="assets/tang-logo-white.png" alt="TANG"><button type="button" id="skipOnboarding" class="quiet-button">EXPLORE ON MY OWN ↗</button></header>
+    <div id="onboardScene" class="onboard-scene"></div>
+    <div class="onboard-composition"><div class="onboard-copy"><span class="eyebrow" id="onboardCounter"></span><h2 id="onboardTitle" class="sr-only" tabindex="-1"></h2></div><div class="onboard-person" id="onboardPortrait"></div></div>
+    <div class="dialogue-box"><span class="speaker-tag">LEO</span><p id="onboardText" aria-hidden="true"></p><p id="onboardAccessible" class="sr-only"></p><div class="dialogue-actions"><button type="button" id="previousOnboarding" class="quiet-button">← BACK</button><span id="onboardDots" aria-hidden="true"></span><button type="button" id="nextOnboarding" class="primary-button">CONTINUE <span aria-hidden="true">→</span></button></div></div>
+  </section>
+  <div id="experience" hidden inert>
+    <header class="hub-header"><button type="button" id="brandHome" class="brand" aria-label="Open the world map"><img src="assets/tang-logo-white.png" alt="TANG"></button><nav aria-label="Main navigation"><button type="button" data-route="map">Explore the World</button><button type="button" data-route="people">Meet the People</button><button type="button" data-route="technology">Explore the Technology</button><button type="button" data-route="quiz">Your Day in 2048</button><button type="button" data-route="about">About the Event</button></nav><div class="header-year" aria-label="The year 2048"><span>20</span><span>48</span></div><button type="button" id="replayIntro" class="header-replay" aria-label="Restart the arrival sequence" title="Restart arrival">↶ <span>RESTART</span></button></header>
+    <main id="mainView" tabindex="-1"></main>
+  </div>
+  <dialog id="chatDialog" class="chat-dialog" aria-labelledby="chatTitle"><header id="chatHeader"></header><div id="chatRuntime" class="chat-runtime"></div><div id="chatMessages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div><div id="chatChips" class="chat-chips"></div><form id="chatForm"><label class="sr-only" for="chatInput">Ask a question about this character's future</label><input id="chatInput" maxlength="400" placeholder="Ask about everyday life…" autocomplete="off"><button type="submit" class="primary-button" aria-label="Send question">↑</button></form><p class="chat-footnote">AI runs in this browser. It downloads 258 MiB of model data plus runtime files from this site. No app is installed; chat messages aren’t sent to a server. Imagined replies are red. Visit resets clear chats.</p></dialog>
+  <dialog id="truthsDialog" class="truths-dialog" aria-labelledby="truthsTitle"><button type="button" data-close-truths class="close-button" aria-label="Close world truths">×</button><span class="eyebrow">2048 / SHARED WORLD</span><h2 id="truthsTitle">World Truths</h2><div id="truthsContent"></div></dialog>
+  <dialog id="connectionDialog" class="connection-dialog" aria-labelledby="connectionTitle"><button type="button" data-close-connection class="close-button" aria-label="Close connection">×</button><div id="connectionContent"></div></dialog>
+  <div id="siteTour" class="site-tour" hidden><div id="tourSpotlight" class="tour-spotlight"></div><section id="tourCard" class="tour-card" role="dialog" aria-modal="false" aria-labelledby="tourTitle"><header><span id="tourCounter"></span><button type="button" id="closeTour" aria-label="Close navigation tour">×</button></header><span class="tour-speaker">LEO</span><h2 id="tourTitle" class="sr-only" tabindex="-1"></h2><p id="tourText"></p><footer><button type="button" id="previousTour">← BACK</button><button type="button" id="nextTour">NEXT →</button></footer></section></div>
+  <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>
