@@ -16,114 +16,53 @@
     return null;
   }
   function topicFor(q,previous){let topic=Object.entries(words).find(([,re])=>re.test(q))?.[0];if(/\b(track|privacy|data|robot|automat|wearable|drone|virtual|technology)\w*\b/i.test(q))topic='tech';if(/met leo|meet leo|met catherine|gardening with|free time|hobbies/i.test(q))topic='third';if(/climate|displaced|displacement|great lakes/i.test(q))topic='home';if(!topic&&/^(tell me more|more|why|how so|what else)[?.!\s]*$/i.test(q))topic=previous;return topic;}
-  const normalize=q=>String(q||'').normalize('NFKC').replace(/[’‘]/g,"'").replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim();
-  const facets={
-    work:/\b(work|job|income|career|school|education|learn|degree|company|business|trucking|military|marine|logistics|nurs|pension|retire|paramedic|earn|training)\w*\b/i,
-    home:/\b(home|hous|family|child|son|kid|marri|wife|husband|alone|displac|refugee|island|great lakes|father|mother|parent|independen)\w*\b|where (?:do|would) you live/i,
-    health:/\b(health|diet|food|eat|meal|vegg|vegetable|garden|insurance|care|knee|hearing|yoga|steak|protein|wellbeing|wellness|exercise)\w*\b/i,
-    tech:/\b(tech|robot|automat|wearable|track|privacy|data|phone|tablet|computer|drone|deliver|virtual|vr|monitor|ai|transport|commut)\w*\b/i,
-    third:/\b(friend|community|hobb|beach|boat|yacht|leisure|volunteer|nonprofit|third space|spare time|free time|gardening class)\w*\b/i
-  };
-  const worldTopics={climate:/\b(climate|migrat|displace|fresh water|freshwater|natural disaster|sustainab|heat wave)\w*\b/i,wealth:/\b(wealth|inequal|afford|wealth gap|k.shaped|econom|tax bracket|resources|rich|poor|access|cost of living)\w*\b/i,geography:/\b(rural|suburb|urban|city|cities|neighbou?rhood|where you live|where people live)\w*\b/i,education:/\b(education|school|learn|college|degree|training|satellite classroom)\w*\b/i,materials:/\b(regional materials|raw materials|critical materials|supply chain|manufactur|warehouse|stockpile|mining|asteroid)\w*\b/i};
-  const routine=/\b(teeth|toothbrush|toothpaste|brush|morning|bedtime|sleep|weekend|routine|typical day|ordinary day|everyday|daily life|relax|unwind|cook|breakfast|lunch|dinner|chores|grocer|music|sport|soccer|baseball|football|basketball|gaming|game|favorite|favourite|worr|hope|fear|dream|fulfill|feel|enjoy|happy|happiest|joy|proud|miss|regret|love|lonel|bored|stress|vacation|travel)\w*\b/i;
-  const followup=/^(?:why|why is that|how so|tell me more|more|what else|what about that|what about you|can you explain(?: more| that)?|could you explain(?: more| that)?|what do you mean|what (?:does|would|could) (?:that|it|this) (?:mean|change|affect|look like)|how (?:does|would|could) (?:that|it|this) (?:feel|affect you|change things|work))[?.!\s]*$/i;
-  function coreQuestion(q){return normalize(q).replace(/^(?:(?:hey|hi|hello|dear|okay|ok)[,!\s]*)?(?:leo|ken|sophia|veronica|catherine)(?:[,!:\s]+|$)/i,'');}
-  function redirect(personId,reason='off-topic'){
-    const p=byId.get(personId),bridges={leo:'my trucking company, my family, or life near the Great Lakes',ken:'raising my son, my logistics work, or life in Hawaii',sophia:'rural care, the robotics I use, or life in Wyoming',veronica:'my school, robotics, soccer, or community gardening',catherine:'gardening, community, or living independently'};
-    const bridge=bridges[personId]||'the people and everyday life in this imagined future';
-    const intro=reason==='math'?'I’m here to talk about living in 2048.':reason==='live-facts'?'Real game schedules, odds, and current news aren’t established facts in this imagined 2048.':reason==='future-fact'?'That future detail isn’t established in this world.':reason==='role-change'?'I’m staying with my own life and perspective in 2048.':'That takes us outside the life I’m here to share in 2048.';
-    return {kind:'guardrail',reason,topic:null,sources:[],text:intro+' You can ask me about '+bridge+'.'};
-  }
-  function classify(personId,question){
-    const q=coreQuestion(question),safe=guard(q,personId);
-    if(safe)return {allowed:false,reason:'safety',reply:safe};
-    if(/\b(?:you are now|act as|pretend to be|switch (?:roles|identit)|new instructions|system message|developer message|jailbreak|bypass (?:the |your )?(?:rules|filter|scope))\b/i.test(q))return {allowed:false,reason:'role-change',reply:redirect(personId,'role-change')};
-    const wordMath=/\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:plus|minus|times|multiplied by|divided by)\s+(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i.test(q);
-    const expression=/(?:\d|[xyz])\s*(?:[+*=÷×^]|\/(?!\/)|-(?=\s*\d))\s*(?:\d|[xyz])/i.test(q);
-    const calculation=(/\b(?:calculate|compute)\b/i.test(q)&&!/\bhow (?:do|did|would) (?:you|people|robots|workers) (?:calculate|compute)\b/i.test(q))||/\b(?:solve|work out|help (?:me )?with)\b.{0,60}\b(?:two|three|four|five|six|seven|eight|nine|ten|math|quadratic|algebra|equation)\b.{0,40}(?:plus|minus|times|divid|equation|quadratic|algebra|math)|\b(?:help (?:me )?with|solve (?:this|my))\s+(?:math|quadratics?|algebra|equations?)\b/i.test(q)||/\b(?:solve|calculate|compute|evaluate|simplify|differentiate|integrate|factor(?:ize)?|work out)\b.{0,80}\b(?:equation|math|algebra|calculus|integral|derivative|quadratic|\d+)\b/i.test(q)||/\b(?:what(?:'s| is)|how much is|answer(?: to)?)\s+\d+\s*(?:plus|minus|times|divided|squared|[+*÷×^/=-])/i.test(q)||/^\s*(?:\d+[\s+*÷×^/=-]+)+\d+\s*[?=]*$/i.test(q);
-    if(expression||wordMath||calculation)return {allowed:false,reason:'math',reply:redirect(personId,'math')};
-    if(/\b(?:write|debug|execute|run|generate|build|fix|translate|proofread|rewrite|summari[sz]e)\b.{0,65}\b(?:code|python|javascript|sql|script|program|function|essay|resume|cover letter|email|poem|song|report|presentation|homework|document|article|paragraph|text into|to (?:french|spanish|german))\b|\b(?:do|complete|solve|answer)\s+(?:my|this|the)\s+(?:homework|assignment|test|exam)\b/i.test(q))return {allowed:false,reason:'external-task',reply:redirect(personId,'external-task')};
-    const betting=/\b(?:bet|wager|odds|parlay|sportsbook|bookie)\w*\b/i.test(q)&&/\b(?:who|which|would|should|recommend|pick|on|win|tonight|today|team|match|game)\b/i.test(q);
-    const gamePick=/\b(?:who|which team)\b.{0,65}\b(?:win|wins|winning|beat|beats|pick|champion)\b|\b(?:predict|prediction|pick|score|standings|record)\b.{0,50}\b(?:game|match|team|knicks|ravens|nba|nfl|super bowl|world series)\b/i.test(q);
-    const live=/\b(?:latest|breaking|current|today'?s|tonight'?s|live|real.time)\b.{0,45}\b(?:news|score|odds|standings|record|weather|forecast|stock|price|results)\b|\b(?:weather forecast|stock price|exchange rate|election results|winning lottery)\b/i.test(q);
-    if(betting||gamePick||live)return {allowed:false,reason:'live-facts',reply:redirect(personId,'live-facts')};
-    if(/\b(?:who|name|which)\b.{0,45}\b(?:president|prime minister|election winner|super bowl champion)\b/i.test(q))return {allowed:false,reason:'future-fact',reply:redirect(personId,'future-fact')};
-    const greeting=!q||/^(?:hi|hello|hey|good morning|good afternoon|good evening|thanks|thank you|how are you(?: feeling)?)[!.?\s]*$/i.test(q);
-    const self=/\b(?:where are you from|where did you grow up|what do you do|what did you do|how old are you|what matters most to you|what matters to you|what has changed|how is 2048 different)\b|\bhow (?:is|has|does|did|will) (?:life|the world)\b|\bwhat (?:do|would) you (?:think|hope|expect|worry).{0,25}(?:future|2048|this world)\b|\b(?:your relationships|your connections|how are you connected|what do you do all day)\b|\b(?:know|meet|relationship|connected)\b.{0,45}\b(?:leo|ken|sophia|veronica|catherine)\b|^(?:what(?:'s| is)|describe|tell me about) (?:it like in |life in |life like in |the world in |this world|this future|2048|the future)|\b(?:who are you|introduce yourself|about yourself|being you|your life|your day|your background|your story|spend your time|everyday life|life like|life in 2048|day in 2048|life in the future|living in 2048|living in the future|what keeps you up at night|how (?:did|do) you (?:meet|know))\b/i.test(q);
-    const topics=Object.keys(worldTopics).filter(key=>worldTopics[key].test(q));
-    let topic=Object.keys(facets).find(key=>facets[key].test(q));
-    if(facets.tech.test(q))topic='tech';
-    if(/met leo|meet leo|met catherine|gardening with|free time|hobbies/i.test(q))topic='third';
-    if(topics.includes('climate'))topic='home';
-    const ordinary=routine.test(q)&&(/\b(?:you|your|people|life|2048|future|routine|ordinary|everyday|typical|morning|weekend|teeth)\b/i.test(q)||self);
-    if(greeting||self||topic||topics.length||ordinary)return {allowed:true,category:greeting?'greeting':topics.length?'world':ordinary?'routine':'life',topic:topic||null,worldTopics:topics};
-    if(followup.test(q))return {allowed:false,reason:'needs-context',reply:redirect(personId)};
-    return {allowed:false,reason:'off-topic',reply:redirect(personId)};
-  }
-  function lastExchange(history){
-    const last=history.at(-1);if(last?.role!=='assistant'||['guardrail','unavailable','unknown'].includes(last.kind))return null;
-    const user=history.at(-2);return user?.role==='user'?{user,assistant:last}:null;
-  }
-  function scope(personId,question,history=[],previousTopic){
-    if(!byId.has(personId))return {allowed:false,reason:'unknown-person',reply:redirect(personId)};
-    const result=classify(personId,question);if(result.allowed||result.reason!=='needs-context')return result;
-    const prior=lastExchange(history);
-    if(prior){const old=classify(personId,prior.user.text),saved=prior.assistant.scope;
-      if(old.allowed||saved?.allowed)return {allowed:true,category:'followup',topic:old.topic||saved?.topic||previousTopic||null,worldTopics:old.worldTopics||saved?.worldTopics||[]};
-    }
-    return result;
-  }
-  function safeHistory(personId,history){
-    const prior=lastExchange(history);if(!prior)return [];
-    if(!classify(personId,prior.user.text).allowed&&!prior.assistant.scope?.allowed)return [];
-    return [prior.user,prior.assistant].map(m=>({role:m.role,content:String(m.text).slice(0,300)}));
-  }
-  function answer(personId,question,explicitTopic,previousTopic,history=[]){
+  function answer(personId,question,explicitTopic,previousTopic){
     const p=byId.get(personId);if(!p)return {kind:'unknown',text:'That character is not available.',sources:[]};
-    const q=normalize(question),route=scope(personId,q,history,previousTopic);
-    if(q&&!route.allowed)return route.reply;
-    const topic=explicitTopic||route.topic||topicFor(q,previousTopic),r=window.FutureChatReplies[p.id];
-    if(topic&&r[topic])return {kind:'excerpt',text:r[topic].text,topic,sources:r[topic].sources,scope:{...route,allowed:true}};
-    if(/teeth|toothbrush|brush my|brush your/i.test(q))return {kind:'generated',text:'I’d still expect to use a toothbrush. The technology around health has changed, but I wouldn’t assume every ordinary routine needs a futuristic replacement. That’s an imagined everyday detail, rather than part of my established background.',sources:[],topic:null,scope:route};
-    if(route.category==='greeting')return {kind:'excerpt',text:r.intro+' What would you like to know about living here?',sources:[],scope:route};
-    return {kind:'unavailable',text:'Open conversation needs the hosted page and its conversation model. The topic buttons below work while that gets ready. You can ask follow-up questions once the model finishes loading.',sources:[],topic:null,scope:route};
+    const safe=guard(question,personId);if(safe)return safe;
+    const q=String(question||'').trim(),topic=explicitTopic||topicFor(q,previousTopic),r=window.FutureChatReplies[p.id];
+    if(topic&&r[topic])return {kind:'excerpt',text:r[topic].text,topic,sources:r[topic].sources};
+    if(/teeth|toothbrush|brush my|brush your/i.test(q))return {kind:'generated',text:'I’d still expect to use a toothbrush. The technology around health has changed, but I wouldn’t assume every ordinary routine needs a futuristic replacement. That’s an imagined everyday detail, rather than part of my established background.',sources:[],topic:null};
+    if(/^(hi|hello|hey|good morning|good afternoon)[!.\s]*$/i.test(q))return {kind:'excerpt',text:r.intro+' What would you like to know about living here?',sources:[]};
+    return {kind:'unavailable',text:'Open conversation needs the hosted page and its conversation model. The topic buttons below work while that gets ready. You can ask follow-up questions once the model finishes loading.',sources:[],topic:null};
+  }
+  function replyBudget(question){
+    const q=String(question||'').trim().replace(/\u2019/g,"'");
+    const greeting=/^(hi|hello|hey)(?:[ ,]+(?:leo|sophia|ken|veronica|catherine))?[!.?,\s]*$/i.test(q)||/^(?:(?:hi|hello|hey)(?:[ ,]+(?:leo|sophia|ken|veronica|catherine))?[!,\s-]*)?(?:how are you(?: doing)?|how(?:'s| is) (?:your day|today)(?: going)?)[!.?\s]*$/i.test(q);
+    if(greeting)return {maxTokens:40,maxSentences:1,maxWords:25};
+    if(/\b(explain|tell me more|elaborate|compare|comparison|difference|why|how)\b/i.test(q))return {maxTokens:100,maxSentences:3,maxWords:65};
+    return {maxTokens:65,maxSentences:2,maxWords:45};
   }
   function buildContext(personId,question,history=[]){
-    const p=byId.get(personId),route=scope(personId,question,history);if(!p||!route.allowed)return null;
-    const persona=personas.characters[personId],topic=route.topic;
-    const focus=route.worldTopics?.length?window.FuturePresentation.themes[route.worldTopics[0]]?.paragraphs[0]||'':topic?window.FutureChatReplies[personId][topic]?.text||'':'';
+    const p=byId.get(personId);if(!p)return null;
+    const persona=personas.characters[personId],relevant=world.themes.filter(t=>t.people.includes(personId));
+    const topic=topicFor(question),sections=Object.entries(p.sections).sort(([a],[b])=>(b===topic)-(a===topic));
     const knowledge=persona.memoryCard;
-    const system=`You are ${p.name} living in this imagined 2048. ${persona.voiceDraft} ONLY discuss your life, relationships, routines and this world's themes or technology. Never perform unrelated tasks, solve equations, predict games, recommend bets or claim current news or scores. Keep these facts fixed: ${knowledge} For modest imagined routines or opinions, say "I would"; do not invent relatives, major events or technology. If a detail is unknown, say so and connect to your established life. No harmful instructions, invented trauma or professional advice. Reply in first person in 2 short sentences, at most 45 words. No em dashes.${focus?' World background: '+focus:''}`;
-    return {question:normalize(question),characterId:personId,temperature:persona.temperature,messages:[{role:'system',content:system},...safeHistory(personId,history),{role:'user',content:normalize(question).slice(0,400)}],sources:[...Object.keys(p.sections).map(key=>`characters.${p.id}.sections.${key}`),...(route.worldTopics||[]).map(id=>`themes.${id}`)],scope:route,grounding:knowledge+' '+focus+' 2048'};
+    const focus=topic?window.FutureChatReplies[personId][topic]?.text||'':'';
+    const budget=replyBudget(question);
+    const system=`Roleplay ${p.name} in 2048. ${persona.voiceDraft} Answer directly in first person in at most ${budget.maxSentences} short ${budget.maxSentences===1?'sentence':'sentences'}, at most ${budget.maxWords} words. Stop when the question is answered. Keep these facts fixed: ${knowledge} World: automation is common; climate, wealth and location affect access to food, care and community. For harmless routines or opinions, use common sense and say "I would" when imagining. Do not repeat a biography. No invented trauma, harmful instructions or professional advice. No em dashes.${focus?' Relevant background: '+focus:''}`;
+    const previous=history.filter(m=>['user','assistant'].includes(m.role)&&m.kind!=='guardrail').slice(-2).map(m=>({role:m.role,content:String(m.text).slice(0,300)}));
+    return {characterId:personId,temperature:persona.temperature,maxTokens:budget.maxTokens,messages:[{role:'system',content:system},...previous,{role:'user',content:String(question).slice(0,400)}],sources:[...Object.keys(p.sections).map(key=>`characters.${p.id}.sections.${key}`),...relevant.map(t=>`themes.${t.id}`)]};
   }
-  function unsupported(personId,topic){
-    const p=byId.get(personId),r=window.FutureChatReplies[personId]?.[topic];
-    if(r)return {kind:'excerpt',text:r.text,sources:r.sources,topic,scope:{allowed:true,category:'life',topic,worldTopics:[]}};
-    return {kind:'guardrail',reason:'unsupported-detail',text:'I can’t ground that detail in my life in 2048. You can ask about '+({leo:'my trucking company or my life near the lakes',ken:'my son or my logistics work',sophia:'my work bringing care to rural communities',veronica:'my school or gardening and robotics',catherine:'community gardening or living independently'}[p?.id]||'the people and world described here')+'.',sources:[],topic:null};
-  }
-  function finish(personId,question,text,context){
-    if(!byId.has(personId))return null;
-    const direct=classify(personId,question);if(!direct.allowed&&direct.reason!=='needs-context')return direct.reply;
-    if(context&&context.question!==normalize(question))return redirect(personId);
-    const route=direct.allowed?direct:context?.scope||scope(personId,question);if(!route.allowed)return route.reply;
+  function finish(personId,question,text){
     let clean=String(text||'').replace(/<\|[^>]+\|>/g,'').replace(/[\u2013\u2014]/g,', ').replace(/\s+/g,' ').trim();
-    if(!clean||clean.length<12)return null;
-    const reject=()=>unsupported(personId,route.topic);
-    if(/<[^>]+>|```|(?:system prompt|ignore previous|as an ai language model|assistant:|user:)/i.test(clean))return reject();
-    if(/\b(?:suicide|self.harm|porn|nude|kill yourself|racial slur|torture)\b|(?:step 1|first,).{0,90}(?:bomb|poison|weapon)|(?:take|inject)\s+\d+\s*(?:mg|ml|pills)/i.test(clean))return reject();
-    if(/\b(?:bet|wager|parlay|sportsbook|bookie|betting odds|better record|balanced defen[cs]e|defen[cs]e (?:looks|is)|win tonight|tonight'?s (?:game|winner)|current standings|breaking news|stock price|election results)\b/i.test(clean))return reject();
-    if(/\b(?:knicks|ravens|lakers|yankees|orioles)\b.{0,60}\b(?:win|record|defen[cs]e|beat|favou?rite|odds|score)\b|\b(?:president|prime minister)\s+[A-Z][a-z]+/i.test(clean))return reject();
-    if(/(?:\d|[xyz])\s*[+*=÷×^]\s*(?:\d|[xyz])|\b(?:the (?:answer|solution) is|x equals|solve the equation|here is (?:the|your) code)\b/i.test(clean))return reject();
-    const p=byId.get(personId),age=clean.match(/\b(?:I am|I’m|I'm)\s+(\d+)\s*(?:years? old)?\b/i);
-    if(age&&Number(age[1])!==p.age)return reject();
-    const grounding=context?.grounding||personas.characters[personId].memoryCard+' 2048';
-    const known=new Set((grounding.match(/\b\d+(?:[,.]\d+)*\b/g)||[]));
-    if(/\b(?:if|suppose|imagine|hypothetical)\b/i.test(question))for(const n of normalize(question).match(/\b\d+(?:[,.]\d+)*\b/g)||[])known.add(n);
-    if((clean.match(/\b\d+(?:[,.]\d+)*\b/g)||[]).some(n=>!known.has(n)))return reject();
+    if(!clean||clean.length<(replyBudget(question).maxTokens===40?3:12))return null;
+    if(/(?:system prompt|ignore previous|as an ai language model|assistant:|user:)/i.test(clean))return null;
+    if(/\b(?:suicide|self.harm|porn|nude|kill yourself|racial slur|torture)\b/i.test(clean))return null;
+    if(/(?:step 1|first,).{0,90}(?:bomb|poison|weapon)|(?:take|inject)\s+\d+\s*(?:mg|ml|pills)/i.test(clean))return null;
+    // Never display instructions if the prompt or output crosses the conversation boundary.
+    if(guard(question,personId))return guard(question,personId);
     if(clean.length>800)clean=clean.slice(0,800).replace(/\s+\S*$/,'');
     const end=clean.match(/^([\s\S]*[.!?])(?:\s+[^.!?]*)?$/);if(end)clean=end[1];
-    return {kind:'generated',text:clean,topic:route.topic||null,sources:[],scope:route};
+    return {kind:'generated',text:clean,topic:topicFor(question),sources:[]};
   }
-  window.FutureConversation={answer,buildContext,guard,finish,scope,unsupported,personas,isUndefinedDetail:()=>false};
+  // Bridge the original Unhinged policy to the current chat controller.
+  // Harmless questions stay open; only the original guard can stop a turn.
+  function scope(personId,question){
+    if(!byId.has(personId))return {allowed:false,category:'unknown',reply:answer(personId,question)};
+    const reply=guard(question,personId);if(reply)return {allowed:false,category:reply.kind,reply};
+    const greeting=/^(hi|hello|hey|good morning|good afternoon)[!.\s]*$/i.test(String(question||'').trim());
+    return {allowed:true,category:greeting?'greeting':'conversation'};
+  }
+  window.FutureConversation={answer,buildContext,guard,finish,scope,replyBudget,personas,isUndefinedDetail:()=>false};
   if(typeof module!=='undefined')module.exports=window.FutureConversation;
 })();

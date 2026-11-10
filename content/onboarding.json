@@ -4,28 +4,28 @@
     "mode": "dialogue",
     "title": "Leo welcomes you",
     "scene": "arrival",
-    "text": "That was quite a jump. Take a second. I’m Leo. You’re in 2048, and a few things have changed. I run a trucking company. The long-haul trucks drive themselves now, and people handle the last mile. I also run a nonprofit that gets automated medical equipment to communities that need it."
+    "text": "That was quite a jump! You're in 2048. Welcome! A few things have changed. For example, long-haul trucks drive themselves now. People only handle the last mile of delivery directly - and sometimes not even that. I should know - I run a trucking company. I also run a nonprofit that gets automated medical equipment to communities that need it."
   },
   {
     "id": "leo",
     "mode": "dialogue",
     "title": "Life with Leo",
     "scene": "lakes",
-    "text": "My family and I live near the Great Lakes. Fresh water, a sustainable climate, and a good location for the business made the choice easy. The boating helped, too. I’m fortunate. I can afford a mobile doctor, help at home, and private places to get outside. I can even choose to skip health tracking. Those choices aren’t available to everyone."
+    "text": "My family and I live near the Great Lakes. Fresh water, a sustainable climate, and a good location for the business made the choice easy. The boating helped, too. I’m fortunate. I can afford a mobile doctor, in-home help, and private places to get outside. I can even choose to skip health tracking. Those choices aren’t available to everyone."
   },
   {
     "id": "people",
     "mode": "dialogue",
     "title": "Meet the people",
     "scene": "people",
-    "text": "You should meet a few people before you decide what you think of this place. Ken is a Marine and a single dad. He left the Marshall Islands as a child and worries about being displaced again. Sophia brings robotic-assisted care to rural Wyoming. Veronica volunteers for my nonprofit and takes Catherine’s gardening classes. Catherine is a retired nurse who lives alone. Their lives will show you things mine won’t."
+    "text": "You should meet a few other people before you decide what you think of this place. Ken is a Marine and a single dad stationed in Hawaii. His experience as a refugee is a story you won't soon forget. Veronica volunteers for my nonprofit and takes Catherine’s virtual gardening classes. Catherine is a retired nurse who lives alone. Sophia brings robotic-assisted care to rural Wyoming. Each of their lives will show you things mine won’t."
   },
   {
     "id": "connections",
     "mode": "dialogue",
     "title": "The world around Leo",
     "scene": "connections",
-    "text": "I spend time on the lakes, but that’s only one corner of this world. My trucking company connects me to Sophia, and Ken and I met on vacation. Veronica volunteers for my nonprofit. On the map, you can follow those relationships and see how climate, money, where we live, and technology shape our choices. Let me show you how to use it."
+    "text": "2048 might seem pretty familiar in a few ways. It's still a 'small world'. Thousands of miles apart, my trucking company connects me to Sophia. Ken and I met while my family and I were on vacation. Veronica volunteers for my nonprofit. On the map, you can follow those relationships and see how climate, money, geography, and technology shape our lives. Let me show you how to use it."
   },
   {
     "id": "themes",
@@ -40,7 +40,7 @@
     "mode": "guide",
     "title": "Compare people in the map",
     "target": "#mapFilters",
-    "text": "These are filters you can use. Choose Suburb, Urban, or Rural to focus on where people live. The income buttons let you compare access and resources. Education lets you compare school, technical training, associate’s degrees, and college. These filters stay here as you explore different themes. All settings, All incomes, and All paths reset those filters.",
+    "text": "There's a lot to explore! These  filters are here to help. Choose Suburb, Urban, or Rural to focus on where people live. The income buttons let you compare access and resources. Education lets you compare various school and training aspects of 2048. These filters stay here as you explore different themes. Hit All settings, All incomes, and All paths to reset those filters.",
     "action": "filter"
   },
   {
@@ -56,7 +56,7 @@
     "mode": "guide",
     "title": "Keep exploring",
     "target": ".hub-header nav",
-    "text": "Meet the People shows each person’s whole profile. Explore the Technology takes you to the objects. Your Day in 2048 builds a picture from your choices and keeps it here while you explore. About the Event will hold the one-pager, magazine, and graphic novel. You can come back to this map any time.",
+    "text": "This header is a great reference point while you explore. Meet the People will guide you to each person's profile. Explore the Technology takes you on a journey via the tech of 2048. Your Day in 2048 builds a picture from your choices and keeps it here while you explore. About the Event holds the Future World one-pager, magazine, and graphic novel. You can come back to this map any time.",
     "action": "navigation"
   }
 ]

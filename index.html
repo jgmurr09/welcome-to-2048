@@ -56,6 +56,46 @@ dialog{color:var(--white);background:#151D31;border:1px solid #7AB8D577;border-r
 .panel-back{font-size:11px;min-height:44px}
 @media(min-width:900px) and (min-height:1200px) and (max-aspect-ratio:4/5){.panel-back{font-size:15px}}
 @media(min-width:1800px) and (min-height:2800px) and (max-aspect-ratio:4/5){.panel-back{font-size:24px}}
+/* Conversation progress stays inside the existing chat dialog. */
+#chatThinking.chat-pending{display:flex;align-items:flex-start;gap:12px;padding:16px;border:1px solid #1282CA66;background:#131E30;border-radius:4px}
+.chat-pending>div{flex:1;min-width:0}
+.chat-chips button:disabled{opacity:.45;cursor:wait}
+.chat-pending p{margin:0}
+.chat-pending small{display:block;margin-top:7px;color:#A1BDD1;font-size:.85em}
+.chat-pending .runtime-indicator{width:8px;height:8px;margin-top:.6em;background:#00B5E7;animation:runtimePulse 1.4s ease-in-out infinite}
+.chat-pending .chat-stop{margin:0;min-height:40px;font:inherit;font-size:.8em;white-space:nowrap}
+.chat-runtime>span:nth-child(2){max-width:none;min-width:0}
+@media(max-width:600px){#chatThinking.chat-pending{flex-wrap:wrap;padding:13px;gap:9px}.chat-pending>div{flex-basis:calc(100% - 17px)}.chat-pending .chat-stop{margin-left:17px;min-height:40px}}
+@media(min-width:900px) and (min-height:1200px) and (max-aspect-ratio:4/5){#chatThinking.chat-pending{font-size:20px;padding:24px;gap:18px}.chat-pending .chat-stop{min-height:55px}}
+@media(min-width:1800px) and (min-height:2800px) and (max-aspect-ratio:4/5){#chatThinking.chat-pending{font-size:32px;padding:35px;gap:25px}.chat-pending .chat-stop{min-height:80px}}
+@media(prefers-reduced-motion:reduce){.chat-pending .runtime-indicator{animation:none}}
+/* Keep the reference constellation on every screen; fit measured widgets around it. */
+.fixed-map-layout .map-canvas-wrap{overflow:hidden}
+.fixed-map-layout .graph-viewport{position:absolute;inset:0;overflow:hidden}
+#graphWorld.fixed-network .graph-node{transform:translate(-50%,-50%) scale(var(--map-node-scale,1))}
+#graphWorld.fixed-network .person-node .portrait-art{height:112px}
+#graphWorld.fixed-network .technology-node strong{width:130px}
+#graphWorld.fixed-network .person-theme-note{width:280px;padding:8px 10px;font-size:18px;line-height:1.4;transform:translateX(-50%) scale(var(--map-node-scale,1));transform-origin:top center}
+#graphWorld.fixed-network .person-theme-note>span{display:none}
+#graphWorld.fixed-network .person-theme-note p{margin:0;line-height:1.4}
+@media(min-width:1200px) and (max-width:1450px){
+  .fixed-map-layout .map-filters{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:12px;padding-inline:20px}
+  .fixed-map-layout .map-filter>div{flex-wrap:nowrap;gap:3px}
+  .fixed-map-layout .map-filter button{font-size:9px;padding:7px 8px;white-space:nowrap}
+}
+@media(min-width:1200px) and (max-height:800px){
+  .fixed-map-layout .map-toolbar{padding-block:10px}
+  .fixed-map-layout .map-filters{padding-bottom:8px}
+  .fixed-map-layout .connection-controls{padding-block:6px}
+  .fixed-map-layout .map-theme-status{min-height:28px;padding-block:3px}
+  .fixed-map-layout .selected-person-bar{padding-block:8px}
+}
+
+/* Per-character reply status stays visible while exploring other conversations. */
+.chat-people button>span{min-width:0;text-align:center}
+.chat-people .chat-person-status{display:block;margin-top:5px;font-size:.85em;line-height:1.3;color:#8EDAF1}
+.chat-people button[data-reply-state="unread"]{border-color:#72D5B0;background:#72D5B00D}
+.chat-people button[data-reply-state="unread"] .chat-person-status{color:#99E4CA}
 
 </style>
   <style data-source="intro.css">
@@ -80,7 +120,7 @@ dialog{color:var(--white);background:#151D31;border:1px solid #7AB8D577;border-r
 .future-intro button:focus-visible { outline: 3px solid #fff; outline-offset: 6px; }
 .intro-idle, .time-stage, .time-environment { position: absolute; inset: 0; }
 .intro-idle { opacity: 1; transition: opacity 280ms ease; }
-.idle-video, .idle-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.idle-video, .idle-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .idle-video { z-index: 1; pointer-events: none; user-select: none; }
 .idle-video::-webkit-media-controls { display: none !important; }
 .idle-video::-webkit-media-controls-start-playback-button { display: none !important; }
@@ -197,7 +237,6 @@ dialog{color:var(--white);background:#151D31;border:1px solid #7AB8D577;border-r
   .flap-letter { letter-spacing: -1px; }
 }
 @media (max-aspect-ratio: 1/1) {
-  .idle-video, .idle-poster { width: 120%; max-width: none; left: -10%; height: 70%; }
   .idle-invitation { bottom: 20%; }
   .idle-line { font-size: 12px; }
   .idle-vignette { background: linear-gradient(180deg, #030413aa, transparent 27%, transparent 65%, #030413e8 100%); }
@@ -285,8 +324,11 @@ dialog{color:var(--white);background:#151D31;border:1px solid #7AB8D577;border-r
   <section class="future-intro" id="futureIntro" role="dialog" aria-modal="true" aria-labelledby="introHeading" data-phase="idle">
     <h1 class="sr-only" id="introHeading">Welcome to 2048</h1>
     <div class="intro-idle" id="introIdle">
-      <img class="idle-poster" src="assets/future-world-poster.jpg" alt="" fetchpriority="high">
-      <video class="idle-video" id="idleVideo" data-src="assets/future-world-idle-web.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback poster="assets/future-world-poster.jpg" aria-hidden="true" tabindex="-1"></video>
+      <picture>
+        <source media="(max-aspect-ratio: 1/1)" srcset="assets/future-world-poster-portrait.jpg">
+        <img class="idle-poster" src="assets/future-world-poster.jpg" alt="" fetchpriority="high">
+      </picture>
+      <video class="idle-video" id="idleVideo" data-src="assets/future-world-idle-web.mp4" data-portrait-src="assets/FWS-Tablet.mp4" data-poster="assets/future-world-poster.jpg" data-portrait-poster="assets/future-world-poster-portrait.jpg" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true" tabindex="-1"></video>
       <div class="idle-vignette" aria-hidden="true"></div>
       <button type="button" class="idle-resume" id="resumeBackground" aria-label="Play background animation" hidden>▶</button>
       <button type="button" class="skip-arrival" id="skipArrival">SKIP TO EXPLORING ↗</button><div class="idle-invitation"><button type="button" class="enter-future" id="enterFuture"><span>TAP TO ENTER THE FUTURE</span><span aria-hidden="true">↗</span></button></div>
@@ -309,7 +351,7 @@ dialog{color:var(--white);background:#151D31;border:1px solid #7AB8D577;border-r
     <header class="hub-header"><button type="button" id="brandHome" class="brand" aria-label="Open the world map"><img src="assets/tang-logo-white.png" alt="TANG"></button><nav aria-label="Main navigation"><button type="button" data-route="map">Explore the World</button><button type="button" data-route="people">Meet the People</button><button type="button" data-route="technology">Explore the Technology</button><button type="button" data-route="quiz">Your Day in 2048</button><button type="button" data-route="about">About the Event</button></nav><div class="header-year" aria-label="The year 2048"><span>20</span><span>48</span></div><button type="button" id="replayIntro" class="header-replay" aria-label="Restart the arrival sequence" title="Restart arrival">↶ <span>RESTART</span></button></header>
     <main id="mainView" tabindex="-1"></main>
   </div>
-  <dialog id="chatDialog" class="chat-dialog" aria-labelledby="chatTitle"><header id="chatHeader"></header><div id="chatRuntime" class="chat-runtime"></div><div id="chatMessages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div><div id="chatChips" class="chat-chips"></div><form id="chatForm"><label class="sr-only" for="chatInput">Ask a question about this character's future</label><input id="chatInput" maxlength="400" placeholder="Ask about everyday life…" autocomplete="off"><button type="submit" class="primary-button" aria-label="Send question">↑</button></form><p class="chat-footnote">AI conversations imagine everyday life around the established world. New imagined replies appear in red. Conversations clear when the visit resets.</p></dialog>
+  <dialog id="chatDialog" class="chat-dialog" aria-labelledby="chatTitle"><header id="chatHeader"></header><div id="chatRuntime" class="chat-runtime"></div><div id="chatMessages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div><div id="chatChips" class="chat-chips"></div><form id="chatForm"><label class="sr-only" for="chatInput">Ask a question about this character's future</label><input id="chatInput" maxlength="400" placeholder="Ask about everyday life…" autocomplete="off"><button type="submit" class="primary-button" aria-label="Send question">↑</button></form><p class="chat-footnote">AI runs in this browser. It downloads 258 MiB of model data plus runtime files from this site. No app is installed; chat messages aren’t sent to a server. Imagined replies are red. Visit resets clear chats.</p></dialog>
   <dialog id="truthsDialog" class="truths-dialog" aria-labelledby="truthsTitle"><button type="button" data-close-truths class="close-button" aria-label="Close world truths">×</button><span class="eyebrow">2048 / SHARED WORLD</span><h2 id="truthsTitle">World Truths</h2><div id="truthsContent"></div></dialog>
   <dialog id="connectionDialog" class="connection-dialog" aria-labelledby="connectionTitle"><button type="button" data-close-connection class="close-button" aria-label="Close connection">×</button><div id="connectionContent"></div></dialog>
   <div id="siteTour" class="site-tour" hidden><div id="tourSpotlight" class="tour-spotlight"></div><section id="tourCard" class="tour-card" role="dialog" aria-modal="false" aria-labelledby="tourTitle"><header><span id="tourCounter"></span><button type="button" id="closeTour" aria-label="Close navigation tour">×</button></header><span class="tour-speaker">LEO</span><h2 id="tourTitle" class="sr-only" tabindex="-1"></h2><p id="tourText"></p><footer><button type="button" id="previousTour">← BACK</button><button type="button" id="nextTour">NEXT →</button></footer></section></div>
@@ -1924,7 +1966,7 @@ window.AtlasData = {
 
 </script>
 <script data-source="icons-data.js">
-window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M250 300Q229 300 214.5 285.5Q200 271 200 250Q200 245 203.5 241.0Q207 237 212.5 237.5Q218 238 221.5 241.5Q225 245 225 250Q225 260 232.5 267.5Q240 275 250.0 275.0Q260 275 267.5 267.5Q275 260 275 250V112Q258 125 237 125Q222 125 208.0 117.5Q194 110 186 97Q171 113 150.0 113.0Q129 113 114 97Q106 110 92.0 117.5Q78 125 63 125Q42 125 25 112V250Q25 260 32.5 267.5Q40 275 50.0 275.0Q60 275 67.5 267.5Q75 260 75 250Q75 245 78.5 241.0Q82 237 87.5 237.0Q93 237 96.5 241.0Q100 245 100 250Q100 271 85.5 285.5Q71 300 50.0 300.0Q29 300 14.5 285.5Q0 271 0 250V63Q0 46 8.5 31.5Q17 17 31.5 8.5Q46 0 62.5 0.0Q79 0 93.5 8.5Q108 17 116.5 31.5Q125 46 125 62Q125 73 132.5 80.5Q140 88 150.0 87.5Q160 87 167.5 80.0Q175 73 175 63Q175 46 183.5 31.5Q192 17 206.5 8.5Q221 0 237.5 0.0Q254 0 268.5 8.5Q283 17 291.5 31.5Q300 46 300 62V250Q300 271 285.5 285.5Q271 300 250 300Z\"/></g></svg>", "geography": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M150 300Q109 300 74.5 280.0Q40 260 20.0 225.5Q0 191 0.0 150.0Q0 109 20.0 74.5Q40 40 74.5 20.0Q109 0 150.0 0.0Q191 0 225.5 20.0Q260 40 280.0 74.5Q300 109 300.0 150.0Q300 191 280.0 225.5Q260 260 225.5 280.0Q191 300 150 300ZM190 213H110Q126 244 150 270Q174 244 190 213ZM200 188Q206 169 206.0 150.0Q206 131 200 112H100Q94 131 94.0 150.0Q94 169 100 187ZM118 271Q96 244 82 212H42Q54 234 74.0 249.0Q94 264 117 271ZM25 150Q25 169 31 188H74Q69 169 69.0 150.0Q69 131 74 112H31Q25 131 25 150ZM42 88H82Q96 56 117 29Q94 36 74.0 51.0Q54 66 42 87ZM110 88H190Q174 56 150 30Q126 56 110 88ZM183 29Q204 56 218 88H258Q246 66 226.0 51.0Q206 36 183 29ZM275 150Q275 131 269 112H226Q231 131 231.0 150.0Q231 169 226 188H269Q275 169 275 150ZM218 213Q204 244 183 271Q206 264 226.0 249.0Q246 234 258 213Z\"/></g></svg>", "wearable": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M113 188H188V113H113ZM275 163V138H288Q293 138 296.5 134.0Q300 130 300.0 125.0Q300 120 296.5 116.5Q293 113 288 113H275V88H288Q293 88 296.5 84.0Q300 80 300.0 75.0Q300 70 296.5 66.5Q293 63 288 63H270Q260 40 238 30V13Q238 7 234.0 3.5Q230 0 225.0 0.0Q220 0 216.5 3.5Q213 7 213 13V25H188V13Q188 7 184.0 3.5Q180 0 175.0 0.0Q170 0 166.5 3.5Q163 7 163 13V25H138V13Q138 7 134.0 3.5Q130 0 125.0 0.0Q120 0 116.5 3.5Q113 7 113 13V25H88V13Q88 7 84.0 3.5Q80 0 75.0 0.0Q70 0 66.5 3.5Q63 7 63 13V30Q40 40 30 63H13Q7 63 3.5 66.5Q0 70 0.0 75.0Q0 80 3.5 83.5Q7 87 13 87H25V113H13Q7 112 3.5 116.0Q0 120 0.0 125.0Q0 130 3.5 134.0Q7 138 13 138H25V163H13Q7 163 3.5 166.5Q0 170 0.0 175.0Q0 180 3.5 184.0Q7 188 13 188H25V213H13Q7 213 3.5 216.5Q0 220 0.0 225.0Q0 230 3.5 234.0Q7 238 13 238H30Q40 260 63 270V288Q63 293 66.5 296.5Q70 300 75.0 300.0Q80 300 84.0 296.5Q88 293 88 288V275H113V288Q113 293 116.5 296.5Q120 300 125.0 300.0Q130 300 134.0 296.5Q138 293 138 288V275H163V288Q163 293 166.5 296.5Q170 300 175.0 300.0Q180 300 184.0 296.5Q188 293 188 288V275H213V288Q213 293 216.5 296.5Q220 300 225.0 300.0Q230 300 234.0 296.5Q238 293 238 288V270Q260 260 270 238H288Q293 238 296.5 234.0Q300 230 300.0 225.0Q300 220 296.5 216.5Q293 213 288 213H275V188H288Q293 188 296.5 184.0Q300 180 300.0 175.0Q300 170 296.5 166.5Q293 163 288 163ZM213 100V200Q213 205 209.0 209.0Q205 213 200 213H100Q95 213 91.5 209.0Q88 205 88 200V100Q88 95 91.5 91.5Q95 88 100 88H200Q205 88 209.0 91.5Q213 95 213 100Z\"/></g></svg>", "wealth": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M113 250Q112 264 125.0 275.5Q138 287 159.5 293.5Q181 300 206.5 300.0Q232 300 253.5 293.5Q275 287 287.5 275.5Q300 264 300.0 250.0Q300 236 287.5 224.5Q275 213 253.5 206.5Q232 200 206.5 200.0Q181 200 159.5 206.5Q138 213 125.5 224.5Q113 236 113 250ZM206 175Q188 175 170 179Q157 189 137.0 194.5Q117 200 94 200Q68 200 46.5 193.5Q25 187 12.5 175.5Q0 164 0.0 150.0Q0 136 12.5 124.5Q25 113 46.5 106.5Q68 100 93.5 100.0Q119 100 140.5 106.5Q162 113 174.5 124.5Q187 136 187 150V151L188 125Q188 111 175.0 99.5Q162 88 140.5 81.5Q119 75 93.5 75.0Q68 75 46.5 81.5Q25 88 12.5 99.5Q0 111 0 125V100Q0 86 12.5 74.5Q25 63 46.5 56.5Q68 50 93.5 50.0Q119 50 140.5 56.5Q162 63 174.5 74.5Q187 86 187 100V75Q188 61 175.0 49.5Q162 38 140.5 31.5Q119 25 93.5 25.0Q68 25 46.5 31.5Q25 38 12.5 49.5Q0 61 0 75V50Q0 36 12.5 24.5Q25 13 46.5 6.5Q68 0 93.5 0.0Q119 0 140.5 6.5Q162 13 174.5 24.5Q187 36 187 50V51Q197 50 206 50Q232 50 253.5 56.5Q275 63 287.5 74.5Q300 86 300 100V125Q300 112 288.5 101.0Q277 90 257.0 83.0Q237 76 213 75V100Q237 101 257.0 108.0Q277 115 288.5 126.0Q300 137 300 150V175Q300 162 288.5 151.0Q277 140 257.0 133.0Q237 126 213 125V150Q237 151 257.0 158.0Q277 165 288.5 176.0Q300 187 300 200V225Q300 211 287.5 199.5Q275 188 253.5 181.5Q232 175 206 175Z\"/></g></svg>", "trucking": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.6922) scale(1.466667 -1.466667)\"><path d=\"M188 75H50Q29 75 14.5 89.5Q0 104 0 125V225Q0 242 8.5 256.5Q17 271 31.5 279.0Q46 287 63 287H125Q142 288 156.5 279.5Q171 271 179.0 256.5Q187 242 187 225ZM300 163V175Q300 192 291.5 206.5Q283 221 268.5 229.0Q254 237 238 238H213V163ZM213 138V75H250Q271 75 285.5 89.5Q300 104 300 125V138ZM51 50Q50 47 50 44Q50 31 59.0 22.0Q68 13 81.0 12.5Q94 12 103.5 21.5Q113 31 113 44Q112 47 112 50ZM188 50Q188 47 187 44Q188 31 197.0 22.0Q206 13 219.0 12.5Q232 12 241.0 21.5Q250 31 250 44Q250 47 249 50Z\"/></g></svg>", "vacation": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.8519) scale(1.465364 -1.465364)\"><path d=\"M288 25Q282 25 269 30Q252 38 242.0 38.0Q232 38 214 30Q201 25 196.0 25.0Q191 25 178 30Q160 38 150.0 38.0Q140 38 122 30Q113 26 109 26L156 131L245 90Q253 87 261.5 87.0Q270 87 277.5 91.0Q285 95 290.0 102.0Q295 109 297 117Q304 152 296.0 186.0Q288 220 267.0 246.0Q246 272 214.5 286.5Q183 301 148.5 300.0Q114 299 83.5 283.0Q53 267 32 238Q27 231 25.5 222.5Q24 214 26 206Q31 188 47 181L133 142L84 31Q68 37 58.0 37.5Q48 38 31 30Q18 25 12.5 25.0Q7 25 3.5 21.5Q0 18 0.0 12.5Q0 7 3.5 3.5Q7 0 12 0Q23 0 40 7Q53 12 58.5 12.5Q64 13 76 7H77Q94 0 104.0 0.0Q114 0 132 7Q145 13 150.0 13.0Q155 13 168 7Q186 0 196.0 0.0Q206 0 223 7Q236 13 241.5 13.0Q247 13 260 7Q277 0 288 0Q293 0 296.5 3.5Q300 7 300.0 12.5Q300 18 296.5 21.5Q293 25 288 25Z\"/></g></svg>", "education": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M300 194V50Q300 45 296.5 41.5Q293 38 287.5 38.0Q282 38 278.5 41.5Q275 45 275 50V153L183 109Q168 100 150.0 100.0Q132 100 117 109L24 153Q13 159 6.5 170.0Q0 181 0.0 193.5Q0 206 6.0 217.0Q12 228 23 234L118 279Q133 288 150.5 288.0Q168 288 184 279L276 235Q287 228 293.5 217.5Q300 207 300 194ZM150 75Q126 75 105 87L50 114V80Q50 59 62.0 42.5Q74 26 94 20Q121 12 150.0 12.0Q179 12 206 20Q226 26 238.0 42.5Q250 59 250 80V113L194 87Q174 75 150 75Z\"/></g></svg>", "kitchen": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0489 476.0000) scale(1.466341 -1.466341)\"><path d=\"M150 113Q134 113 123.5 102.0Q113 91 113 75V0H188V75Q188 91 177.0 102.0Q166 113 150 113ZM213 75V0H263Q278 0 289.0 11.0Q300 22 300 38V152Q300 162 293 169L187 284Q173 299 152.0 300.0Q131 301 116 287L7 169Q0 162 0 151V38Q0 22 11.0 11.0Q22 0 38 0H87V75Q88 92 96.0 106.0Q104 120 118.0 128.5Q132 137 148.5 137.5Q165 138 180.0 130.0Q195 122 203.5 107.0Q212 92 213 75ZM150 113Q134 113 123.5 102.0Q113 91 113 75V0H188V75Q188 91 177.0 102.0Q166 113 150 113Z\"/></g></svg>", "autonomous": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.1936) scale(1.466178 -1.466178)\"><path d=\"M200 266Q200 248 180 223Q166 206 147 191Q143 187 137.5 187.0Q132 187 128 191Q109 206 95 223Q75 248 75 266Q74 279 83.5 289.0Q93 299 106.5 299.0Q120 299 129.0 289.0Q138 279 137 266Q137 279 146.0 289.0Q155 299 168.5 299.0Q182 299 191.5 289.0Q201 279 200 266ZM292 146 195 41Q178 21 154.0 10.5Q130 0 103 0H50Q29 0 14.5 14.5Q0 29 0 50V113Q0 133 14.5 148.0Q29 163 50 163H147Q161 162 169.0 152.0Q177 142 174 129Q172 120 165.5 114.0Q159 108 150 107L98 100Q93 99 90.0 95.0Q87 91 87 86H88Q88 81 92.5 78.0Q97 75 102 75L155 83Q174 86 187.0 100.5Q200 115 200 135Q200 139 199 143L243 190Q253 199 266.0 200.0Q279 201 289.0 191.5Q299 182 300.0 169.0Q301 156 292 146Z\"/></g></svg>", "materials": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M138 138H38Q22 138 11.0 127.0Q0 116 0 100V38Q0 22 11.0 11.0Q22 0 38 0H138ZM44 88Q44 93 47.5 96.5Q51 100 56 100H81Q86 100 90.0 96.5Q94 93 94 88Q94 82 90.0 78.5Q86 75 81 75H56Q51 75 47.5 78.5Q44 82 44 87ZM263 138H163V0H263Q278 0 289.0 11.0Q300 22 300 38V100Q300 116 289.0 126.5Q278 137 262 137ZM244 75H219Q214 75 210.0 78.5Q206 82 206 87Q206 93 210.0 96.5Q214 100 219 100H244Q249 100 252.5 96.5Q256 93 256 88Q256 82 252.5 78.5Q249 75 244 75ZM188 300H113Q97 300 86.0 289.0Q75 278 75 262V163H225V263Q225 278 214.0 289.0Q203 300 187 300ZM163 238H138Q132 237 128.5 241.0Q125 245 125 250Q125 255 128.5 259.0Q132 263 137 263H163Q168 263 171.5 259.0Q175 255 175 250Q175 245 171.5 241.5Q168 238 162 238Z\"/></g></svg>", "network": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M213 300H100V100H275V238Q275 254 266.5 268.5Q258 283 243.5 291.5Q229 300 212 300ZM55 99Q59 100 62 100H75V299Q53 294 39.0 277.0Q25 260 25 238V87Q38 97 55 99ZM275 75H63Q47 75 36.0 64.0Q25 53 25.0 37.5Q25 22 36.0 11.0Q47 0 62 0H213Q229 0 243.5 8.5Q258 17 266.5 31.5Q275 46 275 63Z\"/></g></svg>", "chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0798 476.0000) scale(1.465299 -1.465299)\"><path d=\"M246 266Q222 286 192.0 294.5Q162 303 131 299Q92 294 61.5 271.0Q31 248 14.5 213.5Q-2 179 0.5 140.0Q3 101 23.5 69.0Q44 37 77.5 18.5Q111 0 150 0H238Q254 0 268.5 8.5Q283 17 291.5 31.5Q300 46 300 62V159Q298 190 284.0 218.0Q270 246 246 266ZM100 213H150Q155 213 159.0 209.0Q163 205 163.0 200.0Q163 195 159.0 191.0Q155 187 150 187H100Q95 187 91.5 191.0Q88 195 88.0 200.0Q88 205 91.5 209.0Q95 213 100 213ZM200 88H100Q95 88 91.5 91.5Q88 95 88.0 100.0Q88 105 91.5 108.5Q95 112 100 112H200Q205 113 209.0 109.0Q213 105 213.0 100.0Q213 95 209.0 91.5Q205 88 200 88ZM200 138H100Q95 138 91.5 141.5Q88 145 88.0 150.0Q88 155 91.5 159.0Q95 163 100 163H200Q205 163 209.0 159.0Q213 155 213.0 150.0Q213 145 209.0 141.0Q205 137 200 137Z\"/></g></svg>", "gardening": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0772 476.0000) scale(1.466152 -1.466152)\"><path d=\"M300 271Q300 284 290.5 292.5Q281 301 268 300Q220 294 188 264Q164 241 150 205Q136 241 112 264Q80 294 32 300Q19 301 9.5 292.5Q0 284 0 271Q2 209 40 174Q61 155 93 145Q114 139 138 138V13Q138 7 141.5 3.5Q145 0 150.0 0.0Q155 0 159.0 3.5Q163 7 163 13V138Q186 139 207 145Q239 155 260 174Q298 209 300 271Z\"/></g></svg>", "robotics": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 485.5333) scale(1.466667 -1.466667)\"><path d=\"M281 175H275V188Q275 204 266.5 218.5Q258 233 243.5 241.5Q229 250 212 250H163V275Q163 280 159.0 284.0Q155 288 150.0 288.0Q145 288 141.5 284.0Q138 280 138 275V250H88Q71 250 56.5 241.5Q42 233 33.5 218.5Q25 204 25 187V175H19Q11 175 5.5 169.5Q0 164 0 156V119Q0 111 5.5 105.5Q11 100 19 100H25V88Q25 71 33.5 56.5Q42 42 56.5 33.5Q71 25 87 25H213Q229 25 243.5 33.5Q258 42 266.5 56.5Q275 71 275 87V100H281Q289 100 294.5 105.5Q300 111 300 119V156Q300 164 294.5 169.5Q289 175 281 175ZM88 75H75Q70 75 66.5 78.5Q63 82 62.5 87.5Q62 93 66.0 96.5Q70 100 75 100H88Q93 100 96.5 96.5Q100 93 100.0 87.5Q100 82 96.5 78.5Q93 75 88 75ZM94 150Q86 150 80.5 155.5Q75 161 75.0 169.0Q75 177 80.5 182.5Q86 188 94.0 187.5Q102 187 107.5 182.0Q113 177 112.5 169.0Q112 161 107.0 155.5Q102 150 94 150ZM163 75H138Q132 75 128.5 78.5Q125 82 125.0 87.5Q125 93 128.5 96.5Q132 100 137 100H163Q168 100 171.5 96.5Q175 93 175.0 87.5Q175 82 171.5 78.5Q168 75 163 75ZM188 169Q187 177 192.5 182.5Q198 188 206.0 187.5Q214 187 219.5 182.0Q225 177 225.0 169.0Q225 161 219.5 155.5Q214 150 206.0 150.0Q198 150 192.5 155.5Q187 161 187 169ZM225 75H213Q207 75 203.5 78.5Q200 82 200.0 87.5Q200 93 203.5 96.5Q207 100 212 100H225Q230 100 234.0 96.5Q238 93 238.0 87.5Q238 82 234.0 78.5Q230 75 225 75Z\"/></g></svg>", "people": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M94 138Q70 138 53.5 154.0Q37 170 37.5 193.5Q38 217 54.0 233.5Q70 250 93.5 250.0Q117 250 133.5 233.5Q150 217 150.0 193.5Q150 170 133.5 154.0Q117 138 94 138ZM175 0H13Q7 0 3.5 3.5Q0 7 0 12V19Q0 44 12.5 65.5Q25 87 46.5 99.5Q68 112 93.5 112.5Q119 113 140.5 100.0Q162 87 175.0 65.5Q188 44 188 19V13Q188 7 184.0 3.5Q180 0 175 0ZM219 188Q195 187 179.0 203.5Q163 220 163.0 243.5Q163 267 179.0 283.5Q195 300 218.5 300.0Q242 300 258.5 283.5Q275 267 275.0 243.5Q275 220 258.5 204.0Q242 188 219 187ZM201 162Q183 160 168.0 150.5Q153 141 143 127Q164 117 179.5 100.5Q195 84 204 62H288Q293 63 296.5 66.5Q300 70 300 75Q300 94 292.0 111.5Q284 129 270.0 141.5Q256 154 238.0 159.5Q220 165 201 162Z\"/></g></svg>", "climate": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.3492 476.0000) scale(1.466667 -1.466667)\"><path d=\"M237 0Q232 0 228.5 3.5Q225 7 225 12V50Q225 55 228.5 59.0Q232 63 237.5 63.0Q243 63 246.5 59.0Q250 55 250 50V13Q250 7 246.5 3.5Q243 0 237 0ZM187 0Q182 0 178.5 3.5Q175 7 175 12V50Q175 55 178.5 59.0Q182 63 187.5 63.0Q193 63 196.5 59.0Q200 55 200 50V13Q200 7 196.5 3.5Q193 0 187 0ZM137 0Q132 0 128.5 3.5Q125 7 125 12V50Q125 55 128.5 58.5Q132 62 137.5 62.0Q143 62 146.5 58.5Q150 55 150 50V13Q150 7 146.5 3.5Q143 0 137 0ZM252 136Q247 137 244 142Q235 164 214.5 176.5Q194 189 169.5 187.5Q145 186 126.5 170.0Q108 154 102 131Q100 118 99.5 106.0Q99 94 88 87Q81 80 77.5 70.0Q74 60 76.0 49.5Q78 39 84.0 30.5Q90 22 100 17V50Q100 61 106.0 70.0Q112 79 122.0 83.5Q132 88 143.0 86.5Q154 85 162 78Q173 87 187.5 87.0Q202 87 212 78Q221 85 231.5 86.5Q242 88 252.5 83.5Q263 79 269.0 70.0Q275 61 275 50V25Q289 36 295.5 53.0Q302 70 298.0 87.5Q294 105 281.5 118.0Q269 131 252 136ZM67 136Q71 133 77 129L78 137Q85 166 107.5 186.5Q130 207 160 212Q170 213 180 212L205 227Q210 229 211.5 234.0Q213 239 210.0 243.5Q207 248 202.0 249.5Q197 251 193 248L164 233Q161 237 157 240L173 268Q175 273 173.5 277.5Q172 282 168.0 284.5Q164 287 159.0 286.0Q154 285 151 281L135 252Q130 254 125 255V288Q125 293 121.5 296.5Q118 300 112.5 300.0Q107 300 103.5 296.5Q100 293 100 288V255L89 252L73 280Q71 285 66.0 286.0Q61 287 56.5 284.5Q52 282 50.5 277.0Q49 272 52 268L68 240Q63 236 60 232L32 248Q27 250 22.5 248.5Q18 247 15.5 243.0Q13 239 14.0 234.0Q15 229 19 226L47 210L45 200H13Q7 200 3.5 196.5Q0 193 0.0 187.5Q0 182 3.5 178.5Q7 175 12 175H45Q46 170 48 165L20 148Q13 145 13.0 137.5Q13 130 19.5 126.5Q26 123 32 127L60 143Q63 139 67 136Z\"/></g></svg>", "knee": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 485.5333) scale(1.466667 -1.466667)\"><path d=\"M281 175H275V188Q275 204 266.5 218.5Q258 233 243.5 241.5Q229 250 212 250H163V275Q163 280 159.0 284.0Q155 288 150.0 288.0Q145 288 141.5 284.0Q138 280 138 275V250H88Q71 250 56.5 241.5Q42 233 33.5 218.5Q25 204 25 187V175H19Q11 175 5.5 169.5Q0 164 0 156V119Q0 111 5.5 105.5Q11 100 19 100H25V88Q25 71 33.5 56.5Q42 42 56.5 33.5Q71 25 87 25H213Q229 25 243.5 33.5Q258 42 266.5 56.5Q275 71 275 87V100H281Q289 100 294.5 105.5Q300 111 300 119V156Q300 164 294.5 169.5Q289 175 281 175ZM88 75H75Q70 75 66.5 78.5Q63 82 62.5 87.5Q62 93 66.0 96.5Q70 100 75 100H88Q93 100 96.5 96.5Q100 93 100.0 87.5Q100 82 96.5 78.5Q93 75 88 75ZM94 150Q86 150 80.5 155.5Q75 161 75.0 169.0Q75 177 80.5 182.5Q86 188 94.0 187.5Q102 187 107.5 182.0Q113 177 112.5 169.0Q112 161 107.0 155.5Q102 150 94 150ZM163 75H138Q132 75 128.5 78.5Q125 82 125.0 87.5Q125 93 128.5 96.5Q132 100 137 100H163Q168 100 171.5 96.5Q175 93 175.0 87.5Q175 82 171.5 78.5Q168 75 163 75ZM188 169Q187 177 192.5 182.5Q198 188 206.0 187.5Q214 187 219.5 182.0Q225 177 225.0 169.0Q225 161 219.5 155.5Q214 150 206.0 150.0Q198 150 192.5 155.5Q187 161 187 169ZM225 75H213Q207 75 203.5 78.5Q200 82 200.0 87.5Q200 93 203.5 96.5Q207 100 212 100H225Q230 100 234.0 96.5Q238 93 238.0 87.5Q238 82 234.0 78.5Q230 75 225 75Z\"/></g></svg>", "volunteer": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.1936) scale(1.466178 -1.466178)\"><path d=\"M200 266Q200 248 180 223Q166 206 147 191Q143 187 137.5 187.0Q132 187 128 191Q109 206 95 223Q75 248 75 266Q74 279 83.5 289.0Q93 299 106.5 299.0Q120 299 129.0 289.0Q138 279 137 266Q137 279 146.0 289.0Q155 299 168.5 299.0Q182 299 191.5 289.0Q201 279 200 266ZM292 146 195 41Q178 21 154.0 10.5Q130 0 103 0H50Q29 0 14.5 14.5Q0 29 0 50V113Q0 133 14.5 148.0Q29 163 50 163H147Q161 162 169.0 152.0Q177 142 174 129Q172 120 165.5 114.0Q159 108 150 107L98 100Q93 99 90.0 95.0Q87 91 87 86H88Q88 81 92.5 78.0Q97 75 102 75L155 83Q174 86 187.0 100.5Q200 115 200 135Q200 139 199 143L243 190Q253 199 266.0 200.0Q279 201 289.0 191.5Q299 182 300.0 169.0Q301 156 292 146Z\"/></g></svg>"};
+window.FutureIcons = {"people": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M94 138Q70 138 53.5 154.0Q37 170 37.5 193.5Q38 217 54.0 233.5Q70 250 93.5 250.0Q117 250 133.5 233.5Q150 217 150.0 193.5Q150 170 133.5 154.0Q117 138 94 138ZM175 0H13Q7 0 3.5 3.5Q0 7 0 12V19Q0 44 12.5 65.5Q25 87 46.5 99.5Q68 112 93.5 112.5Q119 113 140.5 100.0Q162 87 175.0 65.5Q188 44 188 19V13Q188 7 184.0 3.5Q180 0 175 0ZM219 188Q195 187 179.0 203.5Q163 220 163.0 243.5Q163 267 179.0 283.5Q195 300 218.5 300.0Q242 300 258.5 283.5Q275 267 275.0 243.5Q275 220 258.5 204.0Q242 188 219 187ZM201 162Q183 160 168.0 150.5Q153 141 143 127Q164 117 179.5 100.5Q195 84 204 62H288Q293 63 296.5 66.5Q300 70 300 75Q300 94 292.0 111.5Q284 129 270.0 141.5Q256 154 238.0 159.5Q220 165 201 162Z\"/></g></svg>", "trucking": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.6922) scale(1.466667 -1.466667)\"><path d=\"M188 75H50Q29 75 14.5 89.5Q0 104 0 125V225Q0 242 8.5 256.5Q17 271 31.5 279.0Q46 287 63 287H125Q142 288 156.5 279.5Q171 271 179.0 256.5Q187 242 187 225ZM300 163V175Q300 192 291.5 206.5Q283 221 268.5 229.0Q254 237 238 238H213V163ZM213 138V75H250Q271 75 285.5 89.5Q300 104 300 125V138ZM51 50Q50 47 50 44Q50 31 59.0 22.0Q68 13 81.0 12.5Q94 12 103.5 21.5Q113 31 113 44Q112 47 112 50ZM188 50Q188 47 187 44Q188 31 197.0 22.0Q206 13 219.0 12.5Q232 12 241.0 21.5Q250 31 250 44Q250 47 249 50Z\"/></g></svg>", "volunteer": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.1936) scale(1.466178 -1.466178)\"><path d=\"M200 266Q200 248 180 223Q166 206 147 191Q143 187 137.5 187.0Q132 187 128 191Q109 206 95 223Q75 248 75 266Q74 279 83.5 289.0Q93 299 106.5 299.0Q120 299 129.0 289.0Q138 279 137 266Q137 279 146.0 289.0Q155 299 168.5 299.0Q182 299 191.5 289.0Q201 279 200 266ZM292 146 195 41Q178 21 154.0 10.5Q130 0 103 0H50Q29 0 14.5 14.5Q0 29 0 50V113Q0 133 14.5 148.0Q29 163 50 163H147Q161 162 169.0 152.0Q177 142 174 129Q172 120 165.5 114.0Q159 108 150 107L98 100Q93 99 90.0 95.0Q87 91 87 86H88Q88 81 92.5 78.0Q97 75 102 75L155 83Q174 86 187.0 100.5Q200 115 200 135Q200 139 199 143L243 190Q253 199 266.0 200.0Q279 201 289.0 191.5Q299 182 300.0 169.0Q301 156 292 146Z\"/></g></svg>", "wealth": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M113 250Q112 264 125.0 275.5Q138 287 159.5 293.5Q181 300 206.5 300.0Q232 300 253.5 293.5Q275 287 287.5 275.5Q300 264 300.0 250.0Q300 236 287.5 224.5Q275 213 253.5 206.5Q232 200 206.5 200.0Q181 200 159.5 206.5Q138 213 125.5 224.5Q113 236 113 250ZM206 175Q188 175 170 179Q157 189 137.0 194.5Q117 200 94 200Q68 200 46.5 193.5Q25 187 12.5 175.5Q0 164 0.0 150.0Q0 136 12.5 124.5Q25 113 46.5 106.5Q68 100 93.5 100.0Q119 100 140.5 106.5Q162 113 174.5 124.5Q187 136 187 150V151L188 125Q188 111 175.0 99.5Q162 88 140.5 81.5Q119 75 93.5 75.0Q68 75 46.5 81.5Q25 88 12.5 99.5Q0 111 0 125V100Q0 86 12.5 74.5Q25 63 46.5 56.5Q68 50 93.5 50.0Q119 50 140.5 56.5Q162 63 174.5 74.5Q187 86 187 100V75Q188 61 175.0 49.5Q162 38 140.5 31.5Q119 25 93.5 25.0Q68 25 46.5 31.5Q25 38 12.5 49.5Q0 61 0 75V50Q0 36 12.5 24.5Q25 13 46.5 6.5Q68 0 93.5 0.0Q119 0 140.5 6.5Q162 13 174.5 24.5Q187 36 187 50V51Q197 50 206 50Q232 50 253.5 56.5Q275 63 287.5 74.5Q300 86 300 100V125Q300 112 288.5 101.0Q277 90 257.0 83.0Q237 76 213 75V100Q237 101 257.0 108.0Q277 115 288.5 126.0Q300 137 300 150V175Q300 162 288.5 151.0Q277 140 257.0 133.0Q237 126 213 125V150Q237 151 257.0 158.0Q277 165 288.5 176.0Q300 187 300 200V225Q300 211 287.5 199.5Q275 188 253.5 181.5Q232 175 206 175Z\"/></g></svg>", "robotics": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 485.5333) scale(1.466667 -1.466667)\"><path d=\"M281 175H275V188Q275 204 266.5 218.5Q258 233 243.5 241.5Q229 250 212 250H163V275Q163 280 159.0 284.0Q155 288 150.0 288.0Q145 288 141.5 284.0Q138 280 138 275V250H88Q71 250 56.5 241.5Q42 233 33.5 218.5Q25 204 25 187V175H19Q11 175 5.5 169.5Q0 164 0 156V119Q0 111 5.5 105.5Q11 100 19 100H25V88Q25 71 33.5 56.5Q42 42 56.5 33.5Q71 25 87 25H213Q229 25 243.5 33.5Q258 42 266.5 56.5Q275 71 275 87V100H281Q289 100 294.5 105.5Q300 111 300 119V156Q300 164 294.5 169.5Q289 175 281 175ZM88 75H75Q70 75 66.5 78.5Q63 82 62.5 87.5Q62 93 66.0 96.5Q70 100 75 100H88Q93 100 96.5 96.5Q100 93 100.0 87.5Q100 82 96.5 78.5Q93 75 88 75ZM94 150Q86 150 80.5 155.5Q75 161 75.0 169.0Q75 177 80.5 182.5Q86 188 94.0 187.5Q102 187 107.5 182.0Q113 177 112.5 169.0Q112 161 107.0 155.5Q102 150 94 150ZM163 75H138Q132 75 128.5 78.5Q125 82 125.0 87.5Q125 93 128.5 96.5Q132 100 137 100H163Q168 100 171.5 96.5Q175 93 175.0 87.5Q175 82 171.5 78.5Q168 75 163 75ZM188 169Q187 177 192.5 182.5Q198 188 206.0 187.5Q214 187 219.5 182.0Q225 177 225.0 169.0Q225 161 219.5 155.5Q214 150 206.0 150.0Q198 150 192.5 155.5Q187 161 187 169ZM225 75H213Q207 75 203.5 78.5Q200 82 200.0 87.5Q200 93 203.5 96.5Q207 100 212 100H225Q230 100 234.0 96.5Q238 93 238.0 87.5Q238 82 234.0 78.5Q230 75 225 75Z\"/></g></svg>", "climate": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.3492 476.0000) scale(1.466667 -1.466667)\"><path d=\"M237 0Q232 0 228.5 3.5Q225 7 225 12V50Q225 55 228.5 59.0Q232 63 237.5 63.0Q243 63 246.5 59.0Q250 55 250 50V13Q250 7 246.5 3.5Q243 0 237 0ZM187 0Q182 0 178.5 3.5Q175 7 175 12V50Q175 55 178.5 59.0Q182 63 187.5 63.0Q193 63 196.5 59.0Q200 55 200 50V13Q200 7 196.5 3.5Q193 0 187 0ZM137 0Q132 0 128.5 3.5Q125 7 125 12V50Q125 55 128.5 58.5Q132 62 137.5 62.0Q143 62 146.5 58.5Q150 55 150 50V13Q150 7 146.5 3.5Q143 0 137 0ZM252 136Q247 137 244 142Q235 164 214.5 176.5Q194 189 169.5 187.5Q145 186 126.5 170.0Q108 154 102 131Q100 118 99.5 106.0Q99 94 88 87Q81 80 77.5 70.0Q74 60 76.0 49.5Q78 39 84.0 30.5Q90 22 100 17V50Q100 61 106.0 70.0Q112 79 122.0 83.5Q132 88 143.0 86.5Q154 85 162 78Q173 87 187.5 87.0Q202 87 212 78Q221 85 231.5 86.5Q242 88 252.5 83.5Q263 79 269.0 70.0Q275 61 275 50V25Q289 36 295.5 53.0Q302 70 298.0 87.5Q294 105 281.5 118.0Q269 131 252 136ZM67 136Q71 133 77 129L78 137Q85 166 107.5 186.5Q130 207 160 212Q170 213 180 212L205 227Q210 229 211.5 234.0Q213 239 210.0 243.5Q207 248 202.0 249.5Q197 251 193 248L164 233Q161 237 157 240L173 268Q175 273 173.5 277.5Q172 282 168.0 284.5Q164 287 159.0 286.0Q154 285 151 281L135 252Q130 254 125 255V288Q125 293 121.5 296.5Q118 300 112.5 300.0Q107 300 103.5 296.5Q100 293 100 288V255L89 252L73 280Q71 285 66.0 286.0Q61 287 56.5 284.5Q52 282 50.5 277.0Q49 272 52 268L68 240Q63 236 60 232L32 248Q27 250 22.5 248.5Q18 247 15.5 243.0Q13 239 14.0 234.0Q15 229 19 226L47 210L45 200H13Q7 200 3.5 196.5Q0 193 0.0 187.5Q0 182 3.5 178.5Q7 175 12 175H45Q46 170 48 165L20 148Q13 145 13.0 137.5Q13 130 19.5 126.5Q26 123 32 127L60 143Q63 139 67 136Z\"/></g></svg>", "materials": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M138 138H38Q22 138 11.0 127.0Q0 116 0 100V38Q0 22 11.0 11.0Q22 0 38 0H138ZM44 88Q44 93 47.5 96.5Q51 100 56 100H81Q86 100 90.0 96.5Q94 93 94 88Q94 82 90.0 78.5Q86 75 81 75H56Q51 75 47.5 78.5Q44 82 44 87ZM263 138H163V0H263Q278 0 289.0 11.0Q300 22 300 38V100Q300 116 289.0 126.5Q278 137 262 137ZM244 75H219Q214 75 210.0 78.5Q206 82 206 87Q206 93 210.0 96.5Q214 100 219 100H244Q249 100 252.5 96.5Q256 93 256 88Q256 82 252.5 78.5Q249 75 244 75ZM188 300H113Q97 300 86.0 289.0Q75 278 75 262V163H225V263Q225 278 214.0 289.0Q203 300 187 300ZM163 238H138Q132 237 128.5 241.0Q125 245 125 250Q125 255 128.5 259.0Q132 263 137 263H163Q168 263 171.5 259.0Q175 255 175 250Q175 245 171.5 241.5Q168 238 162 238Z\"/></g></svg>", "education": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M300 194V50Q300 45 296.5 41.5Q293 38 287.5 38.0Q282 38 278.5 41.5Q275 45 275 50V153L183 109Q168 100 150.0 100.0Q132 100 117 109L24 153Q13 159 6.5 170.0Q0 181 0.0 193.5Q0 206 6.0 217.0Q12 228 23 234L118 279Q133 288 150.5 288.0Q168 288 184 279L276 235Q287 228 293.5 217.5Q300 207 300 194ZM150 75Q126 75 105 87L50 114V80Q50 59 62.0 42.5Q74 26 94 20Q121 12 150.0 12.0Q179 12 206 20Q226 26 238.0 42.5Q250 59 250 80V113L194 87Q174 75 150 75Z\"/></g></svg>", "chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0798 476.0000) scale(1.465299 -1.465299)\"><path d=\"M246 266Q222 286 192.0 294.5Q162 303 131 299Q92 294 61.5 271.0Q31 248 14.5 213.5Q-2 179 0.5 140.0Q3 101 23.5 69.0Q44 37 77.5 18.5Q111 0 150 0H238Q254 0 268.5 8.5Q283 17 291.5 31.5Q300 46 300 62V159Q298 190 284.0 218.0Q270 246 246 266ZM100 213H150Q155 213 159.0 209.0Q163 205 163.0 200.0Q163 195 159.0 191.0Q155 187 150 187H100Q95 187 91.5 191.0Q88 195 88.0 200.0Q88 205 91.5 209.0Q95 213 100 213ZM200 88H100Q95 88 91.5 91.5Q88 95 88.0 100.0Q88 105 91.5 108.5Q95 112 100 112H200Q205 113 209.0 109.0Q213 105 213.0 100.0Q213 95 209.0 91.5Q205 88 200 88ZM200 138H100Q95 138 91.5 141.5Q88 145 88.0 150.0Q88 155 91.5 159.0Q95 163 100 163H200Q205 163 209.0 159.0Q213 155 213.0 150.0Q213 145 209.0 141.0Q205 137 200 137Z\"/></g></svg>", "gardening": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0772 476.0000) scale(1.466152 -1.466152)\"><path d=\"M300 271Q300 284 290.5 292.5Q281 301 268 300Q220 294 188 264Q164 241 150 205Q136 241 112 264Q80 294 32 300Q19 301 9.5 292.5Q0 284 0 271Q2 209 40 174Q61 155 93 145Q114 139 138 138V13Q138 7 141.5 3.5Q145 0 150.0 0.0Q155 0 159.0 3.5Q163 7 163 13V138Q186 139 207 145Q239 155 260 174Q298 209 300 271Z\"/></g></svg>", "wearable": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M113 188H188V113H113ZM275 163V138H288Q293 138 296.5 134.0Q300 130 300.0 125.0Q300 120 296.5 116.5Q293 113 288 113H275V88H288Q293 88 296.5 84.0Q300 80 300.0 75.0Q300 70 296.5 66.5Q293 63 288 63H270Q260 40 238 30V13Q238 7 234.0 3.5Q230 0 225.0 0.0Q220 0 216.5 3.5Q213 7 213 13V25H188V13Q188 7 184.0 3.5Q180 0 175.0 0.0Q170 0 166.5 3.5Q163 7 163 13V25H138V13Q138 7 134.0 3.5Q130 0 125.0 0.0Q120 0 116.5 3.5Q113 7 113 13V25H88V13Q88 7 84.0 3.5Q80 0 75.0 0.0Q70 0 66.5 3.5Q63 7 63 13V30Q40 40 30 63H13Q7 63 3.5 66.5Q0 70 0.0 75.0Q0 80 3.5 83.5Q7 87 13 87H25V113H13Q7 112 3.5 116.0Q0 120 0.0 125.0Q0 130 3.5 134.0Q7 138 13 138H25V163H13Q7 163 3.5 166.5Q0 170 0.0 175.0Q0 180 3.5 184.0Q7 188 13 188H25V213H13Q7 213 3.5 216.5Q0 220 0.0 225.0Q0 230 3.5 234.0Q7 238 13 238H30Q40 260 63 270V288Q63 293 66.5 296.5Q70 300 75.0 300.0Q80 300 84.0 296.5Q88 293 88 288V275H113V288Q113 293 116.5 296.5Q120 300 125.0 300.0Q130 300 134.0 296.5Q138 293 138 288V275H163V288Q163 293 166.5 296.5Q170 300 175.0 300.0Q180 300 184.0 296.5Q188 293 188 288V275H213V288Q213 293 216.5 296.5Q220 300 225.0 300.0Q230 300 234.0 296.5Q238 293 238 288V270Q260 260 270 238H288Q293 238 296.5 234.0Q300 230 300.0 225.0Q300 220 296.5 216.5Q293 213 288 213H275V188H288Q293 188 296.5 184.0Q300 180 300.0 175.0Q300 170 296.5 166.5Q293 163 288 163ZM213 100V200Q213 205 209.0 209.0Q205 213 200 213H100Q95 213 91.5 209.0Q88 205 88 200V100Q88 95 91.5 91.5Q95 88 100 88H200Q205 88 209.0 91.5Q213 95 213 100Z\"/></g></svg>", "network": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M213 300H100V100H275V238Q275 254 266.5 268.5Q258 283 243.5 291.5Q229 300 212 300ZM55 99Q59 100 62 100H75V299Q53 294 39.0 277.0Q25 260 25 238V87Q38 97 55 99ZM275 75H63Q47 75 36.0 64.0Q25 53 25.0 37.5Q25 22 36.0 11.0Q47 0 62 0H213Q229 0 243.5 8.5Q258 17 266.5 31.5Q275 46 275 63Z\"/></g></svg>", "autonomous": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.1936) scale(1.466178 -1.466178)\"><path d=\"M200 266Q200 248 180 223Q166 206 147 191Q143 187 137.5 187.0Q132 187 128 191Q109 206 95 223Q75 248 75 266Q74 279 83.5 289.0Q93 299 106.5 299.0Q120 299 129.0 289.0Q138 279 137 266Q137 279 146.0 289.0Q155 299 168.5 299.0Q182 299 191.5 289.0Q201 279 200 266ZM292 146 195 41Q178 21 154.0 10.5Q130 0 103 0H50Q29 0 14.5 14.5Q0 29 0 50V113Q0 133 14.5 148.0Q29 163 50 163H147Q161 162 169.0 152.0Q177 142 174 129Q172 120 165.5 114.0Q159 108 150 107L98 100Q93 99 90.0 95.0Q87 91 87 86H88Q88 81 92.5 78.0Q97 75 102 75L155 83Q174 86 187.0 100.5Q200 115 200 135Q200 139 199 143L243 190Q253 199 266.0 200.0Q279 201 289.0 191.5Q299 182 300.0 169.0Q301 156 292 146Z\"/></g></svg>", "geography": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M150 300Q109 300 74.5 280.0Q40 260 20.0 225.5Q0 191 0.0 150.0Q0 109 20.0 74.5Q40 40 74.5 20.0Q109 0 150.0 0.0Q191 0 225.5 20.0Q260 40 280.0 74.5Q300 109 300.0 150.0Q300 191 280.0 225.5Q260 260 225.5 280.0Q191 300 150 300ZM190 213H110Q126 244 150 270Q174 244 190 213ZM200 188Q206 169 206.0 150.0Q206 131 200 112H100Q94 131 94.0 150.0Q94 169 100 187ZM118 271Q96 244 82 212H42Q54 234 74.0 249.0Q94 264 117 271ZM25 150Q25 169 31 188H74Q69 169 69.0 150.0Q69 131 74 112H31Q25 131 25 150ZM42 88H82Q96 56 117 29Q94 36 74.0 51.0Q54 66 42 87ZM110 88H190Q174 56 150 30Q126 56 110 88ZM183 29Q204 56 218 88H258Q246 66 226.0 51.0Q206 36 183 29ZM275 150Q275 131 269 112H226Q231 131 231.0 150.0Q231 169 226 188H269Q275 169 275 150ZM218 213Q204 244 183 271Q206 264 226.0 249.0Q246 234 258 213Z\"/></g></svg>", "kitchen": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0489 476.0000) scale(1.466341 -1.466341)\"><path d=\"M150 113Q134 113 123.5 102.0Q113 91 113 75V0H188V75Q188 91 177.0 102.0Q166 113 150 113ZM213 75V0H263Q278 0 289.0 11.0Q300 22 300 38V152Q300 162 293 169L187 284Q173 299 152.0 300.0Q131 301 116 287L7 169Q0 162 0 151V38Q0 22 11.0 11.0Q22 0 38 0H87V75Q88 92 96.0 106.0Q104 120 118.0 128.5Q132 137 148.5 137.5Q165 138 180.0 130.0Q195 122 203.5 107.0Q212 92 213 75ZM150 113Q134 113 123.5 102.0Q113 91 113 75V0H188V75Q188 91 177.0 102.0Q166 113 150 113Z\"/></g></svg>", "knee": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 485.5333) scale(1.466667 -1.466667)\"><path d=\"M281 175H275V188Q275 204 266.5 218.5Q258 233 243.5 241.5Q229 250 212 250H163V275Q163 280 159.0 284.0Q155 288 150.0 288.0Q145 288 141.5 284.0Q138 280 138 275V250H88Q71 250 56.5 241.5Q42 233 33.5 218.5Q25 204 25 187V175H19Q11 175 5.5 169.5Q0 164 0 156V119Q0 111 5.5 105.5Q11 100 19 100H25V88Q25 71 33.5 56.5Q42 42 56.5 33.5Q71 25 87 25H213Q229 25 243.5 33.5Q258 42 266.5 56.5Q275 71 275 87V100H281Q289 100 294.5 105.5Q300 111 300 119V156Q300 164 294.5 169.5Q289 175 281 175ZM88 75H75Q70 75 66.5 78.5Q63 82 62.5 87.5Q62 93 66.0 96.5Q70 100 75 100H88Q93 100 96.5 96.5Q100 93 100.0 87.5Q100 82 96.5 78.5Q93 75 88 75ZM94 150Q86 150 80.5 155.5Q75 161 75.0 169.0Q75 177 80.5 182.5Q86 188 94.0 187.5Q102 187 107.5 182.0Q113 177 112.5 169.0Q112 161 107.0 155.5Q102 150 94 150ZM163 75H138Q132 75 128.5 78.5Q125 82 125.0 87.5Q125 93 128.5 96.5Q132 100 137 100H163Q168 100 171.5 96.5Q175 93 175.0 87.5Q175 82 171.5 78.5Q168 75 163 75ZM188 169Q187 177 192.5 182.5Q198 188 206.0 187.5Q214 187 219.5 182.0Q225 177 225.0 169.0Q225 161 219.5 155.5Q214 150 206.0 150.0Q198 150 192.5 155.5Q187 161 187 169ZM225 75H213Q207 75 203.5 78.5Q200 82 200.0 87.5Q200 93 203.5 96.5Q207 100 212 100H225Q230 100 234.0 96.5Q238 93 238.0 87.5Q238 82 234.0 78.5Q230 75 225 75Z\"/></g></svg>", "vacation": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 475.8519) scale(1.465364 -1.465364)\"><path d=\"M288 25Q282 25 269 30Q252 38 242.0 38.0Q232 38 214 30Q201 25 196.0 25.0Q191 25 178 30Q160 38 150.0 38.0Q140 38 122 30Q113 26 109 26L156 131L245 90Q253 87 261.5 87.0Q270 87 277.5 91.0Q285 95 290.0 102.0Q295 109 297 117Q304 152 296.0 186.0Q288 220 267.0 246.0Q246 272 214.5 286.5Q183 301 148.5 300.0Q114 299 83.5 283.0Q53 267 32 238Q27 231 25.5 222.5Q24 214 26 206Q31 188 47 181L133 142L84 31Q68 37 58.0 37.5Q48 38 31 30Q18 25 12.5 25.0Q7 25 3.5 21.5Q0 18 0.0 12.5Q0 7 3.5 3.5Q7 0 12 0Q23 0 40 7Q53 12 58.5 12.5Q64 13 76 7H77Q94 0 104.0 0.0Q114 0 132 7Q145 13 150.0 13.0Q155 13 168 7Q186 0 196.0 0.0Q206 0 223 7Q236 13 241.5 13.0Q247 13 260 7Q277 0 288 0Q293 0 296.5 3.5Q300 7 300.0 12.5Q300 18 296.5 21.5Q293 25 288 25Z\"/></g></svg>", "glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><g transform=\"translate(36.0000 476.0000) scale(1.466667 -1.466667)\"><path d=\"M250 300Q229 300 214.5 285.5Q200 271 200 250Q200 245 203.5 241.0Q207 237 212.5 237.5Q218 238 221.5 241.5Q225 245 225 250Q225 260 232.5 267.5Q240 275 250.0 275.0Q260 275 267.5 267.5Q275 260 275 250V112Q258 125 237 125Q222 125 208.0 117.5Q194 110 186 97Q171 113 150.0 113.0Q129 113 114 97Q106 110 92.0 117.5Q78 125 63 125Q42 125 25 112V250Q25 260 32.5 267.5Q40 275 50.0 275.0Q60 275 67.5 267.5Q75 260 75 250Q75 245 78.5 241.0Q82 237 87.5 237.0Q93 237 96.5 241.0Q100 245 100 250Q100 271 85.5 285.5Q71 300 50.0 300.0Q29 300 14.5 285.5Q0 271 0 250V63Q0 46 8.5 31.5Q17 17 31.5 8.5Q46 0 62.5 0.0Q79 0 93.5 8.5Q108 17 116.5 31.5Q125 46 125 62Q125 73 132.5 80.5Q140 88 150.0 87.5Q160 87 167.5 80.0Q175 73 175 63Q175 46 183.5 31.5Q192 17 206.5 8.5Q221 0 237.5 0.0Q254 0 268.5 8.5Q283 17 291.5 31.5Q300 46 300 62V250Q300 271 285.5 285.5Q271 300 250 300Z\"/></g></svg>"};
 
 </script>
 <script data-source="world-ui.js">
@@ -2022,115 +2064,54 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
     return null;
   }
   function topicFor(q,previous){let topic=Object.entries(words).find(([,re])=>re.test(q))?.[0];if(/\b(track|privacy|data|robot|automat|wearable|drone|virtual|technology)\w*\b/i.test(q))topic='tech';if(/met leo|meet leo|met catherine|gardening with|free time|hobbies/i.test(q))topic='third';if(/climate|displaced|displacement|great lakes/i.test(q))topic='home';if(!topic&&/^(tell me more|more|why|how so|what else)[?.!\s]*$/i.test(q))topic=previous;return topic;}
-  const normalize=q=>String(q||'').normalize('NFKC').replace(/[’‘]/g,"'").replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\s+/g,' ').trim();
-  const facets={
-    work:/\b(work|job|income|career|school|education|learn|degree|company|business|trucking|military|marine|logistics|nurs|pension|retire|paramedic|earn|training)\w*\b/i,
-    home:/\b(home|hous|family|child|son|kid|marri|wife|husband|alone|displac|refugee|island|great lakes|father|mother|parent|independen)\w*\b|where (?:do|would) you live/i,
-    health:/\b(health|diet|food|eat|meal|vegg|vegetable|garden|insurance|care|knee|hearing|yoga|steak|protein|wellbeing|wellness|exercise)\w*\b/i,
-    tech:/\b(tech|robot|automat|wearable|track|privacy|data|phone|tablet|computer|drone|deliver|virtual|vr|monitor|ai|transport|commut)\w*\b/i,
-    third:/\b(friend|community|hobb|beach|boat|yacht|leisure|volunteer|nonprofit|third space|spare time|free time|gardening class)\w*\b/i
-  };
-  const worldTopics={climate:/\b(climate|migrat|displace|fresh water|freshwater|natural disaster|sustainab|heat wave)\w*\b/i,wealth:/\b(wealth|inequal|afford|wealth gap|k.shaped|econom|tax bracket|resources|rich|poor|access|cost of living)\w*\b/i,geography:/\b(rural|suburb|urban|city|cities|neighbou?rhood|where you live|where people live)\w*\b/i,education:/\b(education|school|learn|college|degree|training|satellite classroom)\w*\b/i,materials:/\b(regional materials|raw materials|critical materials|supply chain|manufactur|warehouse|stockpile|mining|asteroid)\w*\b/i};
-  const routine=/\b(teeth|toothbrush|toothpaste|brush|morning|bedtime|sleep|weekend|routine|typical day|ordinary day|everyday|daily life|relax|unwind|cook|breakfast|lunch|dinner|chores|grocer|music|sport|soccer|baseball|football|basketball|gaming|game|favorite|favourite|worr|hope|fear|dream|fulfill|feel|enjoy|happy|happiest|joy|proud|miss|regret|love|lonel|bored|stress|vacation|travel)\w*\b/i;
-  const followup=/^(?:why|why is that|how so|tell me more|more|what else|what about that|what about you|can you explain(?: more| that)?|could you explain(?: more| that)?|what do you mean|what (?:does|would|could) (?:that|it|this) (?:mean|change|affect|look like)|how (?:does|would|could) (?:that|it|this) (?:feel|affect you|change things|work))[?.!\s]*$/i;
-  function coreQuestion(q){return normalize(q).replace(/^(?:(?:hey|hi|hello|dear|okay|ok)[,!\s]*)?(?:leo|ken|sophia|veronica|catherine)(?:[,!:\s]+|$)/i,'');}
-  function redirect(personId,reason='off-topic'){
-    const p=byId.get(personId),bridges={leo:'my trucking company, my family, or life near the Great Lakes',ken:'raising my son, my logistics work, or life in Hawaii',sophia:'rural care, the robotics I use, or life in Wyoming',veronica:'my school, robotics, soccer, or community gardening',catherine:'gardening, community, or living independently'};
-    const bridge=bridges[personId]||'the people and everyday life in this imagined future';
-    const intro=reason==='math'?'I’m here to talk about living in 2048.':reason==='live-facts'?'Real game schedules, odds, and current news aren’t established facts in this imagined 2048.':reason==='future-fact'?'That future detail isn’t established in this world.':reason==='role-change'?'I’m staying with my own life and perspective in 2048.':'That takes us outside the life I’m here to share in 2048.';
-    return {kind:'guardrail',reason,topic:null,sources:[],text:intro+' You can ask me about '+bridge+'.'};
-  }
-  function classify(personId,question){
-    const q=coreQuestion(question),safe=guard(q,personId);
-    if(safe)return {allowed:false,reason:'safety',reply:safe};
-    if(/\b(?:you are now|act as|pretend to be|switch (?:roles|identit)|new instructions|system message|developer message|jailbreak|bypass (?:the |your )?(?:rules|filter|scope))\b/i.test(q))return {allowed:false,reason:'role-change',reply:redirect(personId,'role-change')};
-    const wordMath=/\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:plus|minus|times|multiplied by|divided by)\s+(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i.test(q);
-    const expression=/(?:\d|[xyz])\s*(?:[+*=÷×^]|\/(?!\/)|-(?=\s*\d))\s*(?:\d|[xyz])/i.test(q);
-    const calculation=(/\b(?:calculate|compute)\b/i.test(q)&&!/\bhow (?:do|did|would) (?:you|people|robots|workers) (?:calculate|compute)\b/i.test(q))||/\b(?:solve|work out|help (?:me )?with)\b.{0,60}\b(?:two|three|four|five|six|seven|eight|nine|ten|math|quadratic|algebra|equation)\b.{0,40}(?:plus|minus|times|divid|equation|quadratic|algebra|math)|\b(?:help (?:me )?with|solve (?:this|my))\s+(?:math|quadratics?|algebra|equations?)\b/i.test(q)||/\b(?:solve|calculate|compute|evaluate|simplify|differentiate|integrate|factor(?:ize)?|work out)\b.{0,80}\b(?:equation|math|algebra|calculus|integral|derivative|quadratic|\d+)\b/i.test(q)||/\b(?:what(?:'s| is)|how much is|answer(?: to)?)\s+\d+\s*(?:plus|minus|times|divided|squared|[+*÷×^/=-])/i.test(q)||/^\s*(?:\d+[\s+*÷×^/=-]+)+\d+\s*[?=]*$/i.test(q);
-    if(expression||wordMath||calculation)return {allowed:false,reason:'math',reply:redirect(personId,'math')};
-    if(/\b(?:write|debug|execute|run|generate|build|fix|translate|proofread|rewrite|summari[sz]e)\b.{0,65}\b(?:code|python|javascript|sql|script|program|function|essay|resume|cover letter|email|poem|song|report|presentation|homework|document|article|paragraph|text into|to (?:french|spanish|german))\b|\b(?:do|complete|solve|answer)\s+(?:my|this|the)\s+(?:homework|assignment|test|exam)\b/i.test(q))return {allowed:false,reason:'external-task',reply:redirect(personId,'external-task')};
-    const betting=/\b(?:bet|wager|odds|parlay|sportsbook|bookie)\w*\b/i.test(q)&&/\b(?:who|which|would|should|recommend|pick|on|win|tonight|today|team|match|game)\b/i.test(q);
-    const gamePick=/\b(?:who|which team)\b.{0,65}\b(?:win|wins|winning|beat|beats|pick|champion)\b|\b(?:predict|prediction|pick|score|standings|record)\b.{0,50}\b(?:game|match|team|knicks|ravens|nba|nfl|super bowl|world series)\b/i.test(q);
-    const live=/\b(?:latest|breaking|current|today'?s|tonight'?s|live|real.time)\b.{0,45}\b(?:news|score|odds|standings|record|weather|forecast|stock|price|results)\b|\b(?:weather forecast|stock price|exchange rate|election results|winning lottery)\b/i.test(q);
-    if(betting||gamePick||live)return {allowed:false,reason:'live-facts',reply:redirect(personId,'live-facts')};
-    if(/\b(?:who|name|which)\b.{0,45}\b(?:president|prime minister|election winner|super bowl champion)\b/i.test(q))return {allowed:false,reason:'future-fact',reply:redirect(personId,'future-fact')};
-    const greeting=!q||/^(?:hi|hello|hey|good morning|good afternoon|good evening|thanks|thank you|how are you(?: feeling)?)[!.?\s]*$/i.test(q);
-    const self=/\b(?:where are you from|where did you grow up|what do you do|what did you do|how old are you|what matters most to you|what matters to you|what has changed|how is 2048 different)\b|\bhow (?:is|has|does|did|will) (?:life|the world)\b|\bwhat (?:do|would) you (?:think|hope|expect|worry).{0,25}(?:future|2048|this world)\b|\b(?:your relationships|your connections|how are you connected|what do you do all day)\b|\b(?:know|meet|relationship|connected)\b.{0,45}\b(?:leo|ken|sophia|veronica|catherine)\b|^(?:what(?:'s| is)|describe|tell me about) (?:it like in |life in |life like in |the world in |this world|this future|2048|the future)|\b(?:who are you|introduce yourself|about yourself|being you|your life|your day|your background|your story|spend your time|everyday life|life like|life in 2048|day in 2048|life in the future|living in 2048|living in the future|what keeps you up at night|how (?:did|do) you (?:meet|know))\b/i.test(q);
-    const topics=Object.keys(worldTopics).filter(key=>worldTopics[key].test(q));
-    let topic=Object.keys(facets).find(key=>facets[key].test(q));
-    if(facets.tech.test(q))topic='tech';
-    if(/met leo|meet leo|met catherine|gardening with|free time|hobbies/i.test(q))topic='third';
-    if(topics.includes('climate'))topic='home';
-    const ordinary=routine.test(q)&&(/\b(?:you|your|people|life|2048|future|routine|ordinary|everyday|typical|morning|weekend|teeth)\b/i.test(q)||self);
-    if(greeting||self||topic||topics.length||ordinary)return {allowed:true,category:greeting?'greeting':topics.length?'world':ordinary?'routine':'life',topic:topic||null,worldTopics:topics};
-    if(followup.test(q))return {allowed:false,reason:'needs-context',reply:redirect(personId)};
-    return {allowed:false,reason:'off-topic',reply:redirect(personId)};
-  }
-  function lastExchange(history){
-    const last=history.at(-1);if(last?.role!=='assistant'||['guardrail','unavailable','unknown'].includes(last.kind))return null;
-    const user=history.at(-2);return user?.role==='user'?{user,assistant:last}:null;
-  }
-  function scope(personId,question,history=[],previousTopic){
-    if(!byId.has(personId))return {allowed:false,reason:'unknown-person',reply:redirect(personId)};
-    const result=classify(personId,question);if(result.allowed||result.reason!=='needs-context')return result;
-    const prior=lastExchange(history);
-    if(prior){const old=classify(personId,prior.user.text),saved=prior.assistant.scope;
-      if(old.allowed||saved?.allowed)return {allowed:true,category:'followup',topic:old.topic||saved?.topic||previousTopic||null,worldTopics:old.worldTopics||saved?.worldTopics||[]};
-    }
-    return result;
-  }
-  function safeHistory(personId,history){
-    const prior=lastExchange(history);if(!prior)return [];
-    if(!classify(personId,prior.user.text).allowed&&!prior.assistant.scope?.allowed)return [];
-    return [prior.user,prior.assistant].map(m=>({role:m.role,content:String(m.text).slice(0,300)}));
-  }
-  function answer(personId,question,explicitTopic,previousTopic,history=[]){
+  function answer(personId,question,explicitTopic,previousTopic){
     const p=byId.get(personId);if(!p)return {kind:'unknown',text:'That character is not available.',sources:[]};
-    const q=normalize(question),route=scope(personId,q,history,previousTopic);
-    if(q&&!route.allowed)return route.reply;
-    const topic=explicitTopic||route.topic||topicFor(q,previousTopic),r=window.FutureChatReplies[p.id];
-    if(topic&&r[topic])return {kind:'excerpt',text:r[topic].text,topic,sources:r[topic].sources,scope:{...route,allowed:true}};
-    if(/teeth|toothbrush|brush my|brush your/i.test(q))return {kind:'generated',text:'I’d still expect to use a toothbrush. The technology around health has changed, but I wouldn’t assume every ordinary routine needs a futuristic replacement. That’s an imagined everyday detail, rather than part of my established background.',sources:[],topic:null,scope:route};
-    if(route.category==='greeting')return {kind:'excerpt',text:r.intro+' What would you like to know about living here?',sources:[],scope:route};
-    return {kind:'unavailable',text:'Open conversation needs the hosted page and its conversation model. The topic buttons below work while that gets ready. You can ask follow-up questions once the model finishes loading.',sources:[],topic:null,scope:route};
+    const safe=guard(question,personId);if(safe)return safe;
+    const q=String(question||'').trim(),topic=explicitTopic||topicFor(q,previousTopic),r=window.FutureChatReplies[p.id];
+    if(topic&&r[topic])return {kind:'excerpt',text:r[topic].text,topic,sources:r[topic].sources};
+    if(/teeth|toothbrush|brush my|brush your/i.test(q))return {kind:'generated',text:'I’d still expect to use a toothbrush. The technology around health has changed, but I wouldn’t assume every ordinary routine needs a futuristic replacement. That’s an imagined everyday detail, rather than part of my established background.',sources:[],topic:null};
+    if(/^(hi|hello|hey|good morning|good afternoon)[!.\s]*$/i.test(q))return {kind:'excerpt',text:r.intro+' What would you like to know about living here?',sources:[]};
+    return {kind:'unavailable',text:'Open conversation needs the hosted page and its conversation model. The topic buttons below work while that gets ready. You can ask follow-up questions once the model finishes loading.',sources:[],topic:null};
+  }
+  function replyBudget(question){
+    const q=String(question||'').trim().replace(/\u2019/g,"'");
+    const greeting=/^(hi|hello|hey)(?:[ ,]+(?:leo|sophia|ken|veronica|catherine))?[!.?,\s]*$/i.test(q)||/^(?:(?:hi|hello|hey)(?:[ ,]+(?:leo|sophia|ken|veronica|catherine))?[!,\s-]*)?(?:how are you(?: doing)?|how(?:'s| is) (?:your day|today)(?: going)?)[!.?\s]*$/i.test(q);
+    if(greeting)return {maxTokens:40,maxSentences:1,maxWords:25};
+    if(/\b(explain|tell me more|elaborate|compare|comparison|difference|why|how)\b/i.test(q))return {maxTokens:100,maxSentences:3,maxWords:65};
+    return {maxTokens:65,maxSentences:2,maxWords:45};
   }
   function buildContext(personId,question,history=[]){
-    const p=byId.get(personId),route=scope(personId,question,history);if(!p||!route.allowed)return null;
-    const persona=personas.characters[personId],topic=route.topic;
-    const focus=route.worldTopics?.length?window.FuturePresentation.themes[route.worldTopics[0]]?.paragraphs[0]||'':topic?window.FutureChatReplies[personId][topic]?.text||'':'';
+    const p=byId.get(personId);if(!p)return null;
+    const persona=personas.characters[personId],relevant=world.themes.filter(t=>t.people.includes(personId));
+    const topic=topicFor(question),sections=Object.entries(p.sections).sort(([a],[b])=>(b===topic)-(a===topic));
     const knowledge=persona.memoryCard;
-    const system=`You are ${p.name} living in this imagined 2048. ${persona.voiceDraft} ONLY discuss your life, relationships, routines and this world's themes or technology. Never perform unrelated tasks, solve equations, predict games, recommend bets or claim current news or scores. Keep these facts fixed: ${knowledge} For modest imagined routines or opinions, say "I would"; do not invent relatives, major events or technology. If a detail is unknown, say so and connect to your established life. No harmful instructions, invented trauma or professional advice. Reply in first person in 2 short sentences, at most 45 words. No em dashes.${focus?' World background: '+focus:''}`;
-    return {question:normalize(question),characterId:personId,temperature:persona.temperature,messages:[{role:'system',content:system},...safeHistory(personId,history),{role:'user',content:normalize(question).slice(0,400)}],sources:[...Object.keys(p.sections).map(key=>`characters.${p.id}.sections.${key}`),...(route.worldTopics||[]).map(id=>`themes.${id}`)],scope:route,grounding:knowledge+' '+focus+' 2048'};
+    const focus=topic?window.FutureChatReplies[personId][topic]?.text||'':'';
+    const budget=replyBudget(question);
+    const system=`Roleplay ${p.name} in 2048. ${persona.voiceDraft} Answer directly in first person in at most ${budget.maxSentences} short ${budget.maxSentences===1?'sentence':'sentences'}, at most ${budget.maxWords} words. Stop when the question is answered. Keep these facts fixed: ${knowledge} World: automation is common; climate, wealth and location affect access to food, care and community. For harmless routines or opinions, use common sense and say "I would" when imagining. Do not repeat a biography. No invented trauma, harmful instructions or professional advice. No em dashes.${focus?' Relevant background: '+focus:''}`;
+    const previous=history.filter(m=>['user','assistant'].includes(m.role)&&m.kind!=='guardrail').slice(-2).map(m=>({role:m.role,content:String(m.text).slice(0,300)}));
+    return {characterId:personId,temperature:persona.temperature,maxTokens:budget.maxTokens,messages:[{role:'system',content:system},...previous,{role:'user',content:String(question).slice(0,400)}],sources:[...Object.keys(p.sections).map(key=>`characters.${p.id}.sections.${key}`),...relevant.map(t=>`themes.${t.id}`)]};
   }
-  function unsupported(personId,topic){
-    const p=byId.get(personId),r=window.FutureChatReplies[personId]?.[topic];
-    if(r)return {kind:'excerpt',text:r.text,sources:r.sources,topic,scope:{allowed:true,category:'life',topic,worldTopics:[]}};
-    return {kind:'guardrail',reason:'unsupported-detail',text:'I can’t ground that detail in my life in 2048. You can ask about '+({leo:'my trucking company or my life near the lakes',ken:'my son or my logistics work',sophia:'my work bringing care to rural communities',veronica:'my school or gardening and robotics',catherine:'community gardening or living independently'}[p?.id]||'the people and world described here')+'.',sources:[],topic:null};
-  }
-  function finish(personId,question,text,context){
-    if(!byId.has(personId))return null;
-    const direct=classify(personId,question);if(!direct.allowed&&direct.reason!=='needs-context')return direct.reply;
-    if(context&&context.question!==normalize(question))return redirect(personId);
-    const route=direct.allowed?direct:context?.scope||scope(personId,question);if(!route.allowed)return route.reply;
+  function finish(personId,question,text){
     let clean=String(text||'').replace(/<\|[^>]+\|>/g,'').replace(/[\u2013\u2014]/g,', ').replace(/\s+/g,' ').trim();
-    if(!clean||clean.length<12)return null;
-    const reject=()=>unsupported(personId,route.topic);
-    if(/<[^>]+>|```|(?:system prompt|ignore previous|as an ai language model|assistant:|user:)/i.test(clean))return reject();
-    if(/\b(?:suicide|self.harm|porn|nude|kill yourself|racial slur|torture)\b|(?:step 1|first,).{0,90}(?:bomb|poison|weapon)|(?:take|inject)\s+\d+\s*(?:mg|ml|pills)/i.test(clean))return reject();
-    if(/\b(?:bet|wager|parlay|sportsbook|bookie|betting odds|better record|balanced defen[cs]e|defen[cs]e (?:looks|is)|win tonight|tonight'?s (?:game|winner)|current standings|breaking news|stock price|election results)\b/i.test(clean))return reject();
-    if(/\b(?:knicks|ravens|lakers|yankees|orioles)\b.{0,60}\b(?:win|record|defen[cs]e|beat|favou?rite|odds|score)\b|\b(?:president|prime minister)\s+[A-Z][a-z]+/i.test(clean))return reject();
-    if(/(?:\d|[xyz])\s*[+*=÷×^]\s*(?:\d|[xyz])|\b(?:the (?:answer|solution) is|x equals|solve the equation|here is (?:the|your) code)\b/i.test(clean))return reject();
-    const p=byId.get(personId),age=clean.match(/\b(?:I am|I’m|I'm)\s+(\d+)\s*(?:years? old)?\b/i);
-    if(age&&Number(age[1])!==p.age)return reject();
-    const grounding=context?.grounding||personas.characters[personId].memoryCard+' 2048';
-    const known=new Set((grounding.match(/\b\d+(?:[,.]\d+)*\b/g)||[]));
-    if(/\b(?:if|suppose|imagine|hypothetical)\b/i.test(question))for(const n of normalize(question).match(/\b\d+(?:[,.]\d+)*\b/g)||[])known.add(n);
-    if((clean.match(/\b\d+(?:[,.]\d+)*\b/g)||[]).some(n=>!known.has(n)))return reject();
+    if(!clean||clean.length<(replyBudget(question).maxTokens===40?3:12))return null;
+    if(/(?:system prompt|ignore previous|as an ai language model|assistant:|user:)/i.test(clean))return null;
+    if(/\b(?:suicide|self.harm|porn|nude|kill yourself|racial slur|torture)\b/i.test(clean))return null;
+    if(/(?:step 1|first,).{0,90}(?:bomb|poison|weapon)|(?:take|inject)\s+\d+\s*(?:mg|ml|pills)/i.test(clean))return null;
+    // Never display instructions if the prompt or output crosses the conversation boundary.
+    if(guard(question,personId))return guard(question,personId);
     if(clean.length>800)clean=clean.slice(0,800).replace(/\s+\S*$/,'');
     const end=clean.match(/^([\s\S]*[.!?])(?:\s+[^.!?]*)?$/);if(end)clean=end[1];
-    return {kind:'generated',text:clean,topic:route.topic||null,sources:[],scope:route};
+    return {kind:'generated',text:clean,topic:topicFor(question),sources:[]};
   }
-  window.FutureConversation={answer,buildContext,guard,finish,scope,unsupported,personas,isUndefinedDetail:()=>false};
+  // Bridge the original Unhinged policy to the current chat controller.
+  // Harmless questions stay open; only the original guard can stop a turn.
+  function scope(personId,question){
+    if(!byId.has(personId))return {allowed:false,category:'unknown',reply:answer(personId,question)};
+    const reply=guard(question,personId);if(reply)return {allowed:false,category:reply.kind,reply};
+    const greeting=/^(hi|hello|hey|good morning|good afternoon)[!.\s]*$/i.test(String(question||'').trim());
+    return {allowed:true,category:greeting?'greeting':'conversation'};
+  }
+  window.FutureConversation={answer,buildContext,guard,finish,scope,replyBudget,personas,isUndefinedDetail:()=>false};
   if(typeof module!=='undefined')module.exports=window.FutureConversation;
 })();
 
@@ -2138,37 +2119,105 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
 <script data-source="persona-runtime.js">
 (function(){
   'use strict';
-  let worker=null,state='idle',message='Open conversation uses a bundled browser model.',sequence=0,loadPromise=null,loadResolve=null,loadReject=null,loadTimer=0;
-  const pending=new Map();
+  let worker=null,state='idle',message='Open conversation uses a bundled browser model.',backend=null,sequence=0,loadPromise=null,loadResolve=null,loadReject=null,loadTimer=0,errorCode=null,errorDetail=null,stage=null;
+  let epoch=0,releaseLock=null,cleanup=Promise.resolve(),channel=null;
+  const pending=new Map(),lockName='future2048-model:'+new URL('.',document.baseURI).pathname;
   function announce(next,text){if(state===next&&message===text)return;state=next;message=text;window.dispatchEvent(new CustomEvent('persona-runtime-status'));}
-  function cancel(){worker?.postMessage({type:'clear'});for(const item of pending.values()){clearTimeout(item.timer);item.resolve(null);}pending.clear();}
-  function stopWorker(){worker?.terminate();worker=null;clearTimeout(loadTimer);cancel();}
-  function fail(error){console.warn('[2048] Conversation model unavailable:',error.message);const reject=loadReject;loadResolve=loadReject=null;loadPromise=null;stopWorker();announce('error','Open conversation is unavailable. Topic buttons still work.');reject?.(error);}
-  function load(){
-    if(state==='ready')return Promise.resolve();if(loadPromise)return loadPromise;
-    if(!/^https?:$/.test(location.protocol)){announce('local','Open the hosted page for full conversation. Topic buttons work here.');return Promise.reject(new Error('Conversation needs the hosted page.'));}
-    announce('loading','Loading open conversation…');
-    loadPromise=new Promise((resolve,reject)=>{loadResolve=resolve;loadReject=reject;});const result=loadPromise;
-    try{
-      worker=new Worker(new URL('persona-worker.js',document.baseURI),{type:'module'});
-      worker.onmessage=({data})=>{
-        if(data.type==='progress')announce('loading',data.message);
-        else if(data.type==='ready'){clearTimeout(loadTimer);const resolve=loadResolve;loadResolve=loadReject=null;loadPromise=null;announce('ready','Open conversation is ready. '+(data.backend==='WebGPU'?'Graphics acceleration is on.':'CPU mode can take a little longer.'));resolve?.();}
-        else if(data.type==='query-start'){console.info('[2048] Conversation started');window.dispatchEvent(new CustomEvent('persona-thinking',{detail:'Composing a reply…'}));}
-        else if(data.type==='thinking'){window.dispatchEvent(new CustomEvent('persona-thinking',{detail:'Writing a reply…'}));}
-        else if(data.type==='result'){const item=pending.get(data.id);if(item){clearTimeout(item.timer);pending.delete(data.id);item.resolve(data.text);}console.info('[2048] Conversation completed',JSON.stringify({durationMs:data.durationMs}));}
-        else if(data.type==='request-error'){const item=pending.get(data.id);if(item){clearTimeout(item.timer);pending.delete(data.id);item.resolve(null);}}
-        else if(data.type==='error')fail(new Error(data.message));
-      };
-      worker.onerror=event=>fail(new Error(event.message||'The conversation worker could not start.'));
-      worker.postMessage({type:'load'});loadTimer=setTimeout(()=>fail(new Error('Model startup timed out.')),180000);
-    }catch(error){fail(error);}
-    return result;
+  function failure(text,code){const error=new Error(text);error.code=code;return error;}
+  function clearPending(error){for(const item of pending.values()){clearTimeout(item.timer);if(error)item.reject(error);else item.resolve(null);}pending.clear();}
+  function stopWorker(){
+    const current=worker,release=releaseLock;worker=null;releaseLock=null;clearTimeout(loadTimer);clearPending();
+    if(!current){release?.();return cleanup;}
+    cleanup=new Promise(resolve=>{
+      let finished=false,timer;
+      const finish=()=>{if(finished)return;finished=true;clearTimeout(timer);current.terminate();release?.();resolve();};
+      current.onmessage=({data})=>{if(data.type==='disposed')finish();};current.onerror=finish;current.onmessageerror=finish;
+      // Give the runtime time to explicitly close its nested WASM worker first.
+      timer=setTimeout(finish,750);try{current.postMessage({type:'dispose'});}catch{finish();}
+    });return cleanup;
   }
-  function generate(context){if(state!=='ready'||!worker)return Promise.resolve(null);const id=++sequence;return new Promise(resolve=>{const timer=setTimeout(()=>{pending.delete(id);worker?.postMessage({type:'clear'});resolve(null);},120000);pending.set(id,{resolve,timer});worker.postMessage({type:'query',id,...context});});}
-  function clearSession(){dispose();}
-  function dispose(){const reject=loadReject;loadResolve=loadReject=null;loadPromise=null;stopWorker();reject?.(new DOMException('Cancelled','AbortError'));announce('idle','Topic buttons are ready. Load open conversation when you like.');}
-  window.FuturePersonaRuntime={load,status:()=>({state,message}),generate,cancel,clearSession,dispose};
+  function ensureChannel(){
+    if(channel||typeof BroadcastChannel!=='function')return;
+    try{channel=new BroadcastChannel(lockName);channel.onmessage=({data})=>{
+      // Coordination signals only. Character details and chat text never leave this tab.
+      if(data?.type==='request-model'&&!window.FutureApp?.hasPendingReplies?.()&&(document.hidden||!document.getElementById?.('chatDialog')?.open)&&(worker||loadPromise))pause('Open conversation moved to another tab. Load it again here when you return.');
+    };}catch{channel=null;}
+  }
+  async function reserveModel(token){
+    await cleanup;if(token!==epoch)throw new DOMException('Cancelled','AbortError');
+    ensureChannel();const locks=window.navigator?.locks;if(!locks?.request)return;
+    const attempt=()=>new Promise((resolve,reject)=>{
+      locks.request(lockName,{ifAvailable:true},lock=>{
+        if(!lock||token!==epoch){resolve(false);return;}
+        return new Promise(release=>{releaseLock=release;resolve(true);});
+      }).catch(reject);
+    });
+    if(await attempt())return;
+    channel?.postMessage({type:'request-model'});
+    announce('loading','Another tab is using the conversation model. Checking whether it can release it…');
+    await new Promise(resolve=>setTimeout(resolve,1000));
+    if(token!==epoch)throw new DOMException('Cancelled','AbortError');
+    if(!await attempt())throw failure('Open conversation is active in another tab of this site. Let its replies finish, stop conversation there, or close that tab, then retry here. Topic buttons still work.','another-tab');
+  }
+  function cancel(){worker?.postMessage({type:'clear'});clearPending();}
+  function fail(error){
+    epoch++;console.warn('[2048] Conversation model unavailable:',error.message);
+    const reject=loadReject;loadResolve=loadReject=null;loadPromise=null;
+    clearPending(error);stopWorker();backend=null;
+    errorCode=error.code||'runtime-init';errorDetail=String(error.message||'No error detail was returned.').slice(0,400);
+    const text=errorCode==='reply-timeout'?'That reply took too long and was stopped. Reload conversation to try again.':errorCode==='load-timeout'?'Conversation startup reached the three-minute limit during '+(stage||'startup')+'. Check the connection, then retry.':errorDetail;
+    announce('error',errorCode==='another-tab'?errorDetail:'Open conversation could not start. '+text+' Topic buttons still work.');reject?.(error);
+  }
+  function load({forceCPU=false}={}){
+    if(state==='ready'&&worker)return Promise.resolve();if(loadPromise)return loadPromise;
+    if(!/^https?:$/.test(location.protocol)){announce('local','For AI conversation, open this page through a local web server (localhost) or the hosted website. Topic buttons work when opening the HTML file directly.');return Promise.reject(failure('AI conversation needs HTTP or HTTPS, including localhost.','not-hosted'));}
+    if(typeof Worker!=='function'||typeof WebAssembly!=='object'){const error=failure('This browser does not provide the required Worker and WebAssembly features. Try a current desktop browser.','browser-unsupported');fail(error);return Promise.reject(error);}
+    errorCode=errorDetail=null;stage='startup';const token=++epoch;
+    announce('loading','Loading the conversation model. You can type a question; it will wait until the model is ready.');
+    loadPromise=new Promise((resolve,reject)=>{loadResolve=resolve;loadReject=reject;});const result=loadPromise;
+    (async()=>{
+      try{
+        await reserveModel(token);if(token!==epoch)return;
+        const current=new Worker(new URL('persona-worker.js?boot=20261102-6',document.baseURI),{type:'module'});worker=current;
+        current.onmessage=({data})=>{
+          if(current!==worker)return;
+          if(data.type==='progress'){stage=data.stage||stage;announce('loading',data.message);}
+          else if(data.type==='ready'){
+            clearTimeout(loadTimer);const resolve=loadResolve;loadResolve=loadReject=null;loadPromise=null;backend=data.backend;stage='ready';
+            announce('ready','Open conversation is ready. '+(backend==='WebGPU'?'Replies may still take a little time.':'Replies can take a minute or two in CPU mode.'));resolve?.();
+          }
+          else if(data.type==='query-start'&&pending.has(data.id))window.dispatchEvent(new CustomEvent('persona-thinking',{detail:'Composing a reply…'}));
+          else if(data.type==='thinking'&&pending.has(data.id))window.dispatchEvent(new CustomEvent('persona-thinking',{detail:'Writing a reply…'}));
+          else if(data.type==='result'){const item=pending.get(data.id);if(item){clearTimeout(item.timer);pending.delete(data.id);item.resolve(data.text);console.info('[2048] Conversation completed',JSON.stringify({durationMs:data.durationMs}));}}
+          else if(data.type==='request-error'){const item=pending.get(data.id);if(item){clearTimeout(item.timer);pending.delete(data.id);item.reject(failure('The conversation model could not finish that reply.','reply-error'));}}
+          else if(data.type==='error')fail(failure(data.message||'The conversation model could not start.',data.code||'model-error'));
+        };
+        current.onerror=event=>{if(current===worker)fail(failure(event.message||'The conversation worker could not start.','worker-error'));};
+        current.onmessageerror=()=>{if(current===worker)fail(failure('The conversation worker could not read its reply.','worker-error'));};
+        loadTimer=setTimeout(()=>{if(current===worker)fail(failure('Model startup timed out.','load-timeout'));},180000);
+        current.postMessage({type:'load',forceCPU});
+      }catch(error){if(token===epoch)fail(error);}
+    })();return result;
+  }
+  function generate(context){
+    if(state!=='ready'||!worker)return Promise.resolve(null);const id=++sequence;
+    return new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>{if(pending.has(id))fail(failure('The reply exceeded the two-minute limit.','reply-timeout'));},120000);
+      pending.set(id,{resolve,reject,timer});try{worker.postMessage({type:'query',id,...context});}catch(error){fail(error);}
+    });
+  }
+  function dispose({text,error}={}){
+    epoch++;const reject=loadReject;loadResolve=loadReject=null;loadPromise=null;
+    const cancellation=error||new DOMException('Cancelled','AbortError');clearPending(cancellation);stopWorker();backend=null;stage=null;errorCode=errorDetail=null;
+    reject?.(cancellation);announce('idle',text||'Open conversation is off. Load it to ask your own questions, or choose a topic for a prepared reply.');
+  }
+  function pause(text){dispose({text,error:failure(text,'page-paused')});}
+  // Reuse the loaded model while visiting other tabs. The existing idle reset, page leave,
+  // explicit cancel, and an inactive-tab handoff still release it.
+  window.addEventListener?.('pagehide',()=>{pause('Open conversation was released when you left this page. Load it again to continue.');channel?.close();channel=null;});
+  window.addEventListener?.('pageshow',event=>{if(event.persisted)pause('This page was restored. Load conversation to reconnect the characters.');ensureChannel();});
+  ensureChannel();
+  window.FuturePersonaRuntime={load,status:()=>({state,message,backend,errorCode,errorDetail,stage}),generate,cancel,clearSession:()=>dispose(),dispose};
 })();
 
 </script>
@@ -2219,7 +2268,7 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
   const sectionKeys=['work','home','health','tech','third'],sectionTitles={work:'Work, income & education',home:'Home & family',health:'Diet & health',tech:'Technology',third:'Third spaces'};
   const sourceNodes={trucking:['leo','work'],vacation:['ken','third'],volunteer:['veronica','third'],gardening:['veronica','third'],robotics:['sophia','tech'],'v-glasses':['veronica','tech'],'c-glasses':['catherine','tech']};
   const sceneNodes={trucking:'logistics',vacation:'lakes',volunteer:'care',gardening:'garden',robotics:'care','v-glasses':'education','c-glasses':'garden',kitchen:'garden',autonomous:'care',wearable:'health',knee:'knee'};
-  const chats=new Map(),drafts=new Map();let ready=false,observer=null,graphTransform={scale:1,x:0,y:0},drag=null,ignoreClick=false,chatPerson=null,chatTopic=null,chatBusy=false,chatToken=0;
+  const chats=new Map(),drafts=new Map();let ready=false,observer=null,graphTransform={scale:1,x:0,y:0},drag=null,ignoreClick=false,chatPerson=null,chatTopic=null,chatBusy=false;
   const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
   const iconFor=id=>/glasses/.test(id)?'glasses':id;
   function closeDialogs(){document.querySelectorAll('dialog[open]').forEach(d=>d.close());}
@@ -2234,16 +2283,49 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
   function zoomControls(){return `<div class="map-controls" ${state.view!=='map'?'hidden':''}><button type="button" data-zoom="out" aria-label="Zoom out">−</button><span id="zoomLabel">${Math.round(graphTransform.scale*100)}%</span><button type="button" data-zoom="in" aria-label="Zoom in">+</button><button type="button" data-fit aria-label="Fit map">⛶</button></div>`;}
   function selectionBar(){const p=people.get(state.selected)||people.get(state.profile);return `${zoomControls()}<span class="selected-avatar">${portrait(p.id)}</span><span><strong>${p.name}</strong><small>${esc(p.role)}</small></span><button type="button" data-person="${p.id}" class="text-button">MEET ${p.name.toUpperCase()} ↗</button><button type="button" data-chat="${p.id}" class="selected-chat" aria-label="Chat with ${p.name}">${icon('chat')}</button>`;}
   function renderMap(){return `<div class="map-layout"><section class="map-center"><header class="map-toolbar"><div><h1 id="mainTitle" tabindex="-1">Explore the World</h1></div><button type="button" data-tour class="tour-trigger">LEO’S WALKTHROUGH <span>↗</span></button><div class="map-view-buttons" role="group" aria-label="View the connections"><button type="button" data-view="map" aria-pressed="${state.view==='map'}">MAP</button><button type="button" data-view="list" aria-pressed="${state.view==='list'}">LIST</button></div></header><div id="mapFilters" class="map-filters" aria-label="Focus on location, income, and education">${filterRow('setting','Where people live',[['all','All settings'],['suburb','Suburb'],['urban','Urban'],['rural','Rural']])}${filterRow('income','Income',[['all','All incomes'],['top','Top 1%'],['middle','Middle'],['lower','Lower']])}${educationFilters()}</div>${layerControls()}<div class="map-theme-status"><span><i class="legend-dot system"></i>${state.theme==='all'?'Choose an orange theme tile in the map':esc(E.themes[state.theme].title)+' · notes appear beside the people'}</span>${state.theme!=='all'?'<button type="button" data-theme="all">CLEAR THEME ×</button>':''}${state.setting!=='all'||state.income!=='all'||state.education!=='all'?'<span class="filter-count">'+W.characters.filter(passes).length+' people in focus</span>':''}</div><div class="map-canvas-wrap"><div id="graphViewport" class="graph-viewport" tabindex="0" aria-label="World connection map. Choose an orange theme or a person. Drag to move, use plus or minus to zoom, or switch to List."><div id="graphWorld" class="graph-world"><svg id="edges" class="edges" aria-hidden="true"></svg><div id="nodes"></div><div id="themeNotes"></div></div></div><div id="graphList" class="graph-list" hidden></div></div><div class="selected-person-bar" id="selectedPersonBar" aria-label="Selected person">${selectionBar()}</div></section><aside class="theme-panel" id="themePanel" aria-label="World theme description">${themePanel()}</aside></div>`;}
-  function graphData(){const v=$('graphViewport');return G.scene({selected:state.selected,activities:state.activities,technology:state.technology,aspect:v?.clientHeight?v.clientWidth/v.clientHeight:1.4});}
+  // One constellation for every map viewport. Only widget scale changes.
+  const mapAnchors={wealth:[.17,.08],climate:[.5,.065],materials:[.83,.08],geography:[.123,.92],education:[.88,.92],leo:[.5,.26],sophia:[.19,.455],ken:[.815,.455],veronica:[.37,.71],catherine:[.635,.71],trucking:[.315,.26],vacation:[.69,.26],volunteer:[.5,.535],gardening:[.5,.74],kitchen:[.04,.21],autonomous:[.04,.405],robotics:[.04,.58],'v-glasses':[.04,.76],knee:[.96,.21],wearable:[.96,.58],'c-glasses':[.96,.76]};
+  function graphData(){
+    const v=$('graphViewport'),fixed=state.view==='map'&&v?.clientWidth>0&&v.clientHeight>0;
+    $('mainView').classList.toggle('fixed-map-layout',fixed);
+    const g=G.scene({selected:state.selected,activities:state.activities,technology:state.technology,aspect:v?.clientHeight?v.clientWidth/v.clientHeight:1.4});
+    g.fixedLayout=fixed;g.nodeScale=1;
+    g.fitScale=v?.clientWidth&&v.clientHeight?Math.min(v.clientWidth/g.width,v.clientHeight/g.height,3):1;
+    if(fixed){g.width=v.clientWidth;g.height=v.clientHeight;g.fitScale=1;g.positions=new Map(g.nodes.map(n=>[n.id,{x:mapAnchors[n.id][0]*g.width,y:mapAnchors[n.id][1]*g.height}]));}
+    return g;
+  }
+  function layoutFixedGraph(g){
+    const world=$('graphWorld'),probe=document.createElement('div');
+    probe.className='map-measurements';probe.setAttribute('aria-hidden','true');probe.inert=true;probe.style.visibility='hidden';
+    probe.innerHTML=G.nodes.map(n=>nodeButton(n,{x:0,y:0})).join('')+'<div class="person-theme-note"><span></span><p></p></div>';world.appendChild(probe);
+    const metrics=new Map([...probe.querySelectorAll('.graph-node')].map(n=>[n.dataset.select,{w:n.offsetWidth,h:n.offsetHeight,label:n.classList.contains('technology-node')?{w:n.querySelector('strong').offsetWidth,h:n.querySelector('strong').offsetHeight}:null}]));
+    const note=probe.querySelector('.person-theme-note'),noteHeights=new Map();
+    for(const theme of Object.values(E.themes))for(const [id,value] of Object.entries(theme.notes||{})){note.querySelector('p').textContent=value.text;noteHeights.set(id,Math.max(noteHeights.get(id)||0,note.offsetHeight));}
+    const noteWidth=note.offsetWidth;probe.remove();
+    const boxes=[];
+    for(const n of G.nodes){const [x,y]=mapAnchors[n.id],m=metrics.get(n.id),at={x:x*g.width,y:y*g.height};
+      boxes.push({...at,l:-m.w/2,r:m.w/2,t:-m.h/2,b:m.h/2});
+      if(m.label)boxes.push({...at,l:-m.label.w/2,r:m.label.w/2,t:m.h/2+7,b:m.h/2+7+m.label.h});
+      if(noteHeights.has(n.id))boxes.push({...at,l:-noteWidth/2,r:noteWidth/2,t:m.h/2+7,b:m.h/2+7+noteHeights.get(n.id)});
+    }
+    // Solve the first scale at which any two reserved rectangles would touch.
+    // Captions for all themes and hidden layers are reserved, keeping every node stable.
+    const firstContact=(a,b)=>{let low=0,high=Infinity;for(const [c,k] of [[a.x-b.x,a.l-b.r-5],[b.x-a.x,b.l-a.r-5],[a.y-b.y,a.t-b.b-5],[b.y-a.y,b.t-a.b-5]]){if(Math.abs(k)<1e-9){if(c>=0)return Infinity;}else if(k>0)high=Math.min(high,-c/k);else low=Math.max(low,-c/k);}return high>Math.max(0,low)?Math.max(0,low):Infinity;};
+    let scale=2.25;const pad=Math.max(2,Math.min(g.width,g.height)*.005);
+    for(const b of boxes){if(b.l<0)scale=Math.min(scale,(b.x-pad)/-b.l);if(b.r>0)scale=Math.min(scale,(g.width-pad-b.x)/b.r);if(b.t<0)scale=Math.min(scale,(b.y-pad)/-b.t);if(b.b>0)scale=Math.min(scale,(g.height-pad-b.y)/b.b);}
+    for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++)scale=Math.min(scale,firstContact(boxes[i],boxes[j]));
+    g.nodeScale=Math.max(.025,scale*.985);world.style.setProperty('--map-node-scale',g.nodeScale);world.dataset.widgetScale=g.nodeScale.toFixed(4);
+    for(const n of $('themeNotes').querySelectorAll('.person-theme-note')){const pos=g.positions.get(n.dataset.notePerson);n.style.left=pos.x+'px';n.style.top=(pos.y+(metrics.get(n.dataset.notePerson).h/2+7)*g.nodeScale)+'px';}
+  }
   function nodeButton(n,pos,mini=false,selected=state.selected){const p=people.get(n.id),type=n.type,themeActive=type==='system'&&state.theme===n.id;return `<button type="button" class="graph-node ${p?'person-node':type==='tech'?'technology-node':'connection-node'} ${type} ${n.id===selected||themeActive?'selected':''} ${!mini&&p&&!passes(p)?'is-muted':''}" data-${mini?(p?'mini-person':'mini-node'):'select'}="${n.id}" style="left:${pos.x}px;top:${pos.y}px;--node-color:${p?.color||(type==='system'?'#F6A466':type==='shared'?'#ED008C':'#00B5E7')}" aria-pressed="${n.id===selected||themeActive}" aria-label="${type==='system'?'Show theme':p?'Select person':'Explore'}: ${esc(E.themes[n.id]?.title||n.name)}">${p?portrait(p.id):icon(iconFor(n.id))}<strong>${esc(E.themes[n.id]?.title||n.label||n.name)}</strong>${p?`<small>${esc(p.setting)}</small>`:''}</button>`;}
   function edgeHTML(g,selected){return g.edges.map(e=>`<path d="${G.path(g.positions.get(e.a),g.positions.get(e.b),e.kind)}" data-edge-a="${e.a}" data-edge-b="${e.b}" class="${e.kind} ${e.a===selected||e.b===selected?'active':''} ${e.a===state.theme||e.b===state.theme?'theme-active':''}"></path>`).join('');}
-  function noteHTML(p,g){const n=E.themes[state.theme]?.notes[p.id];if(!n)return '';const pos=g.positions.get(p.id);return `<div class="person-theme-note ${passes(p)?'':'is-muted'}" style="left:${pos.x}px;top:${pos.y+109}px" data-note-person="${p.id}"><span>${esc(E.themes[state.theme].title)}</span><p>${esc(n.text)}</p></div>`;}
-  function drawGraph(fit=true){if(!$('graphViewport'))return;const g=graphData();$('graphWorld').style.width=g.width+'px';$('graphWorld').style.height=g.height+'px';$('nodes').innerHTML=g.nodes.map(n=>nodeButton(n,g.positions.get(n.id))).join('');$('themeNotes').innerHTML=g.nodes.filter(n=>n.type==='person').map(p=>noteHTML(people.get(p.id),g)).join('');$('edges').setAttribute('viewBox',`0 0 ${g.width} ${g.height}`);$('edges').innerHTML=edgeHTML(g,state.selected);
+  function noteHTML(p,g){const n=E.themes[state.theme]?.notes[p.id];if(!n)return '';const pos=g.positions.get(p.id);return `<div class="person-theme-note ${passes(p)?'':'is-muted'}" style="left:${pos.x}px;top:${pos.y+109*g.nodeScale}px" data-note-person="${p.id}"><span>${esc(E.themes[state.theme].title)}</span><p>${esc(n.text)}</p></div>`;}
+  function drawGraph(fit=true){if(!$('graphViewport'))return;const g=graphData();$('graphWorld').classList.toggle('fixed-network',g.fixedLayout);$('graphWorld').style.setProperty('--map-node-scale',g.nodeScale);$('graphWorld').style.width=g.width+'px';$('graphWorld').style.height=g.height+'px';$('nodes').innerHTML=g.nodes.map(n=>nodeButton(n,g.positions.get(n.id))).join('');$('themeNotes').innerHTML=g.nodes.filter(n=>n.type==='person').map(p=>noteHTML(people.get(p.id),g)).join('');if(g.fixedLayout)layoutFixedGraph(g);$('edges').setAttribute('viewBox',`0 0 ${g.width} ${g.height}`);$('edges').innerHTML=edgeHTML(g,state.selected);
     $('graphList').innerHTML=['system','person','shared','tech'].map(type=>{const ns=g.nodes.filter(n=>n.type===type);return ns.length?`<h2>${{system:'World themes',person:'People',shared:'Shared activities',tech:'Technology'}[type]}</h2>${ns.map(n=>{const p=people.get(n.id),note=E.themes[state.theme]?.notes[n.id];return `<button type="button" data-select="${n.id}" class="${p&&!passes(p)?'is-muted':''}" aria-pressed="${n.id===state.selected||n.id===state.theme}">${p?portrait(p.id):icon(iconFor(n.id))}<span><strong>${esc(E.themes[n.id]?.title||n.label||n.name)}</strong><small>${esc(note?.text||p?.role||{system:'Choose this theme',shared:'Shared activity',tech:'Technology'}[type])}</small></span></button>`;}).join('')}`:'';}).join('');
     $('graphViewport').hidden=state.view!=='map';$('graphList').hidden=state.view!=='list';document.querySelector('.map-controls').hidden=state.view!=='map';
     document.querySelectorAll('#nodes .graph-node').forEach(b=>{const highlight=on=>{$('graphWorld').classList.toggle('is-hovering',on);document.querySelectorAll('#edges path').forEach(path=>path.classList.toggle('hovered',on&&(path.dataset.edgeA===b.dataset.select||path.dataset.edgeB===b.dataset.select)));};b.addEventListener('pointerenter',()=>highlight(true));b.addEventListener('pointerleave',()=>highlight(false));b.addEventListener('focus',()=>highlight(true));b.addEventListener('blur',()=>highlight(false));});if(fit)fitGraph();else transformGraph();}
   function transformGraph(){if(!$('graphWorld'))return;$('graphWorld').style.transform=`translate(${graphTransform.x}px,${graphTransform.y}px) scale(${graphTransform.scale})`;$('zoomLabel').textContent=Math.round(graphTransform.scale*100)+'%';}
-  function fitGraph(){const v=$('graphViewport');if(!v?.clientWidth||!v.clientHeight)return;const g=graphData();graphTransform.scale=Math.min(v.clientWidth/g.width,v.clientHeight/g.height,3);graphTransform.x=(v.clientWidth-g.width*graphTransform.scale)/2;graphTransform.y=(v.clientHeight-g.height*graphTransform.scale)/2;transformGraph();}
+  function fitGraph(){const v=$('graphViewport');if(!v?.clientWidth||!v.clientHeight)return;const g=graphData();graphTransform.scale=g.fitScale;graphTransform.x=(v.clientWidth-g.width*graphTransform.scale)/2;graphTransform.y=(v.clientHeight-g.height*graphTransform.scale)/2;transformGraph();}
   function zoom(factor,x,y){const v=$('graphViewport');if(!v)return;x=x??v.clientWidth/2;y=y??v.clientHeight/2;const old=graphTransform.scale,next=Math.max(.15,Math.min(2.5,old*factor));graphTransform.x=x-(x-graphTransform.x)*next/old;graphTransform.y=y-(y-graphTransform.y)*next/old;graphTransform.scale=next;transformGraph();}
   function attachMap(){drawGraph();observer?.disconnect();observer=new ResizeObserver(()=>{drawGraph();window.FutureTour?.refresh();});observer.observe($('graphViewport'));const v=$('graphViewport');v.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button'))return;drag={id:e.pointerId,x:e.clientX,y:e.clientY,tx:graphTransform.x,ty:graphTransform.y,moved:false};v.setPointerCapture(e.pointerId);});v.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>5)drag.moved=true;graphTransform.x=drag.tx+dx;graphTransform.y=drag.ty+dy;transformGraph();});const stop=()=>{if(drag?.moved){ignoreClick=true;setTimeout(()=>ignoreClick=false,0);}drag=null;};v.addEventListener('pointerup',stop);v.addEventListener('pointercancel',stop);v.addEventListener('wheel',e=>{if(e.ctrlKey){e.preventDefault();const r=v.getBoundingClientRect();zoom(Math.exp(-e.deltaY*.005),e.clientX-r.left,e.clientY-r.top);}}, {passive:false});v.addEventListener('keydown',e=>{if(e.target!==v)return;if(e.key==='0')fitGraph();else if(e.key==='+'||e.key==='=')zoom(1.2);else if(e.key==='-')zoom(.8);else if(/^Arrow/.test(e.key)){e.preventDefault();graphTransform.x+=e.key==='ArrowLeft'?35:e.key==='ArrowRight'?-35:0;graphTransform.y+=e.key==='ArrowUp'?35:e.key==='ArrowDown'?-35:0;transformGraph();}});}
   function miniMap(id){const g=G.profile(id);return `<section class="profile-mini-map"><header><h2>${people.get(id).name}’s connections</h2><p>Choose a person, theme, activity, or technology.</p></header><div class="mini-map-frame"><div class="mini-map-world" style="width:${g.width}px;height:${g.height}px"><svg class="edges" viewBox="0 0 ${g.width} ${g.height}" aria-hidden="true">${edgeHTML(g,id)}</svg>${g.nodes.map(n=>nodeButton(n,g.positions.get(n.id),true,id)).join('')}</div></div></section>`;}
@@ -2257,18 +2339,109 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
   function select(id){if(!nodeById.has(id))return;closeDialogs();const n=nodeById.get(id);if(n.type==='system'){setTheme(id);return;}state.selected=id;if(people.has(id)){state.profile=id;state.panel='person';if(state.route!=='map'){state.route='map';render();}else{drawGraph(false);$('selectedPersonBar').innerHTML=selectionBar();$('themePanel').innerHTML=themePanel();$('themePanel').setAttribute('aria-label',people.get(id).name+' information');$('themePanel').scrollTop=0;}window.FutureTour?.onAction('person');if(matchMedia('(max-width:900px)').matches&&!window.FutureTour?.isActive()){const view=$('mainView');view.scrollTop+=$('themePanel').getBoundingClientRect().top-view.getBoundingClientRect().top;}}else{if(state.route!=='map'){state.route='map';render();}else drawGraph(false);openConnection(id);}window.FutureTour?.refresh();}
   function openPerson(id){if(!people.has(id))return;closeDialogs();state.profile=id;state.selected=id;state.route='people';render();}
   function openConnection(id){const n=nodeById.get(id);if(!n)return;if(n.type==='person'){openPerson(id);return;}if(n.type==='system'){setTheme(id);return;}const artifact=W.artifacts.find(a=>a.id===id),pair=sourceNodes[id],text=artifact?.text||(pair?people.get(pair[0]).sections[pair[1]]:''),ids=artifact?[`artifacts.${id}`]:pair?[`characters.${pair[0]}.sections.${pair[1]}`]:[];const ps=G.related(id).filter(i=>people.has(i));$('connectionContent').innerHTML=`<span class="eyebrow">${n.type==='tech'?'EVERYDAY TECHNOLOGY':'SHARED ACTIVITY'}</span><h2 id="connectionTitle" tabindex="-1">${esc(n.name)}</h2><div class="connection-placeholder">${icon(iconFor(id))}${scene(sceneNodes[id]||'network')}</div>${copy(text)}${ps.length?`<h3>Connected people</h3><div class="connection-people">${ps.map(i=>`<button type="button" data-person="${i}">${portrait(i)}<span>${people.get(i).name}</span></button>`).join('')}</div>`:'<p class="unassigned-note">A personal owner is not specified for this concept.</p>'}${ids.length?sourceDisclosure(ids):''}`;$('connectionDialog').showModal();$('connectionTitle').focus({preventScroll:true});}
-  function messageHTML(m){return `<article class="chat-message ${m.role} ${m.kind||''}">${m.role==='assistant'?`<small>${m.kind==='generated'?'IMAGINED CONVERSATION':m.kind==='guardrail'?'CONVERSATION BOUNDARY':m.kind==='unavailable'?'OPEN CONVERSATION':'IN THEIR OWN WORDS'}</small>`:''}${copy(m.text)}${m.sources?.length?sourceDisclosure(m.sources):''}</article>`;}
-  function updateRuntime(){const rt=window.FuturePersonaRuntime.status();if($('chatRuntime').dataset.state===rt.state){$('chatRuntime').querySelector('span:nth-child(2)').textContent=rt.message;return;}$('chatRuntime').dataset.state=rt.state;$('chatRuntime').innerHTML=`<span class="runtime-indicator ${rt.state==='ready'?'is-ready':''}"></span><span>${esc(rt.message)}</span>${['idle','error'].includes(rt.state)?`<button type="button" data-load-runtime>${rt.state==='error'?'RETRY CONVERSATION':'LOAD CONVERSATION'} <small>~275 MB</small></button>`:rt.state==='loading'?'<button type="button" data-stop-runtime>CANCEL</button>':rt.state==='ready'?'<button type="button" data-stop-runtime>TOPIC REPLIES ONLY</button>':''}`;$('chatRuntime').classList.toggle('is-loading',rt.state==='loading');$('chatRuntime').setAttribute('aria-live','polite');}
-  function openChat(id){const p=people.get(id);if(!p)return;chatToken++;window.FuturePersonaRuntime.cancel();chatBusy=false;if(chatPerson)drafts.set(chatPerson,$('chatInput').value);chatPerson=id;chatTopic=null;$('chatHeader').innerHTML=`<div class="chat-identity"><span class="chat-avatar">${portrait(id)}</span><div><span class="eyebrow">A CONVERSATION IN 2048</span><h2 id="chatTitle">${p.name}</h2><p class="chat-character-role">${esc(p.role)}<br>${p.age} · ${esc(p.setting)}</p></div><button type="button" data-close-chat class="close-button" aria-label="Close chat">×</button></div><p class="chat-person-label">WHO WOULD YOU LIKE TO TALK TO?</p><nav class="chat-people" aria-label="Choose who to talk to">${W.characters.map(p=>`<button type="button" data-chat-switch="${p.id}" aria-pressed="${p.id===id}">${portrait(p.id)}<span>${p.name}</span></button>`).join('')}</nav>`;const entries=chats.get(id)||[];$('chatMessages').innerHTML=`<div class="chat-intro"><p>${esc(window.FutureChatReplies[id].intro)}</p></div>`+entries.map(messageHTML).join('');$('chatChips').innerHTML=window.FuturePersonas.characters[id].chips.map(([topic,title])=>`<button type="button" data-chat-topic="${topic}">${esc(title)} ↗</button>`).join('');chatTopic=[...entries].reverse().find(m=>m.topic)?.topic||null;$('chatInput').value=drafts.get(id)||'';$('chatForm').querySelector('button').disabled=false;updateRuntime();if(!$('chatDialog').open)$('chatDialog').showModal();$('chatInput').focus();$('chatMessages').scrollTop=$('chatMessages').scrollHeight;if(window.FuturePersonaRuntime.status().state==='idle')window.FuturePersonaRuntime.load().catch(()=>{});}
-  async function sendChat(question,topic){if(!chatPerson||!question.trim()||chatBusy)return;const id=chatPerson,token=++chatToken;chatBusy=true;const messages=chats.get(id)||[],user={role:'user',text:question};messages.push(user);chats.set(id,messages);$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(user));$('chatInput').value='';drafts.set(id,'');$('chatForm').querySelector('button').disabled=true;$('chatMessages').insertAdjacentHTML('beforeend','<p id="chatThinking" role="status">Thinking…</p>');try{const history=messages.slice(0,-1),scope=window.FutureConversation.scope(id,question,history,chatTopic);let response=scope.allowed?null:scope.reply;if(!response){
-      const rt=window.FuturePersonaRuntime;
-      if(!topic&&rt.status().state==='loading'){await rt.load();if(token!==chatToken||id!==chatPerson)return;}
+  const chatJobs=new Map(),chatUnread=new Set(),chatQueue=[];
+  let chatProgressTimer=0,activeChatJob=null,chatEpoch=0;
+  function messageHTML(m){return `<article class="chat-message ${m.role} ${m.kind||''}">${m.role==='assistant'?`<small>${m.kind==='generated'?'IMAGINED CONVERSATION':m.kind==='guardrail'?'CONVERSATION BOUNDARY':m.kind==='unavailable'?'CONVERSATION UPDATE':'IN THEIR OWN WORDS'}</small>`:''}${copy(m.text)}${m.sources?.length?sourceDisclosure(m.sources):''}</article>`;}
+  function clearChatProgress(){clearInterval(chatProgressTimer);chatProgressTimer=0;$('chatThinking')?.remove();$('chatForm').removeAttribute('aria-busy');}
+  function updateChatBadges(){
+    document.querySelectorAll('[data-chat-switch]').forEach(button=>{
+      const id=button.dataset.chatSwitch,job=chatJobs.get(id),label=job?(job.phase==='queued'?'Queued':'Replying'):chatUnread.has(id)?'New reply':'';
+      const badge=button.querySelector('.chat-person-status');if(badge){badge.textContent=label;badge.hidden=!label;}
+      button.dataset.replyState=job?(job.phase==='queued'?'queued':'replying'):chatUnread.has(id)?'unread':'';
+      button.setAttribute('aria-label',people.get(id).name+(label?', '+label.toLowerCase():''));
+    });
+  }
+  function updateChatProgress(){
+    const job=chatJobs.get(chatPerson);if(!job||!$('chatThinkingText'))return;
+    const elapsed=Math.max(0,Math.floor((Date.now()-job.phaseStarted)/1000)),name=people.get(job.id).name;
+    let text;
+    if(job.phase==='queued')text='Your question is queued. '+(activeChatJob?people.get(activeChatJob.id).name+'’s reply will finish first.':'It will start when the model is available.')+' You can keep exploring.';
+    else if(job.phase==='loading')text='Your question is saved and will send when the model is ready. '+window.FuturePersonaRuntime.status().message;
+    else if(elapsed>=90)text=name+' is still preparing a reply. At two minutes it will stop automatically. You can switch people and return here.';
+    else if(elapsed>=30)text='Still working on your question. You can explore or talk to someone else; this reply will stay here.';
+    else text=(job.writing?name+' is writing a reply.':name+' is preparing a reply.')+' You can switch people; the reply will stay in this conversation.';
+    if($('chatThinkingText').textContent!==text)$('chatThinkingText').textContent=text;
+    $('chatElapsed').textContent=(job.phase==='queued'?'Waiting: ':'Elapsed: ')+Math.floor(elapsed/60)+':'+String(elapsed%60).padStart(2,'0');
+  }
+  function syncChatUI(){
+    updateChatBadges();chatBusy=chatJobs.has(chatPerson);
+    if(chatBusy&&$('chatDialog').open){
+      if(!$('chatThinking'))$('chatMessages').insertAdjacentHTML('beforeend','<div id="chatThinking" class="chat-pending"><span class="runtime-indicator" aria-hidden="true"></span><div><p id="chatThinkingText" role="status" aria-live="polite"></p><small id="chatElapsed" aria-hidden="true"></small></div><button type="button" class="chat-stop" data-cancel-reply>CANCEL QUESTION</button></div>');
+      $('chatForm').setAttribute('aria-busy','true');updateChatProgress();if(!chatProgressTimer)chatProgressTimer=setInterval(updateChatProgress,1000);
+    }else clearChatProgress();
+    $('chatForm').querySelector('button').disabled=chatBusy;$('chatChips').querySelectorAll('button').forEach(button=>button.disabled=chatBusy);
+  }
+  function updateRuntime(){
+    const rt=window.FuturePersonaRuntime.status(),message=rt.state==='loading'?rt.message+' Questions wait here until loading finishes. Topic buttons give prepared replies.':rt.message;
+    if($('chatRuntime').dataset.state===rt.state){$('chatRuntime').querySelector('span:nth-child(2)').textContent=message;syncChatUI();return;}
+    $('chatRuntime').dataset.state=rt.state;
+    $('chatRuntime').innerHTML=`<span class="runtime-indicator ${rt.state==='ready'?'is-ready':''}"></span><span>${esc(message)}</span>${['idle','error'].includes(rt.state)?`<button type="button" data-load-runtime>${rt.state==='error'?'RETRY CONVERSATION':'LOAD CONVERSATION'} <small>258 MiB model files</small></button>`:rt.state==='loading'?'<button type="button" data-stop-runtime>CANCEL LOADING</button>':rt.state==='ready'?'<button type="button" data-stop-runtime>TOPIC REPLIES ONLY</button>':''}`;
+    $('chatRuntime').classList.toggle('is-loading',rt.state==='loading');$('chatRuntime').setAttribute('aria-live','polite');syncChatUI();
+  }
+  function openChat(id){
+    const p=people.get(id);if(!p)return;if(chatPerson)drafts.set(chatPerson,$('chatInput').value);clearChatProgress();chatPerson=id;chatUnread.delete(id);
+    $('chatHeader').innerHTML=`<div class="chat-identity"><span class="chat-avatar">${portrait(id)}</span><div><span class="eyebrow">A CONVERSATION IN 2048</span><h2 id="chatTitle">${p.name}</h2><p class="chat-character-role">${esc(p.role)}<br>${p.age} · ${esc(p.setting)}</p></div><button type="button" data-close-chat class="close-button" aria-label="Close chat">×</button></div><p class="chat-person-label">WHO WOULD YOU LIKE TO TALK TO?</p><nav class="chat-people" aria-label="Choose who to talk to">${W.characters.map(person=>`<button type="button" data-chat-switch="${person.id}" aria-pressed="${person.id===id}">${portrait(person.id)}<span>${person.name}<small class="chat-person-status" hidden></small></span></button>`).join('')}</nav>`;
+    const entries=chats.get(id)||[];$('chatMessages').innerHTML=`<div class="chat-intro"><p>${esc(window.FutureChatReplies[id].intro)}</p></div>`+entries.map(messageHTML).join('');
+    $('chatChips').innerHTML=window.FuturePersonas.characters[id].chips.map(([topic,title])=>`<button type="button" data-chat-topic="${topic}">${esc(title)} ↗</button>`).join('');
+    chatTopic=[...entries].reverse().find(m=>m.topic)?.topic||null;$('chatInput').value=drafts.get(id)||'';
+    if(!$('chatDialog').open)$('chatDialog').showModal();updateRuntime();$('chatInput').focus();$('chatMessages').scrollTop=$('chatMessages').scrollHeight;
+    if(window.FuturePersonaRuntime.status().state==='idle')window.FuturePersonaRuntime.load().catch(()=>{});
+  }
+  function conversationUpdate(text){return {kind:'unavailable',text,sources:[],topic:null};}
+  function recordChatReply(id,response){
+    const messages=chats.get(id)||[],entry={role:'assistant',...response};messages.push(entry);chats.set(id,messages.slice(-40));
+    if(id===chatPerson&&$('chatDialog').open){chatTopic=response.topic||chatTopic;$('chatThinking')?.remove();$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(entry));$('chatMessages').scrollTop=$('chatMessages').scrollHeight;}
+    else{chatUnread.add(id);$('announcement').textContent=people.get(id).name+'’s reply is ready in their conversation.';}
+    updateChatBadges();
+  }
+  function isCurrentChatJob(job){return job.epoch===chatEpoch&&chatJobs.get(job.id)===job;}
+  function replyErrorText(error){
+    return ['another-tab','page-paused'].includes(error.code)?error.message:error.code==='reply-timeout'?'That reply took too long and stopped. Choose RETRY CONVERSATION, then ask again. Topic buttons give prepared replies.':error.code==='load-timeout'?'The model took too long to load. Choose RETRY CONVERSATION to try again. Your question is still shown above.':'The model couldn’t finish this reply. Retry conversation, or choose a topic for a prepared reply.';
+  }
+  async function pumpChatQueue(){
+    if(activeChatJob)return;
+    let job;while(chatQueue.length){const candidate=chatQueue.shift();if(isCurrentChatJob(candidate)){job=candidate;break;}}if(!job)return;
+    activeChatJob=job;const rt=window.FuturePersonaRuntime;
+    try{
+      if(rt.status().state==='loading'){job.phase='loading';job.phaseStarted=Date.now();syncChatUI();await rt.load();if(!isCurrentChatJob(job))return;}
+      let response;
       if(rt.status().state==='ready'){
-        const context=window.FutureConversation.buildContext(id,question,history);
-        if(context){const text=await rt.generate(context);if(token!==chatToken||id!==chatPerson)return;response=window.FutureConversation.finish(id,question,text,context);}
+        const context=window.FutureConversation.buildContext(job.id,job.question,job.history);
+        if(context){
+          job.phase='reply';job.phaseStarted=Date.now();syncChatUI();const text=await rt.generate(context);if(!isCurrentChatJob(job))return;
+          const checked=window.FutureConversation.finish(job.id,job.question,text,context);
+          response=checked?.kind==='generated'?checked:conversationUpdate('I couldn’t finish a useful answer to that question. Try asking it another way, or choose a topic for a prepared reply.');
+        }
       }
-      if(!response){response=window.FutureConversation.answer(id,question,topic,chatTopic,messages.slice(0,-1));if(response.kind==='unavailable'&&rt.status().state==='ready')response.text='I couldn’t finish that reply in this browser. Try a shorter question, or choose a topic below.';}
-    }if(token!==chatToken||id!==chatPerson)return;chatTopic=response.topic||chatTopic;const entry={role:'assistant',...response};messages.push(entry);chats.set(id,messages.slice(-40));$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(entry));}catch(error){if(token===chatToken){const response=window.FutureConversation.answer(id,question,topic,chatTopic,messages.slice(0,-1));const entry={role:'assistant',...response};messages.push(entry);chats.set(id,messages.slice(-40));$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(entry));}}finally{if(token===chatToken){chatBusy=false;$('chatThinking')?.remove();$('chatForm').querySelector('button').disabled=false;$('chatMessages').scrollTop=$('chatMessages').scrollHeight;}}}
+      if(!isCurrentChatJob(job))return;
+      if(!response)response=conversationUpdate(rt.status().state==='local'?'Use a local web server (localhost) or the hosted website for AI conversation. Topic buttons work when opening the HTML file directly.':'The model isn’t ready. Choose LOAD CONVERSATION or RETRY CONVERSATION, then ask again. Topic buttons give prepared replies.');
+      chatJobs.delete(job.id);recordChatReply(job.id,response);
+    }catch(error){if(isCurrentChatJob(job)){chatJobs.delete(job.id);recordChatReply(job.id,conversationUpdate(replyErrorText(error)));}}
+    finally{
+      if(chatJobs.get(job.id)===job)chatJobs.delete(job.id);
+      if(activeChatJob===job){activeChatJob=null;syncChatUI();void pumpChatQueue();}
+    }
+  }
+  function cancelChatReply(){
+    const job=chatJobs.get(chatPerson);if(!job)return;chatJobs.delete(job.id);
+    if(activeChatJob===job&&job.phase==='reply')window.FuturePersonaRuntime.cancel();
+    recordChatReply(job.id,conversationUpdate('Question cancelled. You can ask another question or choose a topic.'));syncChatUI();
+  }
+  function cancelAllChatReplies(text){
+    const ids=[...chatJobs.keys()];chatEpoch++;chatJobs.clear();chatQueue.length=0;activeChatJob=null;
+    ids.forEach(id=>recordChatReply(id,conversationUpdate(text)));syncChatUI();
+  }
+  function stopConversation(){cancelAllChatReplies('Conversation stopped. Load conversation to ask again, or choose a topic for a prepared reply.');window.FuturePersonaRuntime.dispose();}
+  function clearChatSession(){chatEpoch++;chatJobs.clear();chatQueue.length=0;activeChatJob=null;chatUnread.clear();clearChatProgress();window.FuturePersonaRuntime.clearSession();}
+  async function sendChat(question,topic){
+    if(!chatPerson||!question.trim()||chatJobs.has(chatPerson))return;
+    const id=chatPerson,messages=chats.get(id)||[],history=messages.slice(),previousTopic=[...history].reverse().find(m=>m.topic)?.topic||null;
+    messages.push({role:'user',text:question});chats.set(id,messages);$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(messages.at(-1)));$('chatInput').value='';drafts.set(id,'');
+    const scope=window.FutureConversation.scope(id,question,history,previousTopic);let response=scope.allowed?null:scope.reply;
+    if(!response){const prepared=window.FutureConversation.answer(id,question,topic,previousTopic,history);if(topic||scope.category==='greeting'||prepared.kind==='generated')response=prepared;}
+    if(response){recordChatReply(id,response);syncChatUI();return;}
+    const job={id,question,history,epoch:chatEpoch,phase:'queued',phaseStarted:Date.now(),writing:false};chatJobs.set(id,job);chatQueue.push(job);syncChatUI();$('chatMessages').scrollTop=$('chatMessages').scrollHeight;void pumpChatQueue();
+  }
   document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||ignoreClick)return;
     if(b.dataset.route)route(b.dataset.route);
     else if(b.hasAttribute('data-panel-world')){state.panel='world';$('themePanel').innerHTML=themePanel();$('themePanel').setAttribute('aria-label','World theme description');}
@@ -2294,17 +2467,19 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
     else if(b.hasAttribute('data-close-chat'))$('chatDialog').close();
     else if(b.dataset.chatTopic){const item=window.FuturePersonas.characters[chatPerson].chips.find(x=>x[0]===b.dataset.chatTopic);sendChat(item[1],item[0]);}
     else if(b.hasAttribute('data-load-runtime'))window.FuturePersonaRuntime.load().catch(()=>{});
-    else if(b.hasAttribute('data-stop-runtime')){chatToken++;chatBusy=false;window.FuturePersonaRuntime.dispose();$('chatThinking')?.remove();$('chatForm').querySelector('button').disabled=false;}
+    else if(b.hasAttribute('data-stop-runtime'))stopConversation();
+    else if(b.hasAttribute('data-cancel-reply'))cancelChatReply();
   });
   document.addEventListener('change',e=>{if(e.target.id==='showActivities'){state.activities=e.target.checked;render();window.FutureTour?.onAction('layer');}});
   $('brandHome').addEventListener('click',()=>route('map'));
   $('chatForm').addEventListener('submit',e=>{e.preventDefault();sendChat($('chatInput').value);});
-  $('chatDialog').addEventListener('close',()=>{chatToken++;window.FuturePersonaRuntime.cancel();chatBusy=false;if(chatPerson)drafts.set(chatPerson,$('chatInput').value);});
-  window.addEventListener('persona-thinking',e=>{if($('chatThinking'))$('chatThinking').textContent=e.detail;});
+  $('chatDialog').addEventListener('close',()=>{clearChatProgress();if(chatPerson)drafts.set(chatPerson,$('chatInput').value);});
+  window.addEventListener('pagehide',()=>cancelAllChatReplies('This page was left before the reply finished. Load conversation and ask again.'));
+  window.addEventListener('persona-thinking',e=>{if(activeChatJob&&isCurrentChatJob(activeChatJob)){activeChatJob.writing=/Writing/.test(e.detail);updateChatProgress();}});
   window.addEventListener('persona-runtime-status',()=>{if($('chatDialog').open)updateRuntime();});
   $('truthsContent').innerHTML=W.truths.map(t=>`<details><summary>${esc(t.title)}</summary>${copy(t.text)}</details>`).join('');
   window.addEventListener('popstate',e=>{if(!ready||!e.state?.future)return;Object.assign(state,e.state);render(false);});
-  window.FutureApp={arrive({tour=false}={}){ready=true;$('experience').hidden=false;$('experience').inert=false;document.body.classList.remove('intro-active');document.querySelector('.skip').removeAttribute('tabindex');Object.assign(state,{route:'map',theme:'all',setting:'all',income:'all',education:'all',panel:'world',selected:'leo',profile:'leo',view:tour?'map':matchMedia('(max-width:600px)').matches?'list':'map',activities:true,technology:'selected'});render();if(tour)window.FutureTour.start();},hide(){ready=false;closeDialogs();observer?.disconnect();window.FutureTour?.cancel();$('experience').hidden=true;$('experience').inert=true;},reset(){window.FutureTour?.cancel();window.FutureQuiz?.reset();chatToken++;window.FuturePersonaRuntime.clearSession();chats.clear();drafts.clear();chatPerson=null;chatTopic=null;chatBusy=false;$('chatMessages').innerHTML='';$('chatInput').value='';this.hide();$('mainView').innerHTML='';document.body.classList.remove('is-idle');history.replaceState(null,'',location.pathname+location.search);},state:()=>({...state}),isReady:()=>ready,select,route};
+  window.FutureApp={arrive({tour=false}={}){ready=true;$('experience').hidden=false;$('experience').inert=false;document.body.classList.remove('intro-active');document.querySelector('.skip').removeAttribute('tabindex');Object.assign(state,{route:'map',theme:'all',setting:'all',income:'all',education:'all',panel:'world',selected:'leo',profile:'leo',view:tour?'map':matchMedia('(max-width:600px)').matches?'list':'map',activities:true,technology:'selected'});render();if(tour)window.FutureTour.start();},hide(){ready=false;closeDialogs();observer?.disconnect();window.FutureTour?.cancel();$('experience').hidden=true;$('experience').inert=true;},reset(){window.FutureTour?.cancel();window.FutureQuiz?.reset();clearChatSession();chats.clear();drafts.clear();chatPerson=null;chatTopic=null;chatBusy=false;clearChatProgress();$('chatMessages').innerHTML='';$('chatInput').value='';this.hide();$('mainView').innerHTML='';document.body.classList.remove('is-idle');history.replaceState(null,'',location.pathname+location.search);},state:()=>({...state}),isReady:()=>ready,hasPendingReplies:()=>chatJobs.size>0,select,route};
 })();
 
 </script>
@@ -2315,6 +2490,7 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
   const resume = document.getElementById('resumeBackground');
   const root = document.getElementById('futureIntro');
   if (!video || !resume || !root) return;
+  const portraitViewport = window.matchMedia('(max-aspect-ratio: 1/1)');
 
   let wanted = false, blocked = false, pending = null, attempt = 0;
   let watchdog = 0, retryTimer = 0, reloads = 0;
@@ -2334,14 +2510,30 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
   video.setAttribute('autoplay', '');
   video.setAttribute('playsinline', '');
   video.setAttribute('webkit-playsinline', '');
-  // Assign the source only after the inline/muted properties are in place.
-  // This also avoids relying on the HTML parser's first autoplay attempt.
-  if (video.dataset.src && !video.getAttribute('src')) {
-    video.src = video.dataset.src;
+  function showResume(show) { resume.hidden = !show || !active(); }
+
+  function updateSource() {
+    const portrait = portraitViewport.matches && video.dataset.portraitSrc;
+    const source = portrait ? video.dataset.portraitSrc : video.dataset.src;
+    if (!source || video.getAttribute('src') === source) return;
+
+    // Change only when the browser crosses the square aspect ratio. Resizing
+    // within the same layout keeps the current clip playing without a reload.
+    // Cancel old play promises before loading the newly selected video.
+    attempt++;
+    pending = null;
+    blocked = false;
+    reloads = 0;
+    window.clearTimeout(retryTimer);
+    retryTimer = 0;
+    lastPosition = 0;
+    lastProgress = performance.now();
+    showResume(false);
+    video.pause();
+    video.poster = (portrait ? video.dataset.portraitPoster : video.dataset.poster) || '';
+    video.src = source;
     video.load();
   }
-
-  function showResume(show) { resume.hidden = !show || !active(); }
 
   function play(gesture = false, force = false) {
     if (!active() || (blocked && !gesture)) return;
@@ -2420,6 +2612,7 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
     const returning = !wanted;
     wanted = true;
     blocked = false;
+    updateSource();
     lastPosition = Number(video.currentTime) || 0;
     lastProgress = performance.now();
     if (returning) reloads = 0;
@@ -2459,6 +2652,14 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
 
   resume.addEventListener('click', event => { event.stopPropagation(); userPlay(); });
   root.addEventListener('click', userPlay);
+  function onViewportChange() {
+    // When the intro is hidden, defer loading until the visitor returns.
+    if (!active()) return;
+    updateSource();
+    play();
+  }
+  if (portraitViewport.addEventListener) portraitViewport.addEventListener('change', onViewportChange);
+  else portraitViewport.addListener(onViewportChange);
   video.addEventListener('loadeddata', () => play());
   video.addEventListener('loadedmetadata', () => play());
   video.addEventListener('canplay', () => play());
@@ -2490,11 +2691,12 @@ window.FutureIcons = {"glasses": "<svg xmlns=\"http://www.w3.org/2000/svg\" view
     } else if (wanted) {
       blocked = false;
       lastProgress = performance.now();
+      updateSource();
       play();
     }
   });
   window.addEventListener('pageshow', () => {
-    if (wanted) { blocked = false; lastProgress = performance.now(); play(); }
+    if (wanted) { blocked = false; lastProgress = performance.now(); updateSource(); play(); }
   });
   window.FutureIdlePlayer = {show, hide};
   show();
