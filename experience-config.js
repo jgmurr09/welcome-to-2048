@@ -1,1 +1,1 @@
-window.FutureExperienceConfig = {idleMs:150000,textCharacterMs:24,arrivalSound:true};
+window.FutureExperienceConfig = {idleMs:250000,textCharacterMs:24,arrivalSound:true};
