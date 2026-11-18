@@ -48,7 +48,9 @@
     "mode": "guide",
     "title": "Choose the connections you see",
     "target": "#connectionControls",
-    "text": "Use the Shared activities checkbox to show the pink cards. The Technology buttons are another set of controls: show the selected person’s devices, show them all, or hide them. Click a person to change whose technology appears. These controls help you open up the map a little at a time.",
+    "text": "These controls help you open up the map and explore a little bit at a time.
+Click the shared activities checkbox to show the pink pathways and how we're connected.
+The technology buttons are a great way to show which technology each person interacts with, but you can turn them off if you'd like.",
     "action": "layer"
   },
   {
