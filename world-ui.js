@@ -2,6 +2,7 @@
   'use strict';
   const world=window.FutureWorld;
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const titleCase=v=>String(v??'').replace(/(^|[\s/\-])(\p{L})/gu,(_,space,letter)=>space+letter.toUpperCase());
   const people=new Map(world.characters.map(p=>[p.id,p]));
   const sections={work:'WORK / INCOME / EDUCATION',health:'DIET / HEALTH',home:'HOME / FAMILY',third:'3rd SPACE',tech:'TECH'};
   function portrait(id,extra=''){
@@ -13,5 +14,5 @@
   function scene(kind='network',label=''){return `<div class="image-brief" role="img" aria-label="Image placeholder: ${esc(label||descriptions[kind]||descriptions.network)}"><span>[${esc(label||descriptions[kind]||descriptions.network)}]</span></div>`;}
   function icon(kind){return `<span class="solid-icon" aria-hidden="true">${window.FutureIcons?.[kind]||window.FutureIcons?.network||'<span>●</span>'}</span>`;}
   function excerpt(text,max=220){const s=String(text||'').split('\n')[0];if(s.length<=max)return s;const part=s.slice(0,max);return part.slice(0,part.lastIndexOf(' '))+'…';}
-  window.WorldUI={esc,people,sections,portrait,copy,scene,icon,excerpt};
+  window.WorldUI={esc,titleCase,people,sections,portrait,copy,scene,icon,excerpt};
 })();
