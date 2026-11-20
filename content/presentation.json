@@ -231,5 +231,32 @@
         "characters.leo.sections.work"
       ]
     }
+  },
+  "profiles": {
+    "leo": {
+      "summary": "Leo runs an autonomous trucking company and a nonprofit that brings medical equipment to underserved communities. He lives near the Great Lakes with his mixed family, choosing the area for its fresh water, climate, business connections, and boating. His top 1% income gives him access to private care, household support, and more choice over the technology in his life.",
+      "cta": "Explore Leo’s Life Beyond the Business",
+      "invitation": "See how boating, private healthcare, and the freedom to skip health tracking shape his day."
+    },
+    "sophia": {
+      "summary": "Sophia is a robotic assisted paramedic serving rural Wyoming. Trained at a technical school, she relies on automation to bring care to communities and wishes she could reach more people. She and her partner rent a home while weighing the cost of homeownership and starting a family. Outside work, she finds community at the farmers market and yoga studio.",
+      "cta": "See How Sophia Brings Care to Rural Communities",
+      "invitation": "Explore her work with robotics, the choices behind her health tracking, and her hopes for a home and family."
+    },
+    "ken": {
+      "summary": "Ken is a Marine logistics specialist and single father raising his five-year-old son in military housing in Hawaii. After fleeing the Marshall Islands as a child, he values the stability his service provides while worrying about displacement happening again. Fixed military pay, childcare, and work shape his daily choices, with trips to the beach offering time together.",
+      "cta": "Explore the Life Ken Is Building With His Son",
+      "invitation": "Learn about his journey from the Marshall Islands, military-supported education, and connection with Leo."
+    },
+    "veronica": {
+      "summary": "Veronica is a seventh grader in a rural community whose satellite schoolhouse connects her to a larger school district. Supported by her middle-income family, she fills her days with soccer, gaming, gardening, and robotics. She takes Catherine’s online gardening classes and volunteers for Leo’s medical equipment nonprofit, with ambitions to use technology to develop more sustainable diets.",
+      "cta": "Follow Veronica’s Ideas From Garden to Robotics",
+      "invitation": "Explore her connected school, community gardening with Catherine, and hopes for more sustainable food."
+    },
+    "catherine": {
+      "summary": "Catherine is a retired nurse living alone in an urban community, supported by a full pension and retirement income. Friends, neighbors, gardening, and volunteering keep her connected as she thinks about who will care for her as she ages. Smart home health tools and virtual experiences support her routines, while her gardening classes connect her with younger people like Veronica.",
+      "cta": "Discover How Catherine Stays Connected",
+      "invitation": "Explore her gardens, virtual travel, and the technology supporting her independence as she ages."
+    }
   }
 }
