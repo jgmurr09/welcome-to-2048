@@ -32,7 +32,7 @@
     "mode": "guide",
     "title": "Choose a world theme",
     "target": "#graphViewport",
-    "text": "Start with an orange world-theme tile, like Climate change or Where you live. A short note appears beside the people connected to that theme so you can compare what that theme means in their life. The explanation on the right gives you the wider picture.",
+    "text": "Start with an orange world theme card, like 'Climate Change' or 'Where You Live'. A short note will appear beside the people connected to that theme so you can compare what that theme means in their life. The explanation on the right gives you the wider picture.",
     "action": "theme"
   },
   {
