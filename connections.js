@@ -2,7 +2,7 @@
   'use strict';
   const W=window.FutureWorld;
   const nodes=window.AtlasData.nodes.filter(n=>n.type!=='facet').map(n=>({...n}));
-  nodes.push({id:'education',type:'system',name:'Education'},{id:'knee',type:'tech',name:'External Robotic Knee Support'},{id:'wearable',type:'tech',name:'Wearble tech'});
+  nodes.push({id:'education',type:'system',name:'Education'},{id:'knee',type:'tech',name:'External Robotic Knee Support'},{id:'wearable',type:'tech',name:'Wearable Tech'});
   const byId=new Map(nodes.map(n=>[n.id,n]));
   const edges=[];
   function add(a,b){if(a===b||!byId.has(a)||!byId.has(b)||edges.some(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a)))return;edges.push({a,b});}
@@ -51,3 +51,4 @@
   window.FutureConnections={nodes,byId,edges,related,peopleFor,scene,profile,path,edgeKind};
   if(typeof module!=='undefined')module.exports=window.FutureConnections;
 })();
+
