@@ -121,10 +121,11 @@
   function connectionDetails(id,headingId){
     const n=nodeById.get(id),artifact=W.artifacts.find(a=>a.id===id),pair=sourceNodes[id];
     const text=artifact?.text||(pair?people.get(pair[0]).sections[pair[1]]:'');
-    const ps=G.related(id).filter(i=>people.has(i));
-    return `<span class="eyebrow">${n.type==='tech'?'EVERYDAY TECHNOLOGY':'SHARED ACTIVITY'}</span><h2 id="${headingId}" tabindex="-1">${esc(U.titleCase(n.name))}</h2><div class="connection-placeholder">${icon(iconFor(id))}${scene(sceneNodes[id]||'network')}</div>${copy(text)}${ps.length?`<h3>Connected People</h3><div class="connection-people">${ps.map(i=>`<button type="button" data-person="${i}" style="--person-color:${people.get(i).color}">${portrait(i)}<span>${people.get(i).name}</span></button>`).join('')}</div>`:'<p class="unassigned-note">A personal owner is not specified for this concept.</p>'}`;
+    const ps=G.related(id).filter(i=>people.has(i)),theme=n.type==='system'?E.themes[id]:null;
+    const detail=theme?theme.paragraphs.map(p=>`<p>${esc(p)}</p>`).join(''):`<div class="connection-placeholder">${icon(iconFor(id))}${scene(sceneNodes[id]||'network')}</div>${copy(text)}`;
+    return `<span class="eyebrow">${theme?'WORLD THEME':n.type==='tech'?'EVERYDAY TECHNOLOGY':'SHARED ACTIVITY'}</span><h2 id="${headingId}" tabindex="-1">${esc(U.titleCase(theme?.title||n.name))}</h2>${detail}${ps.length?`<h3>Connected People</h3><div class="connection-people">${ps.map(i=>`<button type="button" data-person="${i}" style="--person-color:${people.get(i).color}">${portrait(i)}<span>${people.get(i).name}</span></button>`).join('')}</div>`:'<p class="unassigned-note">A personal owner is not specified for this concept.</p>'}`;
   }
-  function openConnection(id){const n=nodeById.get(id);if(!n)return;if(n.type==='person'){openPerson(id);return;}if(n.type==='system'){setTheme(id);return;}$('connectionContent').innerHTML=connectionDetails(id,'connectionTitle');$('connectionDialog').showModal();$('connectionTitle').focus({preventScroll:true});}
+  function openConnection(id){const n=nodeById.get(id);if(!n)return;if(n.type==='person'){openPerson(id);return;}if(n.type==='system'&&state.route!=='people'){setTheme(id);return;}$('connectionContent').innerHTML=connectionDetails(id,'connectionTitle');$('connectionDialog').showModal();$('connectionTitle').focus({preventScroll:true});}
   const chatJobs=new Map(),chatUnread=new Set(),chatQueue=[];
   let chatProgressTimer=0,activeChatJob=null,chatEpoch=0;
   function messageHTML(m){return `<article class="chat-message ${m.role} ${m.kind||''}">${m.role==='assistant'?`<small>${m.kind==='generated'?'IMAGINED CONVERSATION':m.kind==='guardrail'?'CONVERSATION BOUNDARY':m.kind==='unavailable'?'CONVERSATION UPDATE':'IN THEIR OWN WORDS'}</small>`:''}${copy(m.text)}${m.sources?.length?sourceDisclosure(m.sources):''}</article>`;}
@@ -238,7 +239,7 @@
     else if(b.dataset.backMap){state.view='map';select(b.dataset.backMap);}
     else if(b.dataset.person)openPerson(b.dataset.person);
     else if(b.dataset.miniPerson)openPerson(b.dataset.miniPerson);
-    else if(b.dataset.miniNode){if(nodeById.get(b.dataset.miniNode)?.type==='system')setTheme(b.dataset.miniNode);else openConnection(b.dataset.miniNode);}
+    else if(b.dataset.miniNode)openConnection(b.dataset.miniNode);
     else if(b.dataset.connection)openConnection(b.dataset.connection);
     else if(b.hasAttribute('data-close-connection'))$('connectionDialog').close();
     else if(b.dataset.view){state.view=b.dataset.view;render();}
@@ -268,4 +269,3 @@
   window.addEventListener('popstate',e=>{if(!ready||!e.state?.future)return;Object.assign(state,e.state);render(false);});
   window.FutureApp={arrive({tour=false}={}){ready=true;$('experience').hidden=false;$('experience').inert=false;document.body.classList.remove('intro-active');document.querySelector('.skip').removeAttribute('tabindex');Object.assign(state,{route:'map',theme:'all',setting:'all',income:'all',education:'all',panel:'world',selected:'leo',profile:'leo',view:tour?'map':matchMedia('(max-width:600px)').matches?'list':'map',activities:true,technology:'all'});render();if(tour)window.FutureTour.start();},hide(){ready=false;closeDialogs();observer?.disconnect();window.FutureTour?.cancel();$('experience').hidden=true;$('experience').inert=true;},reset(){window.FutureTour?.cancel();window.FutureQuiz?.reset();clearChatSession();chats.clear();drafts.clear();chatPerson=null;chatTopic=null;chatBusy=false;clearChatProgress();$('chatMessages').innerHTML='';$('chatInput').value='';this.hide();$('mainView').innerHTML='';document.body.classList.remove('is-idle');history.replaceState(null,'',location.pathname+location.search);},state:()=>({...state}),isReady:()=>ready,hasPendingReplies:()=>chatJobs.size>0,select,route,focusTourExample,fitMap:fitGraph,showTourExample(){state.theme='climate';state.selected='leo';state.panel='world';state.view='map';render();}};
 })();
-
