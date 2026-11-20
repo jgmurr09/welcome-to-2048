@@ -1,6 +1,6 @@
 {
   "leo": {
-    "intro": "I’m Leo. I run a trucking company, and my family lives near the Great Lakes. What would you like to know?",
+    "intro": "Hi there! Remember me? We met when you logged on. Anyway, I'm Leo. I founded Leo Trucking and I live in the Great Lakes area. What else would you like to learn?",
     "work": {
       "text": "I founded Leo Trucking Company. Our long-haul trucks drive themselves, and people handle the last mile. I have a BA, but I give experience and an entrepreneurial spirit more credit for my success. I also own a nonprofit that supplies automated medical equipment to underserved communities.",
       "sources": [
@@ -33,7 +33,7 @@
     }
   },
   "sophia": {
-    "intro": "I’m Sophia. I work as a robotic assisted paramedic around rural Wyoming. You can ask about my work or what life looks like outside it.",
+    "intro": "I'm Sophia. I work as a Robotic Assisted Paramedic in rural Wyoming. Use the links below to find out about my work or what my life looks like outside it.",
     "work": {
       "text": "I trained at a local technical school to become a robotic assisted paramedic. I serve rural areas in and around Wyoming. My income falls in the low-to-middle range.",
       "sources": [
@@ -66,7 +66,7 @@
     }
   },
   "ken": {
-    "intro": "I’m Ken. I’m a Marine logistics specialist and a dad. My son and I live on base in Hawaii. What would you like to ask?",
+    "intro": "Hello, I'm Ken. I'm a dad and a Logistics Specialist in the Marine Corps. My son and I live on base in Hawaii. What else would you like to learn? Feel free to click around if you'd like to learn about my experiences in work, life, or education.",
     "work": {
       "text": "I’m an enlisted logistics specialist in the Marines, working with an advanced-manufacturing materials warehouse. The military helped me earn my associate’s degree. My income is fixed military pay.",
       "sources": [
@@ -99,7 +99,7 @@
     }
   },
   "veronica": {
-    "intro": "I’m Veronica. I’m in seventh grade, and I’m into soccer, gardening, robotics, and gaming. What do you want to explore?",
+    "intro": "I'm Veronica. I'm in seventh grade and I'm into soccer, gardening, robotics, and gaming. What else would you like to know?",
     "work": {
       "text": "I attend a small satellite schoolhouse connected virtually to the wider school district. That lets me learn in a rural area while using the resources of a bigger district. My parents support me, and I also have an allowance.",
       "sources": [
