@@ -5,7 +5,6 @@
   const educationGroups={veronica:'school',sophia:'technical',ken:'associate',leo:'college',catherine:'college'};
   const state={education:'all',route:'map',theme:'all',setting:'all',income:'all',selected:'leo',profile:'leo',panel:'world',view:'map',activities:true,technology:'all'};
   const sectionKeys=['work','home','health','tech','third'],sectionTitles={work:'Work, Income & Education',home:'Home & Family',health:'Diet & Health',tech:'Technology',third:'Third Spaces'};
-  const sourceNodes={trucking:['leo','work'],vacation:['ken','third'],volunteer:['veronica','third'],gardening:['veronica','third'],robotics:['sophia','tech'],'v-glasses':['veronica','tech'],'c-glasses':['catherine','tech']};
   const sceneNodes={trucking:'logistics',vacation:'lakes',volunteer:'care',gardening:'garden',robotics:'care','v-glasses':'education','c-glasses':'garden',kitchen:'garden',autonomous:'care',wearable:'health',knee:'knee'};
   const chats=new Map(),drafts=new Map();let ready=false,observer=null,graphTransform={scale:1,x:0,y:0},drag=null,ignoreClick=false,chatPerson=null,chatTopic=null,chatBusy=false;
   const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -14,27 +13,87 @@
   function passes(p){return (state.setting==='all'||p.placeGroup===state.setting)&&(state.income==='all'||p.incomeGroup===state.income)&&(state.education==='all'||educationGroups[p.id]===state.education);}
   function themeRecord(){return E.themes[state.theme]||E.world;}
   function sourceDisclosure(){return '';}
+  const worldGuide={id:'world',name:'World of 2048',role:'World & theme guide'};
+  const chatIdentity=id=>id==='world'?worldGuide:people.get(id);
+  const worldChatEnabled=()=>window.FutureExperienceConfig.worldChatEnabled!==false;
+  const supportsAI=()=>window.FutureChatBrowser.isEdge();
+  const aiFootnote=$('chatDialog').querySelector('.chat-footnote').textContent;
+  let worldChatTheme='all',worldChatFocus='all',noticeSeen=false,noticeTimer=0,lastNoticeAt=0;
+  const incomingHandoff=window.FutureChatBrowser.parse(location.href),NOTICE_INTERVAL=3*60*60*1000;
+  function screenSnapshot(){return {v:1,page:{...state},chat:{id:chatPerson||'world',theme:worldChatTheme,focus:worldChatFocus},quiz:window.FutureQuiz.state(),scroll:{main:$('mainView').scrollTop,panel:$('themePanel')?.scrollTop||0}};}
+  function scheduleNotice(){clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>{if($('chatDialog').open)showBreakReminder();},NOTICE_INTERVAL);}
+  function showBreakReminder(){
+    noticeSeen=true;lastNoticeAt=Date.now();scheduleNotice();
+    $('chatReminderText').textContent=supportsAI()?'You’re talking with fictional AI characters, not real people. Take a break and reconnect with the people around you.':'You’re exploring fictional characters through prepared topics. Take a break and reconnect with the people around you.';
+    $('chatReminder').hidden=false;
+  }
+  function updateScreenLink(){
+    const url=window.FutureChatBrowser.screenURL(location.href,screenSnapshot()),field=$('edgeScreenURL'),link=$('openScreenInEdge'),button=$('copyScreenButton');
+    if(!field||!link||!button)return url;
+    field.value=url||'';button.disabled=!url;
+    if(url){link.href=window.FutureChatBrowser.edgeURI(url);link.removeAttribute('aria-disabled');link.removeAttribute('tabindex');}
+    else{link.removeAttribute('href');link.setAttribute('aria-disabled','true');link.tabIndex=-1;$('edgeCopyStatus').textContent='Open this site through its local server to use the handoff.';}
+    return url;
+  }
+  async function copyScreenLink(){
+    const url=updateScreenLink(),field=$('edgeScreenURL'),status=$('edgeCopyStatus');if(!url||!field||!status)return;
+    try{if(!navigator.clipboard?.writeText)throw Error('Clipboard unavailable');await navigator.clipboard.writeText(url);status.textContent='Link copied. Paste it into Edge.';}
+    catch{const fallback=$('edgeFallback');if(fallback){fallback.hidden=false;fallback.open=true;}if(field.isConnected){field.focus();field.select();}status.textContent='Link selected. Copy it, then paste it into Edge.';}
+  }
+  function focusChatAction(){if($('chatDialog').open)(supportsAI()?$('chatInput'):$('chatChips').querySelector('button'))?.focus();}
+  function showBrowserOptions(){
+    $('helpMenu').open=false;
+    if(supportsAI()){showChatHelp();$('chatBrowserHelp').open=true;$('chatBrowserHelp').querySelector('summary').focus();return;}
+    if(!$('chatDialog').open){closeDialogs();openChat(chatPerson||(worldChatEnabled()?'world':'leo'));}
+    updateScreenLink();$('edgeFallback').hidden=false;$('edgeFallback').open=true;$('edgeFallback').querySelector('summary').focus();
+  }
+  function showAIDetails(){if(!$('chatDialog').open)closeDialogs();$('helpMenu').open=false;$('aiDetailsDialog').showModal();$('aiDetailsTitle').focus();}
+  function contextSources(ids=[]){
+    const records=[...new Set(ids)].map(window.FutureKnowledge.source).filter(Boolean);
+    if(!records.length)return '';
+    return `<details class="chat-sources"><summary>Context for this reply · ${records.length}</summary><p>World Truths and stories set this imagined world. Research adds context from its publication year; it does not predict 2048.</p>${records.map(r=>`<div><strong>${esc(r.label)}</strong><small>${esc(r.category)}${r.location?' · '+esc(r.location):''}</small>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">Open source ↗</a>`:''}</div>`).join('')}</details>`;
+  }
+  function connectionPeople(id,collapsible=false){
+    const record=window.FutureConnectionData[id],ids=G.related(id).filter(i=>people.has(i));
+    if(!ids.length)return '';
+    const articles=ids.map(i=>{const person=people.get(i),detail=record?.people?.[i];return `<article><button type="button" data-person="${i}" class="connection-person-link">${portrait(i)}<span>${person.name}</span> ↗</button>${detail?`<p>${esc(detail.use)}</p><p><strong>In practice:</strong> ${esc(detail.effect)}</p><p class="connection-tradeoff">${esc(detail.tradeoff)}</p>`:''}</article>`;}).join('');
+    return collapsible?`<details class="connection-impact technology-perspectives"><summary>What changes in daily life?</summary><div>${articles}</div></details>`:`<section class="connection-impact"><h3>What changes in daily life?</h3>${articles}</section>`;
+  }
+  function filterFeedback(){
+    const active=['setting','income','education'].filter(k=>state[k]!=='all'),count=W.characters.filter(passes).length;
+    if(!active.length)return '';
+    const labels={suburb:'Suburb',urban:'Urban',rural:'Rural',top:'Top 1%',middle:'Middle income',lower:'Lower income',school:'School',technical:'Technical',associate:'Associate’s',college:'College'};
+    return `<div class="filter-feedback ${count?'':'is-empty'}" role="status" aria-live="polite"><strong>${count?count+' of 5 people match all filters':'No people match this combination'}</strong><span>${count?'Other people stay dimmed for comparison.':'The map is still here. Remove a filter to bring people back into focus.'}</span><div>${active.map(key=>`<button type="button" data-filter="${key}" data-value="all" aria-label="Remove ${esc(labels[state[key]])} filter">${esc(labels[state[key]])} ×</button>`).join('')}</div></div>`;
+  }
+  function showTruths(){closeDialogs();$('helpMenu').open=false;$('truthsDialog').showModal();$('truthsTitle').focus();}
+  function updateHelpStatus(){const rt=window.FuturePersonaRuntime.status(),times=rt.timings||{};$('helpRuntimeStatus').textContent=rt.message+(rt.compatibility?' This browser uses the compatibility runtime.':'')+(times.downloadMs!==undefined?' Model transfer: '+Math.round(times.downloadMs/1000)+'s.':'')+(times.initializeMs!==undefined?' Engine startup: '+Math.round(times.initializeMs/1000)+'s.':'')+(times.totalMs!==undefined?' Total setup: '+Math.round(times.totalMs/1000)+'s.':'');document.querySelector('#helpDialog [data-retry-cpu]').hidden=!supportsAI()||['ready','disabled'].includes(rt.state);}
+  function showChatHelp(){$('helpMenu').open=false;updateHelpStatus();if(!$('helpDialog').open)$('helpDialog').showModal();$('helpTitle').focus();}
+  function startUITour(){closeDialogs();$('helpMenu').open=false;state.route='map';state.view='map';render();window.FutureTour.start({required:false});}
+
   function filterRow(key,label,options){return `<fieldset class="map-filter"><legend>${esc(U.titleCase(label))}</legend><div>${options.map(([value,title])=>`<button type="button" data-filter="${key}" data-value="${value}" aria-pressed="${state[key]===value}">${esc(U.titleCase(title))}</button>`).join('')}</div></fieldset>`;}
   function layerControls(){return `<section class="connection-controls" id="connectionControls" aria-label="Choose which connections to show"><label class="activity-check"><input type="checkbox" id="showActivities" ${state.activities?'checked':''}><span><i class="legend-dot shared"></i>Show Shared Activities</span></label><fieldset><legend><i class="legend-dot tech"></i>Show Technology</legend><div class="technology-options" role="group" aria-label="Technology visibility">${[['selected','Selected Person'],['all','Everyone'],['none','Hide']].map(([v,title])=>`<button type="button" data-tech-mode="${v}" aria-pressed="${state.technology===v}">${title}</button>`).join('')}</div></fieldset></section>`;}
-  function themePanel(){if(state.panel==='person')return personPanel();if(state.panel==='connection')return connectionPanel();const t=themeRecord();return `<div class="theme-reading"><span class="eyebrow">${state.theme==='all'?'THE WORLD AROUND THESE PEOPLE':'WORLD THEME'}</span><h2 id="selectedTitle" tabindex="-1">${esc(U.titleCase(t.title))}</h2>${t.paragraphs.map(p=>`<p>${esc(p)}</p>`).join('')}${sourceDisclosure(t.sources)}<button type="button" data-truths class="text-button">READ THE WORLD TRUTHS <span>↗</span></button></div>`;}
+  function themePanel(){
+    if(state.panel==='person')return personPanel();if(state.panel==='connection')return connectionPanel();const t=themeRecord();
+    return `<div class="theme-reading"><span class="eyebrow">${state.theme==='all'?'THE WORLD AROUND THESE PEOPLE':'WORLD THEME'}</span><h2 id="selectedTitle" tabindex="-1">${esc(state.theme==='all'?t.title:U.titleCase(t.title))}</h2>${t.paragraphs.map(p=>`<p>${esc(p)}</p>`).join('')}<div class="world-reading-actions"><button type="button" data-truths class="text-button">WORLD TRUTHS ↗</button>${worldChatEnabled()?`<button type="button" data-world-chat="${state.theme}" class="primary-button world-chat-invite">ASK ABOUT ${state.theme==='all'?'2048':esc(t.title.toUpperCase())} ↗</button>`:''}</div></div>`;
+  }
+
   function personPanel(){
     const p=people.get(state.profile),profile=E.profiles[p.id];
     return `<div class="person-reading" style="--person-color:${p.color}"><div class="sidebar-body">${panelBack()}<header class="sidebar-identity"><span class="sidebar-portrait">${portrait(p.id)}</span><div><span class="eyebrow">${p.age} / ${esc(U.titleCase(p.setting))}</span><h2 id="selectedTitle" tabindex="-1">${p.name}</h2><p class="sidebar-role">${esc(U.titleCase(p.role))}</p></div></header><p class="sidebar-summary">${esc(profile.summary)}</p><p class="sidebar-invitation">${esc(profile.invitation)}</p></div><div class="sidebar-actions"><button type="button" data-person="${p.id}" class="primary-button">${esc(profile.cta)}</button><button type="button" data-chat="${p.id}" class="outline-button">Chat With ${p.name}</button></div></div>`;
   }
 
   function panelBack(){return `<button type="button" class="panel-back" data-panel-world>${state.theme==='all'?'Back to the World in 2048':'Back to '+esc(U.titleCase(E.themes[state.theme].title))}</button>`;}
-  function connectionPanel(){return `<div class="connection-reading">${panelBack()}${connectionDetails(state.selected,'selectedTitle')}</div>`;}
+  function connectionPanel(){return `<div class="connection-reading" data-connection-type="${nodeById.get(state.selected)?.type||''}">${panelBack()}${connectionDetails(state.selected,'selectedTitle')}</div>`;}
   function educationFilters(){return `<fieldset class="map-filter education-filter"><legend>Education</legend><div>${[['all','All paths'],['school','School'],['technical','Technical'],['associate','Associate’s'],['college','College']].map(([v,label])=>`<button type="button" data-filter="education" data-value="${v}" aria-pressed="${state.education===v}">${esc(U.titleCase(label))}</button>`).join('')}</div></fieldset>`;}
   function zoomControls(){return `<div class="map-controls" ${state.view!=='map'?'hidden':''}><button type="button" data-zoom="out" aria-label="Zoom out">−</button><span id="zoomLabel">${Math.round(graphTransform.scale*100)}%</span><button type="button" data-zoom="in" aria-label="Zoom in">+</button><button type="button" data-fit aria-label="Fit map">⛶</button></div>`;}
   function selectionBar(){
-    if(!mapFocus())return `${zoomControls()}<span><strong>All Connections</strong><small>Choose A Person, Theme, Activity, Or Technology</small></span>`;
-    const n=nodeById.get(mapFocus()),p=people.get(state.selected)||people.get(state.profile);
-    if(state.panel==='connection')return `${zoomControls()}<span class="selected-node-symbol">${icon(iconFor(n.id))}</span><span><strong>${esc(U.titleCase(n.label||n.name))}</strong><small>${n.type==='tech'?'Technology':'Shared Activity'}</small></span>`;
-    return `${zoomControls()}<span class="selected-avatar">${portrait(p.id)}</span><span><strong>${p.name}</strong><small>${esc(U.titleCase(p.role))}</small></span><button type="button" data-person="${p.id}" class="text-button">MEET ${p.name.toUpperCase()} ↗</button><button type="button" data-chat="${p.id}" class="selected-chat" aria-label="Chat with ${p.name}">${icon('chat')}</button>`;
+    const id=mapFocus();if(!id)return `${zoomControls()}<span><strong>All Connections</strong><small>Choose a person, theme, activity, or technology</small></span>`;
+    const n=nodeById.get(id),p=people.get(id);
+    return `${zoomControls()}${p?`<span class="selected-avatar">${portrait(p.id)}</span>`:`<span class="selected-node-symbol">${icon(iconFor(id))}</span>`}<span><strong>${esc(U.titleCase(p?.name||E.themes[id]?.title||n?.name||'All Connections'))}</strong><small>${esc(p?U.titleCase(p.role):n?.type==='system'?'World Theme':n?.type==='tech'?'Technology':'Shared Activity')}</small></span>`;
   }
 
-  function renderMap(){return `<div class="map-layout"><section class="map-center"><header class="map-toolbar"><div><h1 id="mainTitle" tabindex="-1">Explore the World Map</h1></div><button type="button" data-tour class="tour-trigger">LEO’S WALKTHROUGH <span>↗</span></button><div class="map-view-buttons" role="group" aria-label="View the connections"><button type="button" data-view="map" aria-pressed="${state.view==='map'}">MAP</button><button type="button" data-view="list" aria-pressed="${state.view==='list'}">LIST</button></div></header><div id="mapFilters" class="map-filters" aria-label="Focus on location, income, and education">${filterRow('setting','Where people live',[['all','All settings'],['suburb','Suburb'],['urban','Urban'],['rural','Rural']])}${filterRow('income','Income',[['all','All incomes'],['top','Top 1%'],['middle','Middle'],['lower','Lower']])}${educationFilters()}</div>${layerControls()}<div class="map-theme-status"><span><i class="legend-dot system"></i>${state.theme==='all'?'Choose an orange theme tile in the map':esc(E.themes[state.theme].title)+' · notes appear beside the people'}</span>${state.theme!=='all'?'<button type="button" data-theme="all">CLEAR THEME ×</button>':''}${state.setting!=='all'||state.income!=='all'||state.education!=='all'?'<span class="filter-count">'+W.characters.filter(passes).length+' people in focus</span>':''}<button type="button" data-clear-map class="outline-button" style="margin-left:auto;min-height:40px;padding:8px 12px;font-size:14px">Clear Selections</button></div><div class="map-canvas-wrap"><div id="graphViewport" class="graph-viewport" tabindex="0" aria-label="World connection map. Choose an orange theme or a person. Drag to move, use plus or minus to zoom, or switch to List."><div id="graphWorld" class="graph-world"><svg id="edges" class="edges" aria-hidden="true"></svg><div id="nodes"></div><div id="themeNotes"></div></div></div><div id="graphList" class="graph-list" hidden></div></div><div class="selected-person-bar" id="selectedPersonBar" aria-label="Selected person">${selectionBar()}</div></section><aside class="theme-panel ${state.panel==='person'?'is-person-panel':''}" id="themePanel" aria-label="World theme description">${themePanel()}</aside></div>`;}
-  // One constellation for every map viewport. Only widget scale changes.
+  function renderMap(){return `<div class="map-layout"><section class="map-center"><header class="map-toolbar"><div><h1 id="mainTitle" tabindex="-1">Explore the World Map</h1></div><div class="map-view-actions"><button type="button" data-clear-map class="clear-selections">Clear Selections</button><div class="map-view-buttons" role="group" aria-label="View the connections"><button type="button" data-view="map" aria-pressed="${state.view==='map'}">MAP</button><button type="button" data-view="list" aria-pressed="${state.view==='list'}">LIST</button></div></div></header><div id="mapFilters" class="map-filters" aria-label="Focus on location, income, and education">${filterRow('setting','Where people live',[['all','All settings'],['suburb','Suburb'],['urban','Urban'],['rural','Rural']])}${filterRow('income','Income',[['all','All incomes'],['top','Top 1%'],['middle','Middle'],['lower','Lower']])}${educationFilters()}</div>${filterFeedback()}${layerControls()}<div class="map-theme-status"><span><i class="legend-dot system"></i>${state.theme==='all'?'Choose an orange theme tile in the map':esc(E.themes[state.theme].title)+' · notes appear beside the people'}</span>${state.theme!=='all'?'<button type="button" data-theme="all">CLEAR THEME ×</button>':''}</div><div class="map-canvas-wrap"><div id="graphViewport" class="graph-viewport" tabindex="0" aria-label="World connection map. Choose an orange theme or a person. Drag to move, use plus or minus to zoom, or switch to List."><div id="graphWorld" class="graph-world"><svg id="edges" class="edges" aria-hidden="true"></svg><div id="nodes"></div><div id="themeNotes"></div></div></div><div id="graphList" class="graph-list" hidden></div></div><div class="selected-person-bar" id="selectedPersonBar" aria-label="Selected connection">${selectionBar()}</div></section><aside class="theme-panel ${state.panel==='person'?'is-person-panel':''}" id="themePanel" aria-label="World theme description">${themePanel()}</aside></div>`;}
+
   const mapAnchors={wealth:[.17,.08],climate:[.5,.065],materials:[.83,.08],geography:[.123,.92],education:[.88,.92],leo:[.5,.26],sophia:[.19,.455],ken:[.815,.455],veronica:[.37,.71],catherine:[.635,.71],trucking:[.315,.26],vacation:[.69,.26],volunteer:[.5,.535],gardening:[.5,.74],kitchen:[.04,.21],autonomous:[.04,.405],robotics:[.04,.58],'v-glasses':[.04,.76],knee:[.96,.21],wearable:[.96,.58],'c-glasses':[.96,.76]};
   function graphData(){
     const v=$('graphViewport'),fixed=state.view==='map'&&v?.clientWidth>0&&v.clientHeight>0;
@@ -96,17 +155,19 @@
   function attachMap(){drawGraph();observer?.disconnect();observer=new ResizeObserver(()=>{drawGraph();window.FutureTour?.refresh();});observer.observe($('graphViewport'));const v=$('graphViewport');v.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button'))return;drag={id:e.pointerId,x:e.clientX,y:e.clientY,tx:graphTransform.x,ty:graphTransform.y,moved:false};v.setPointerCapture(e.pointerId);});v.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>5)drag.moved=true;graphTransform.x=drag.tx+dx;graphTransform.y=drag.ty+dy;transformGraph();});const stop=()=>{if(drag?.moved){ignoreClick=true;setTimeout(()=>ignoreClick=false,0);}drag=null;};v.addEventListener('pointerup',stop);v.addEventListener('pointercancel',stop);v.addEventListener('wheel',e=>{if(e.ctrlKey){e.preventDefault();const r=v.getBoundingClientRect();zoom(Math.exp(-e.deltaY*.005),e.clientX-r.left,e.clientY-r.top);}}, {passive:false});v.addEventListener('keydown',e=>{if(e.target!==v)return;if(e.key==='0')fitGraph();else if(e.key==='+'||e.key==='=')zoom(1.2);else if(e.key==='-')zoom(.8);else if(/^Arrow/.test(e.key)){e.preventDefault();graphTransform.x+=e.key==='ArrowLeft'?35:e.key==='ArrowRight'?-35:0;graphTransform.y+=e.key==='ArrowUp'?35:e.key==='ArrowDown'?-35:0;transformGraph();}});}
   function miniMap(id){const g=G.profile(id);return `<section class="profile-mini-map"><header><div><h2>${people.get(id).name}’s Connections</h2><p>Choose A Person, Theme, Activity, Or Technology.</p></div><button type="button" data-back-map="${id}" class="outline-button">Back To World Map</button></header><div class="mini-map-frame"><div class="mini-map-world" style="width:${g.width}px;height:${g.height}px"><svg class="edges" viewBox="0 0 ${g.width} ${g.height}" aria-hidden="true">${edgeHTML(g,id)}</svg>${g.nodes.map(n=>nodeButton(n,g.positions.get(n.id),true,id)).join('')}</div></div></section>`;}
   function fitMini(){const f=document.querySelector('.mini-map-frame'),g=document.querySelector('.mini-map-world');if(f&&g){const scale=f.clientWidth/520;g.style.transform=`scale(${scale})`;f.style.height=600*scale+'px';}}
-  function renderProfile(){const p=people.get(state.profile);return `<section class="profile-page ambient"><div class="profile-inner"><nav class="person-selector" aria-label="Choose a person">${W.characters.map(person=>`<button type="button" data-person="${person.id}" aria-pressed="${person.id===p.id}">${portrait(person.id)}<span>${person.name}</span></button>`).join('')}</nav><header class="profile-scene"><div class="profile-introduction"><span class="eyebrow">${p.age} / ${esc(p.ethnicity)} / ${p.gender}</span><h1 id="mainTitle" tabindex="-1">${p.name}</h1><p>${esc(U.titleCase(p.role))}</p><span class="profile-setting">${esc(U.titleCase(p.setting))}</span><button type="button" data-chat="${p.id}" class="primary-button">CHAT WITH ${p.name.toUpperCase()} ↗</button></div><div class="profile-image-description">[${esc(p.setting)}. A scene from ${p.name}’s everyday life.]</div><div class="profile-figure">${portrait(p.id)}</div></header><div class="profile-information"><aside class="profile-map-column">${miniMap(p.id)}</aside><div class="profile-life-grid">${sectionKeys.map((key,i)=>`<article class="life-area" data-life-area="${key}"><span class="eyebrow">0${i+1} / ${esc(U.sections[key])}</span><h2>${sectionTitles[key]}</h2>${copy(p.sections[key])}</article>`).join('')}</div></div></div></section>`;}
-  function renderTechnology(){return `<section class="technology-page ambient"><div class="page-inner"><header class="page-heading"><span class="eyebrow">2048 / EVERYDAY OBJECTS</span><h1 id="mainTitle" tabindex="-1">Learn the Technology</h1></header><div class="artifact-grid">${W.artifacts.map(a=>`<article class="artifact-card"><button type="button" class="artifact-image" data-connection="${a.id}" aria-label="Explore ${esc(a.title)}">${scene(a.scene)}<span class="artifact-symbol">${icon(a.id)}</span></button><div><h2>${esc(a.title)}</h2>${copy(a.text)}<button type="button" data-connection="${a.id}" class="text-button">SEE CONNECTIONS ↗</button></div></article>`).join('')}</div><section class="event-callout"><span class="eyebrow">KEEP EXPLORING 2048</span><h2>Learn About Additional Worlds, People, and Technologies of 2048</h2><p>Explore the one-pager, magazine, and graphic novel from the Future World Sprint.</p><a href="#/about" data-route="about" class="primary-button">About the Event</a></section></div></section>`;}
-  function renderAbout(){return `<section class="about-page"><div class="page-inner"><header class="page-heading"><span class="eyebrow">TANG / FUTURE WORLD SPRINT</span><h1 id="mainTitle" tabindex="-1">About the Event</h1><p>Other ways to explore this possible future.</p></header><div class="event-deliverables">${[['The one-pager','One-page overview. Front and optional back.'],['Magazine of the future','Magazine pages and a link to the full publication.'],['Graphic novel','A story narrative set in 2048.']].map(([title,description])=>`<section><h2>${title}</h2><div class="deliverable-placeholder"><span>[${description}]</span></div></section>`).join('')}</div><p class="asset-credit">Uicons by <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener">Flaticon</a>.</p></div></section>`;}
-  function render(push=true,keepScroll=false){if(!ready)return;const scroll=$('mainView').scrollTop;observer?.disconnect();const views={map:renderMap,people:renderProfile,technology:renderTechnology,quiz:()=>window.FutureQuiz.render(),about:renderAbout};$('mainView').innerHTML=(views[state.route]||renderMap)();$('mainView').className=state.route==='map'?'map-main':'scroll-main';document.querySelectorAll('.hub-header [data-route]').forEach(b=>b.setAttribute('aria-current',b.dataset.route===state.route?'page':'false'));if(state.route==='map')attachMap();if(state.route==='people'){fitMini();observer=new ResizeObserver(fitMini);observer.observe(document.querySelector('.profile-map-column'));}if(push)history.pushState({future:true,...state},'',`#/${state.route}/${state.route==='people'?state.profile:state.theme}`);$('mainView').scrollTop=keepScroll?scroll:0;if(!keepScroll)$('mainTitle')?.focus({preventScroll:true});window.FutureTour?.refresh();}
+  function renderProfile(){const p=people.get(state.profile);return `<section class="profile-page ambient"><div class="profile-inner"><nav class="person-selector" aria-label="Choose a person">${W.characters.map(person=>`<button type="button" data-person="${person.id}" aria-pressed="${person.id===p.id}">${portrait(person.id)}<span>${person.name}</span></button>`).join('')}</nav><header class="profile-scene"><div class="profile-introduction"><span class="eyebrow">${p.age} / ${esc(p.ethnicity)} / ${p.gender}</span><h1 id="mainTitle" tabindex="-1">${p.name}</h1><p>${esc(U.titleCase(p.role))}</p><span class="profile-setting">${esc(U.titleCase(p.setting))}</span><p class="profile-greeting">${esc(E.profiles[p.id].summary)}</p><p class="profile-ask">${esc(E.profiles[p.id].askAbout)}</p><button type="button" data-chat="${p.id}" class="primary-button">CHAT WITH ${p.name.toUpperCase()} ↗</button></div><div class="profile-image-description">[${esc(p.setting)}. A scene from ${p.name}’s everyday life.]</div><div class="profile-figure">${portrait(p.id)}</div></header><div class="profile-information"><aside class="profile-map-column">${miniMap(p.id)}</aside><div class="profile-life-grid">${sectionKeys.map((key,i)=>`<article class="life-area" data-life-area="${key}"><span class="eyebrow">0${i+1} / ${esc(U.sections[key])}</span><h2>${sectionTitles[key]}</h2>${copy(p.sections[key])}</article>`).join('')}</div></div></div></section>`;}
+  function renderTechnology(){return `<section class="technology-page ambient"><div class="page-inner"><header class="page-heading"><span class="eyebrow">2048 / EVERYDAY OBJECTS</span><h1 id="mainTitle" tabindex="-1">Learn the Technology</h1><p>What the technology does, and what it changes for the people who use it.</p></header><div class="artifact-grid">${W.artifacts.map(a=>`<article class="artifact-card"><div class="artifact-image" aria-hidden="true">${scene(a.scene)}<span class="artifact-symbol">${icon(iconFor(a.id))}</span></div><div><h2>${esc(a.title)}</h2>${copy(a.text)}${connectionPeople(a.id,true)}</div></article>`).join('')}</div><section class="event-callout"><span class="eyebrow">KEEP EXPLORING 2048</span><h2>Learn About Additional Worlds, People, and Technologies of 2048</h2><p>Explore the one-pager, magazine, and graphic novel from the Future World Sprint.</p><a href="#/about" data-route="about" class="primary-button">About the Event</a></section></div></section>`;}
+
+  function renderAbout(){return `<section class="about-page"><div class="page-inner"><header class="page-heading"><span class="eyebrow">TANG / FUTURE WORLD SPRINT</span><h1 id="mainTitle" tabindex="-1">About the Event</h1><p>Other ways to explore this possible future.</p></header><div class="event-deliverables">${[['The one-pager','One-page overview. Front and optional back.'],['Magazine of the future','Magazine pages and a link to the full publication.'],['Graphic novel','A story narrative set in 2048.']].map(([title,description])=>`<section><h2>${title}</h2><div class="deliverable-placeholder"><span>[${description}]</span></div></section>`).join('')}</div></div></section>`;}
+  function render(push=true,keepScroll=false){if(!ready)return;const scroll=$('mainView').scrollTop;observer?.disconnect();const views={map:renderMap,people:renderProfile,technology:renderTechnology,quiz:()=>window.FutureQuiz.render(),about:renderAbout};$('mainView').innerHTML=(views[state.route]||renderMap)();$('mainView').className=state.route==='map'?'map-main':'scroll-main';document.querySelectorAll('.hub-header [data-route]').forEach(b=>b.setAttribute('aria-current',b.dataset.route===state.route?'page':'false'));if(state.route==='map')attachMap();window.FutureQuiz?.watchLayout?.(state.route==='quiz');if(state.route==='people'){fitMini();observer=new ResizeObserver(fitMini);observer.observe(document.querySelector('.profile-map-column'));}if(push)history.pushState({future:true,...state},'',`#/${state.route}/${state.route==='people'?state.profile:state.theme}`);$('mainView').scrollTop=keepScroll?scroll:0;if(!keepScroll)$('mainTitle')?.focus({preventScroll:true});window.FutureTour?.refresh();}
   function route(name){closeDialogs();state.route=['map','people','technology','quiz','about'].includes(name)?name:'map';if(name==='people'&&people.has(state.selected))state.profile=state.selected;render();window.FutureTour?.onAction('navigation');}
-  function clearMap(){
-    closeDialogs();window.FutureTour?.cancel();
+  function clearMap({focus=true}={}){
+    closeDialogs();$('helpMenu').open=false;window.FutureTour?.cancel();
     Object.assign(state,{route:'map',theme:'all',setting:'all',income:'all',education:'all',selected:null,panel:'world',activities:true,technology:'all'});
-    render();document.querySelector('[data-clear-map]')?.focus({preventScroll:true});
+    render();if(focus)document.querySelector('[data-clear-map]')?.focus({preventScroll:true});else $('selectedTitle')?.focus({preventScroll:true});
     $('announcement').textContent='Selections cleared. Showing all people, themes, shared activities, and technologies.';
   }
+
   function setTheme(id){state.panel='world';state.theme=themes.has(id)?id:'all';if(state.route!=='map')state.route='map';render();window.FutureTour?.onAction('theme');$('announcement').textContent=state.theme==='all'?'Showing all connections':E.themes[state.theme].title+'. Compare the notes beside each person.';}
   function select(id){
     if(!nodeById.has(id))return;closeDialogs();const n=nodeById.get(id);
@@ -126,118 +187,173 @@
   }
   function openPerson(id){if(!people.has(id))return;closeDialogs();state.profile=id;state.selected=id;state.route='people';render();}
   function connectionDetails(id,headingId){
-    const n=nodeById.get(id),artifact=W.artifacts.find(a=>a.id===id),pair=sourceNodes[id];
-    const text=artifact?.text||(pair?people.get(pair[0]).sections[pair[1]]:'');
-    const ps=G.related(id).filter(i=>people.has(i)),theme=n.type==='system'?E.themes[id]:null;
-    const detail=theme?theme.paragraphs.map(p=>`<p>${esc(p)}</p>`).join(''):`<div class="connection-placeholder">${icon(iconFor(id))}${scene(sceneNodes[id]||'network')}</div>${copy(text)}`;
-    return `<span class="eyebrow">${theme?'WORLD THEME':n.type==='tech'?'EVERYDAY TECHNOLOGY':'SHARED ACTIVITY'}</span><h2 id="${headingId}" tabindex="-1">${esc(U.titleCase(theme?.title||n.name))}</h2>${detail}${ps.length?`<h3>Connected People</h3><div class="connection-people">${ps.map(i=>`<button type="button" data-person="${i}" style="--person-color:${people.get(i).color}">${portrait(i)}<span>${people.get(i).name}</span></button>`).join('')}</div>`:'<p class="unassigned-note">A personal owner is not specified for this concept.</p>'}`;
+    const n=nodeById.get(id),artifact=W.artifacts.find(a=>a.id===id),record=window.FutureConnectionData[id];
+    const text=artifact?.text||record?.text||'';
+    const theme=n.type==='system'?E.themes[id]:null;
+    const detail=theme?theme.paragraphs.map(p=>`<p>${esc(p)}</p>`).join(''):`<div class="connection-placeholder">${icon(iconFor(id))}${scene(sceneNodes[id]||'network')}</div>${copy(text)}${connectionPeople(id)}`;
+    return `<span class="eyebrow">${theme?'WORLD THEME':n.type==='tech'?'EVERYDAY TECHNOLOGY':'SHARED ACTIVITY'}</span><h2 id="${headingId}" tabindex="-1">${esc(U.titleCase(theme?.title||artifact?.title||record?.title||n.name))}</h2>${detail}`;
   }
+
   function openConnection(id){const n=nodeById.get(id);if(!n)return;if(n.type==='person'){openPerson(id);return;}if(n.type==='system'&&state.route!=='people'){setTheme(id);return;}$('connectionContent').innerHTML=connectionDetails(id,'connectionTitle');$('connectionDialog').showModal();$('connectionTitle').focus({preventScroll:true});}
-  const chatJobs=new Map(),chatUnread=new Set(),chatQueue=[];
+  const chatJobs=new Map(),chatUnread=new Set(),chatQueue=[],CHAT_WAIT_MS=20000;
   let chatProgressTimer=0,activeChatJob=null,chatEpoch=0;
-  function messageHTML(m){return `<article class="chat-message ${m.role} ${m.kind||''}">${m.role==='assistant'?`<small>${m.kind==='generated'?'IMAGINED CONVERSATION':m.kind==='guardrail'?'CONVERSATION BOUNDARY':m.kind==='unavailable'?'CONVERSATION UPDATE':'IN THEIR OWN WORDS'}</small>`:''}${copy(m.text)}${m.sources?.length?sourceDisclosure(m.sources):''}</article>`;}
+  function messageHTML(m){return `<article class="chat-message ${m.role} ${m.kind||''}"${m.kind==='generated'?' data-ai-generated="true" data-ai-model="SmolLM2-360M-Instruct"':''}>${m.role==='assistant'?`<small>${m.kind==='generated'?'IMAGINED CONVERSATION':m.kind==='guardrail'?'CONVERSATION BOUNDARY':m.kind==='unavailable'?'CONVERSATION UPDATE':m.world?'FROM THE WORLD TRUTHS':'PREPARED CHARACTER REPLY'}</small>`:''}${m.note?`<p class="chat-reply-note">${esc(m.note)}</p>`:''}${copy(m.text)}${m.crisis?'<nav class="chat-crisis-links" aria-label="United States crisis support"><a href="tel:988?oai_link_source=model_response_hotline">Call 988 (US)</a><a href="sms:988?oai_link_source=model_response_hotline">Text 988 (US)</a><a href="https://988lifeline.org/chat/?oai_link_source=model_response_hotline" target="_blank" rel="noopener noreferrer">988 online chat (US)</a></nav>':''}${m.sources?.length?contextSources(m.sources):''}</article>`;}
   function clearChatProgress(){clearInterval(chatProgressTimer);chatProgressTimer=0;$('chatThinking')?.remove();$('chatForm').removeAttribute('aria-busy');}
   function updateChatBadges(){
     document.querySelectorAll('[data-chat-switch]').forEach(button=>{
       const id=button.dataset.chatSwitch,job=chatJobs.get(id),label=job?(job.phase==='queued'?'Queued':'Replying'):chatUnread.has(id)?'New reply':'';
       const badge=button.querySelector('.chat-person-status');if(badge){badge.textContent=label;badge.hidden=!label;}
       button.dataset.replyState=job?(job.phase==='queued'?'queued':'replying'):chatUnread.has(id)?'unread':'';
-      button.setAttribute('aria-label',people.get(id).name+(label?', '+label.toLowerCase():''));
+      button.setAttribute('aria-label',chatIdentity(id).name+(label?', '+label.toLowerCase():''));
     });
   }
   function updateChatProgress(){
     const job=chatJobs.get(chatPerson);if(!job||!$('chatThinkingText'))return;
-    const elapsed=Math.max(0,Math.floor((Date.now()-job.phaseStarted)/1000)),name=people.get(job.id).name;
-    let text;
-    if(job.phase==='queued')text='Your question is queued. '+(activeChatJob?people.get(activeChatJob.id).name+'’s reply will finish first.':'It will start when the model is available.')+' You can keep exploring.';
-    else if(job.phase==='loading')text='Your question is saved and will send when the model is ready. '+window.FuturePersonaRuntime.status().message;
-    else if(elapsed>=90)text=name+' is still preparing a reply. At two minutes it will stop automatically. You can switch people and return here.';
-    else if(elapsed>=30)text='Still working on your question. You can explore or talk to someone else; this reply will stay here.';
-    else text=(job.writing?name+' is writing a reply.':name+' is preparing a reply.')+' You can switch people; the reply will stay in this conversation.';
+    const elapsed=Math.max(0,Math.floor((Date.now()-job.submittedAt)/1000)),name=chatIdentity(job.id).name;
+    const text=job.phase==='queued'?'Waiting for the current reply. A prepared answer will appear if this question reaches 20 seconds.':(job.writing?name+' is writing a reply.':name+' is preparing a reply.')+' You can explore elsewhere. At 20 seconds, a prepared answer is used if needed.';
     if($('chatThinkingText').textContent!==text)$('chatThinkingText').textContent=text;
-    $('chatElapsed').textContent=(job.phase==='queued'?'Waiting: ':'Elapsed: ')+Math.floor(elapsed/60)+':'+String(elapsed%60).padStart(2,'0');
+    $('chatElapsed').textContent='Elapsed: '+Math.min(elapsed,20)+' / 20 seconds';
   }
+
   function syncChatUI(){
     updateChatBadges();chatBusy=chatJobs.has(chatPerson);
     if(chatBusy&&$('chatDialog').open){
       if(!$('chatThinking'))$('chatMessages').insertAdjacentHTML('beforeend','<div id="chatThinking" class="chat-pending"><span class="runtime-indicator" aria-hidden="true"></span><div><p id="chatThinkingText" role="status" aria-live="polite"></p><small id="chatElapsed" aria-hidden="true"></small></div><button type="button" class="chat-stop" data-cancel-reply>CANCEL QUESTION</button></div>');
       $('chatForm').setAttribute('aria-busy','true');updateChatProgress();if(!chatProgressTimer)chatProgressTimer=setInterval(updateChatProgress,1000);
     }else clearChatProgress();
-    $('chatForm').querySelector('button').disabled=chatBusy;$('chatChips').querySelectorAll('button').forEach(button=>button.disabled=chatBusy);
+    $('chatForm').hidden=!supportsAI();$('chatInput').disabled=!supportsAI();$('chatForm').querySelector('button').disabled=chatBusy||!supportsAI();$('chatChips').querySelectorAll('[data-chat-topic]').forEach(button=>button.disabled=chatBusy);
   }
   function updateRuntime(){
-    const rt=window.FuturePersonaRuntime.status(),message=rt.state==='loading'?rt.message+' Questions wait here until loading finishes. Topic buttons give prepared replies.':rt.message;
-    if($('chatRuntime').dataset.state===rt.state){$('chatRuntime').querySelector('span:nth-child(2)').textContent=message;syncChatUI();return;}
+    if(!supportsAI()){
+      $('chatRuntime').dataset.state='browser-unavailable';$('chatRuntime').classList.remove('is-loading');$('chatRuntime').classList.add('is-unavailable');$('chatRuntime').setAttribute('aria-live','polite');
+      $('chatRuntime').innerHTML='<span class="browser-status-icon" aria-hidden="true">!</span><div class="chat-browser-message"><strong>AI chat unavailable in this browser</strong><span>Use Edge to ask questions, or choose a prepared topic below.</span></div><div class="chat-browser-actions"><a id="openScreenInEdge" data-open-edge class="outline-button">USE EDGE</a><button id="copyScreenButton" type="button" data-copy-screen class="text-button">COPY LINK</button></div><p id="edgeCopyStatus" role="status"></p><details id="edgeFallback" hidden><summary>Edge didn’t open?</summary><p>Edge must be installed. Copy this link and paste it into Edge.</p><label class="sr-only" for="edgeScreenURL">Current screen link</label><input id="edgeScreenURL" type="text" readonly></details>';updateScreenLink();syncChatUI();return;
+    }
+    $('chatRuntime').classList.remove('is-unavailable');
+    const rt=window.FuturePersonaRuntime.status(),message=rt.state==='ready'?'AI model online and available.':rt.state==='loading'?'AI model starting. You can choose a topic while you wait.':'AI model offline. You can still choose a topic below.';
+    if($('chatRuntime').dataset.state===rt.state){$('chatRuntime').querySelector('.chat-model-status').textContent=message;syncChatUI();return;}
     $('chatRuntime').dataset.state=rt.state;
-    $('chatRuntime').innerHTML=`<span class="runtime-indicator ${rt.state==='ready'?'is-ready':''}"></span><span>${esc(message)}</span>${['idle','error'].includes(rt.state)?`<button type="button" data-load-runtime>${rt.state==='error'?'RETRY CONVERSATION':'LOAD CONVERSATION'} <small>258 MiB model files</small></button>`:rt.state==='loading'?'<button type="button" data-stop-runtime>CANCEL LOADING</button>':rt.state==='ready'?'<button type="button" data-stop-runtime>TOPIC REPLIES ONLY</button>':''}`;
+    $('chatRuntime').innerHTML=`<span class="runtime-indicator ${rt.state==='ready'?'is-ready':''}" aria-hidden="true"></span><span class="chat-model-status">${esc(message)}</span>${['idle','error'].includes(rt.state)?`<button type="button" data-load-runtime>${rt.state==='error'?'TRY AI AGAIN':'START AI'}</button>`:rt.state==='loading'?'<button type="button" data-stop-runtime>CANCEL LOADING</button>':''}${rt.state==='error'||rt.state==='loading'?'<button type="button" data-chat-help>HELP</button>':''}`;
     $('chatRuntime').classList.toggle('is-loading',rt.state==='loading');$('chatRuntime').setAttribute('aria-live','polite');syncChatUI();
   }
-  function openChat(id){
-    const p=people.get(id);if(!p)return;if(chatPerson)drafts.set(chatPerson,$('chatInput').value);clearChatProgress();chatPerson=id;chatUnread.delete(id);
-    $('chatHeader').innerHTML=`<div class="chat-identity"><span class="chat-avatar">${portrait(id)}</span><div><span class="eyebrow">A CONVERSATION IN 2048</span><h2 id="chatTitle">${p.name}</h2><p class="chat-character-role">${esc(p.role)}<br>${p.age} · ${esc(p.setting)}</p></div><button type="button" data-close-chat class="close-button" aria-label="Close chat">×</button></div><p class="chat-person-label">WHO WOULD YOU LIKE TO TALK TO?</p><nav class="chat-people" aria-label="Choose who to talk to">${W.characters.map(person=>`<button type="button" data-chat-switch="${person.id}" aria-pressed="${person.id===id}">${portrait(person.id)}<span>${person.name}<small class="chat-person-status" hidden></small></span></button>`).join('')}</nav>`;
-    const entries=chats.get(id)||[];$('chatMessages').innerHTML=`<div class="chat-intro"><p>${esc(window.FutureChatReplies[id].intro)}</p></div>`+entries.map(messageHTML).join('');
-    $('chatChips').innerHTML=window.FuturePersonas.characters[id].chips.map(([topic,title])=>`<button type="button" data-chat-topic="${topic}">${esc(title)} ↗</button>`).join('');
+  function openChat(id,themeId){
+    if(id==='world'&&!worldChatEnabled())return;const p=chatIdentity(id);if(!p)return;
+    if(chatPerson)drafts.set(chatPerson,$('chatInput').value);clearChatProgress();chatPerson=id;chatUnread.delete(id);
+    if(id==='world'&&themeId!==undefined)worldChatTheme=themes.has(themeId)?themeId:'all';
+    const isWorld=id==='world',cast=[...(worldChatEnabled()?[worldGuide]:[]),...W.characters];
+    $('chatDialog').classList.toggle('is-world-chat',isWorld);
+    $('chatDialog').classList.toggle('is-prepared-only',!supportsAI());
+    $('chatDialog').querySelector('.chat-footnote').textContent=supportsAI()?aiFootnote:'Prepared replies from the 2048 stories. Open Microsoft Edge to ask your own questions.';
+    const chatLabel=supportsAI()?(isWorld?'FICTIONAL WORLD / AI GUIDE':'FICTIONAL PERSON / AI PORTRAYAL'):'FICTIONAL WORLD / PREPARED TOPICS';
+    $('chatHeader').innerHTML=`<div class="chat-identity"><span class="chat-avatar">${isWorld?icon('network'):portrait(id)}</span><div><span class="eyebrow">${chatLabel}</span><h2 id="chatTitle">${p.name}</h2><p class="chat-character-role">${esc(p.role)}${isWorld?'':`<br>${p.age} · ${esc(p.setting)}`}</p></div><button type="button" data-close-chat class="close-button" aria-label="Close chat">×</button></div><nav class="chat-people" aria-label="Choose a conversation">${cast.map(person=>`<button type="button" data-chat-switch="${person.id}" aria-pressed="${person.id===id}"><span>${person.id==='world'?'2048':person.name}<small class="chat-person-status" hidden></small></span></button>`).join('')}</nav>${isWorld?`<div class="world-chat-lenses"><label>World theme<select id="worldChatTheme"><option value="all">The whole world</option>${W.themes.map(t=>`<option value="${t.id}" ${worldChatTheme===t.id?'selected':''}>${esc(E.themes[t.id].title)}</option>`).join('')}</select></label><label>Focus lens<select id="worldChatFocus"><option value="all">Follow my question</option>${window.FutureKnowledge.data.focusAreas.map(f=>`<option value="${f.id}" ${worldChatFocus===f.id?'selected':''}>${esc(f.title)}</option>`).join('')}</select></label></div>`:''}`;
+    const entries=chats.get(id)||[];
+    const intro=supportsAI()?(isWorld?'Ask how life, work, health, and community fit together in this imagined future. I can compare people and themes, using the World Truths and supporting research.':window.FutureChatReplies[id].intro):(isWorld?'Choose a topic below to explore this world through the World Truths and supporting research.':window.FutureChatReplies[id].intro);
+    $('chatMessages').innerHTML=`<div class="chat-intro"><p>${esc(intro)}</p></div>`+entries.map(messageHTML).join('');
+    const chips=isWorld?[['trust','Who gets to opt out of tracking?'],['home','How does community change?'],['work','What happens to work and learning?']]:window.FuturePersonas.characters[id].chips;
+    $('chatChips').innerHTML=chips.map(([topic,title])=>`<button type="button" data-chat-topic="${topic}">${esc(title)} ↗</button>`).join('')+'<button type="button" class="chat-clear" data-clear-chat aria-label="Clear this conversation">Clear history</button>';
     chatTopic=[...entries].reverse().find(m=>m.topic)?.topic||null;$('chatInput').value=drafts.get(id)||'';
-    if(!$('chatDialog').open)$('chatDialog').showModal();updateRuntime();$('chatInput').focus();$('chatMessages').scrollTop=$('chatMessages').scrollHeight;
+    $('chatInput').maxLength=isWorld?700:400;$('chatInput').placeholder=isWorld?'Ask about this world or compare perspectives…':'Ask about everyday life…';
+    document.querySelector('label[for="chatInput"]').textContent=isWorld?'Ask about the imagined world of 2048':'Ask a question about this character’s future';
+    if(!$('chatDialog').open)$('chatDialog').showModal();updateRuntime();focusChatAction();$('chatMessages').scrollTop=$('chatMessages').scrollHeight;
     if(window.FuturePersonaRuntime.status().state==='idle')window.FuturePersonaRuntime.load().catch(()=>{});
+    if(!noticeSeen){noticeSeen=true;lastNoticeAt=Date.now();scheduleNotice();}else if(Date.now()-lastNoticeAt>=NOTICE_INTERVAL)showBreakReminder();
   }
+
   function conversationUpdate(text){return {kind:'unavailable',text,sources:[],topic:null};}
-  function recordChatReply(id,response){
-    const messages=chats.get(id)||[],entry={role:'assistant',...response};messages.push(entry);chats.set(id,messages.slice(-40));
+  function recordChatReply(id,response,worldContext){
+    const messages=chats.get(id)||[],entry={role:'assistant',...response,...(id==='world'&&worldContext?{worldContext}:{})};messages.push(entry);chats.set(id,messages.slice(-40));
     if(id===chatPerson&&$('chatDialog').open){chatTopic=response.topic||chatTopic;$('chatThinking')?.remove();$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(entry));$('chatMessages').scrollTop=$('chatMessages').scrollHeight;}
-    else{chatUnread.add(id);$('announcement').textContent=people.get(id).name+'’s reply is ready in their conversation.';}
+    else{chatUnread.add(id);$('announcement').textContent=chatIdentity(id).name+'’s reply is ready in their conversation.';}
     updateChatBadges();
   }
   function isCurrentChatJob(job){return job.epoch===chatEpoch&&chatJobs.get(job.id)===job;}
-  function replyErrorText(error){
-    return ['another-tab','page-paused'].includes(error.code)?error.message:error.code==='reply-timeout'?'That reply took too long and stopped. Choose RETRY CONVERSATION, then ask again. Topic buttons give prepared replies.':error.code==='load-timeout'?'The model took too long to load. Choose RETRY CONVERSATION to try again. Your question is still shown above.':'The model couldn’t finish this reply. Retry conversation, or choose a topic for a prepared reply.';
+  function preparedChatReply(id,question,topic,previousTopic,worldContext,note){
+    const reply=window.FutureConversation.prepared(id,question,id==='world'?(topic||worldContext.focusId):topic,previousTopic,worldContext);
+    return {...reply,...(note?{note}:{})};
+  }
+  function completeChatJob(job,response){
+    if(!isCurrentChatJob(job))return;clearTimeout(job.timer);chatJobs.delete(job.id);recordChatReply(job.id,response,job.worldContext);syncChatUI();
+  }
+  function expireChatJob(job){
+    if(!isCurrentChatJob(job))return;
+    completeChatJob(job,preparedChatReply(job.id,job.question,null,job.previousTopic,job.worldContext,'AI reached the 20-second limit. Here is relevant prepared background.'));
+    if(activeChatJob===job&&job.phase==='reply')window.FuturePersonaRuntime.cancel({timedOut:true});
+    if(!activeChatJob)void pumpChatQueue();
   }
   async function pumpChatQueue(){
     if(activeChatJob)return;
     let job;while(chatQueue.length){const candidate=chatQueue.shift();if(isCurrentChatJob(candidate)){job=candidate;break;}}if(!job)return;
     activeChatJob=job;const rt=window.FuturePersonaRuntime;
     try{
-      if(rt.status().state==='loading'){job.phase='loading';job.phaseStarted=Date.now();syncChatUI();await rt.load();if(!isCurrentChatJob(job))return;}
+      const remaining=CHAT_WAIT_MS-(Date.now()-job.submittedAt);if(remaining<=0){expireChatJob(job);return;}
       let response;
       if(rt.status().state==='ready'){
-        const context=window.FutureConversation.buildContext(job.id,job.question,job.history);
+        const context=window.FutureConversation.buildContext(job.id,job.question,job.history,job.worldContext);
         if(context){
-          job.phase='reply';job.phaseStarted=Date.now();syncChatUI();const text=await rt.generate(context);if(!isCurrentChatJob(job))return;
+          job.phase='reply';syncChatUI();const text=await rt.generate(context,{timeoutMs:remaining});if(!isCurrentChatJob(job))return;
           const checked=window.FutureConversation.finish(job.id,job.question,text,context);
-          response=checked?.kind==='generated'?checked:conversationUpdate('I couldn’t finish a useful answer to that question. Try asking it another way, or choose a topic for a prepared reply.');
+          response=checked||preparedChatReply(job.id,job.question,null,job.previousTopic,job.worldContext,'A prepared reply is shown because AI could not finish a suitable answer.');
         }
       }
       if(!isCurrentChatJob(job))return;
-      if(!response)response=conversationUpdate(rt.status().state==='local'?'Use a local web server (localhost) or the hosted website for AI conversation. Topic buttons work when opening the HTML file directly.':'The model isn’t ready. Choose LOAD CONVERSATION or RETRY CONVERSATION, then ask again. Topic buttons give prepared replies.');
-      chatJobs.delete(job.id);recordChatReply(job.id,response);
-    }catch(error){if(isCurrentChatJob(job)){chatJobs.delete(job.id);recordChatReply(job.id,conversationUpdate(replyErrorText(error)));}}
-    finally{
+      completeChatJob(job,response||preparedChatReply(job.id,job.question,null,job.previousTopic,job.worldContext,'AI is unavailable. Here is relevant prepared background.'));
+    }catch(error){
+      if(isCurrentChatJob(job))completeChatJob(job,preparedChatReply(job.id,job.question,null,job.previousTopic,job.worldContext,error.code==='reply-timeout'?'AI reached the 20-second limit. Here is relevant prepared background.':'AI could not finish this reply. Here is relevant prepared background.'));
+    }finally{
+      clearTimeout(job.timer);
       if(chatJobs.get(job.id)===job)chatJobs.delete(job.id);
       if(activeChatJob===job){activeChatJob=null;syncChatUI();void pumpChatQueue();}
     }
   }
   function cancelChatReply(){
-    const job=chatJobs.get(chatPerson);if(!job)return;chatJobs.delete(job.id);
+    const job=chatJobs.get(chatPerson);if(!job)return;clearTimeout(job.timer);chatJobs.delete(job.id);
     if(activeChatJob===job&&job.phase==='reply')window.FuturePersonaRuntime.cancel();
     recordChatReply(job.id,conversationUpdate('Question cancelled. You can ask another question or choose a topic.'));syncChatUI();
   }
+  function clearChatHistory(){
+    if(!chatPerson)return;
+    const id=chatPerson,job=chatJobs.get(id);
+    if(job){
+      clearTimeout(job.timer);chatJobs.delete(id);
+      const queued=chatQueue.indexOf(job);if(queued!==-1)chatQueue.splice(queued,1);
+      if(activeChatJob===job&&job.phase==='reply')window.FuturePersonaRuntime.cancel();
+    }
+    chats.delete(id);drafts.delete(id);chatUnread.delete(id);chatTopic=null;$('chatInput').value='';
+    openChat(id);$('announcement').textContent='Conversation history cleared.';
+  }
   function cancelAllChatReplies(text){
-    const ids=[...chatJobs.keys()];chatEpoch++;chatJobs.clear();chatQueue.length=0;activeChatJob=null;
+    const ids=[...chatJobs.keys()];chatJobs.forEach(job=>clearTimeout(job.timer));chatEpoch++;chatJobs.clear();chatQueue.length=0;activeChatJob=null;
     ids.forEach(id=>recordChatReply(id,conversationUpdate(text)));syncChatUI();
   }
-  function stopConversation(){cancelAllChatReplies('Conversation stopped. Load conversation to ask again, or choose a topic for a prepared reply.');window.FuturePersonaRuntime.dispose();}
-  function clearChatSession(){chatEpoch++;chatJobs.clear();chatQueue.length=0;activeChatJob=null;chatUnread.clear();clearChatProgress();window.FuturePersonaRuntime.clearSession();}
+  function stopConversation(){cancelAllChatReplies('AI conversation stopped. Prepared replies are available immediately.');window.FuturePersonaRuntime.dispose();}
+  function clearChatSession(){chatJobs.forEach(job=>clearTimeout(job.timer));chatEpoch++;chatJobs.clear();chatQueue.length=0;activeChatJob=null;chatUnread.clear();clearChatProgress();window.FuturePersonaRuntime.clearSession();}
   async function sendChat(question,topic){
-    if(!chatPerson||!question.trim()||chatJobs.has(chatPerson))return;
-    const id=chatPerson,messages=chats.get(id)||[],history=messages.slice(),previousTopic=[...history].reverse().find(m=>m.topic)?.topic||null;
-    messages.push({role:'user',text:question});chats.set(id,messages);$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(messages.at(-1)));$('chatInput').value='';drafts.set(id,'');
-    const scope=window.FutureConversation.scope(id,question,history,previousTopic);let response=scope.allowed?null:scope.reply;
-    if(!response){const prepared=window.FutureConversation.answer(id,question,topic,previousTopic,history);if(topic||scope.category==='greeting'||prepared.kind==='generated')response=prepared;}
-    if(response){recordChatReply(id,response);syncChatUI();return;}
-    const job={id,question,history,epoch:chatEpoch,phase:'queued',phaseStarted:Date.now(),writing:false};chatJobs.set(id,job);chatQueue.push(job);syncChatUI();$('chatMessages').scrollTop=$('chatMessages').scrollHeight;void pumpChatQueue();
+    if(!chatPerson||!question.trim()||chatJobs.has(chatPerson)||(!supportsAI()&&!topic))return;
+    const submittedAt=Date.now(),id=chatPerson,messages=chats.get(id)||[],history=messages.slice(),previousTopic=[...history].reverse().find(m=>m.topic)?.topic||null;
+    const worldContext={themeId:worldChatTheme,focusId:worldChatFocus};
+    messages.push({role:'user',text:question,...(id==='world'?{worldContext}:{})});chats.set(id,messages);$('chatMessages').insertAdjacentHTML('beforeend',messageHTML(messages.at(-1)));$('chatInput').value='';drafts.set(id,'');
+    const scope=window.FutureConversation.scope(id,question,history,previousTopic);let response=scope.reply||null;messages.at(-1).blocked=!scope.allowed;
+    if(!response){
+      const immediate=topic||['greeting','introduction'].includes(scope.category),notReady=window.FuturePersonaRuntime.status().state!=='ready';
+      if(immediate||notReady)response=preparedChatReply(id,question,topic,previousTopic,worldContext,notReady&&!immediate?'AI is getting ready or unavailable. Here is relevant prepared background.':null);
+    }
+    if(response){recordChatReply(id,response,worldContext);syncChatUI();return;}
+    const job={id,question,history,previousTopic,epoch:chatEpoch,phase:'queued',submittedAt,writing:false,worldContext};
+    job.timer=setTimeout(()=>expireChatJob(job),CHAT_WAIT_MS);chatJobs.set(id,job);chatQueue.push(job);syncChatUI();$('chatMessages').scrollTop=$('chatMessages').scrollHeight;void pumpChatQueue();
   }
-  document.addEventListener('click',e=>{const b=e.target.closest('button,a[data-route]');if(!b||ignoreClick)return;
-    if(b.dataset.route){e.preventDefault();route(b.dataset.route);}
+  document.addEventListener('click',e=>{const b=e.target.closest('button,a[data-route],a[data-open-edge]');if(!b||ignoreClick)return;
+    if(b.hasAttribute('data-open-edge')){if(!updateScreenLink())e.preventDefault();}
+    else if(b.hasAttribute('data-world-chat')){closeDialogs();openChat('world',b.dataset.worldChat);}
+    else if(b.hasAttribute('data-copy-screen'))void copyScreenLink();
+    else if(b.hasAttribute('data-browser-help'))showBrowserOptions();
+    else if(b.hasAttribute('data-dismiss-reminder')){$('chatReminder').hidden=true;focusChatAction();}
+    else if(b.hasAttribute('data-ai-details'))showAIDetails();
+    else if(b.hasAttribute('data-close-ai-details'))$('aiDetailsDialog').close();
+    else if(b.hasAttribute('data-chat-help'))showChatHelp();
+    else if(b.hasAttribute('data-close-help'))$('helpDialog').close();
+    else if(b.hasAttribute('data-retry-cpu')){window.FuturePersonaRuntime.retryCPU().catch(()=>{});updateHelpStatus();}
+    else if(b.hasAttribute('data-ui-tour'))startUITour();
+    else if(b.hasAttribute('data-leo-intro')){closeDialogs();$('helpMenu').open=false;window.FutureOnboarding.start();}
+    else if(b.dataset.route){e.preventDefault();route(b.dataset.route);}
     else if(b.hasAttribute('data-clear-map'))clearMap();
     else if(b.hasAttribute('data-panel-world')){$('themePanel').classList.remove('is-person-panel');state.panel='world';drawGraph(false);$('themePanel').innerHTML=themePanel();$('themePanel').setAttribute('aria-label','World Theme Description');$('selectedTitle')?.focus({preventScroll:true});}
     else if(b.dataset.theme)setTheme(b.dataset.theme);
@@ -256,24 +372,37 @@
     else if(b.hasAttribute('data-fit'))fitGraph();
     else if(b.hasAttribute('data-tour')){closeDialogs();window.FutureOnboarding.start();}
     else if(b.hasAttribute('data-quiz'))route('quiz');
-    else if(b.hasAttribute('data-truths')){$('truthsDialog').showModal();}
+    else if(b.hasAttribute('data-truths'))showTruths();
     else if(b.hasAttribute('data-close-truths'))$('truthsDialog').close();
     else if(b.dataset.chat)openChat(b.dataset.chat);
     else if(b.dataset.chatSwitch)openChat(b.dataset.chatSwitch);
     else if(b.hasAttribute('data-close-chat'))$('chatDialog').close();
-    else if(b.dataset.chatTopic){const item=window.FuturePersonas.characters[chatPerson].chips.find(x=>x[0]===b.dataset.chatTopic);sendChat(item[1],item[0]);}
+    else if(b.dataset.chatTopic){if(chatPerson==='world')sendChat(b.textContent.replace(' ↗',''),b.dataset.chatTopic);else{const item=window.FuturePersonas.characters[chatPerson].chips.find(x=>x[0]===b.dataset.chatTopic);sendChat(item[1],item[0]);}}
     else if(b.hasAttribute('data-load-runtime'))window.FuturePersonaRuntime.load().catch(()=>{});
     else if(b.hasAttribute('data-stop-runtime'))stopConversation();
+    else if(b.hasAttribute('data-clear-chat'))clearChatHistory();
     else if(b.hasAttribute('data-cancel-reply'))cancelChatReply();
   });
-  document.addEventListener('change',e=>{if(e.target.id==='showActivities'){state.activities=e.target.checked;render();window.FutureTour?.onAction('layer');}});
+  document.addEventListener('change',e=>{if(e.target.id==='worldChatTheme')worldChatTheme=e.target.value;else if(e.target.id==='worldChatFocus')worldChatFocus=e.target.value;else if(e.target.id==='showActivities'){state.activities=e.target.checked;render();window.FutureTour?.onAction('layer');}});
   $('brandHome').addEventListener('click',()=>route('map'));
   $('chatForm').addEventListener('submit',e=>{e.preventDefault();sendChat($('chatInput').value);});
   $('chatDialog').addEventListener('close',()=>{clearChatProgress();if(chatPerson)drafts.set(chatPerson,$('chatInput').value);});
+  $('aiDetailsDialog').addEventListener('close',focusChatAction);
   window.addEventListener('pagehide',()=>cancelAllChatReplies('This page was left before the reply finished. Load conversation and ask again.'));
   window.addEventListener('persona-thinking',e=>{if(activeChatJob&&isCurrentChatJob(activeChatJob)){activeChatJob.writing=/Writing/.test(e.detail);updateChatProgress();}});
-  window.addEventListener('persona-runtime-status',()=>{if($('chatDialog').open)updateRuntime();});
-  $('truthsContent').innerHTML=W.truths.map(t=>`<details><summary>${esc(t.title)}</summary>${copy(t.text)}</details>`).join('');
+  window.addEventListener('persona-runtime-status',()=>{if($('chatDialog').open)updateRuntime();if($('helpDialog').open)updateHelpStatus();});
+  $('truthsContent').innerHTML=W.truths.map(t=>`<details id="truth-${t.id}" ${t.id==='global'?'open':''}><summary>${esc(t.title)}</summary>${copy(t.text)}</details>`).join('');
+  document.querySelectorAll('[data-world-chat]').forEach(b=>b.hidden=!worldChatEnabled());
+  document.addEventListener('click',e=>{if(!e.target.closest('#helpMenu'))$('helpMenu').open=false;});
+
   window.addEventListener('popstate',e=>{if(!ready||!e.state?.future)return;Object.assign(state,e.state);render(false);});
-  window.FutureApp={arrive({tour=false}={}){ready=true;$('experience').hidden=false;$('experience').inert=false;document.body.classList.remove('intro-active');document.querySelector('.skip').removeAttribute('tabindex');Object.assign(state,{route:'map',theme:'all',setting:'all',income:'all',education:'all',panel:'world',selected:'leo',profile:'leo',view:tour?'map':matchMedia('(max-width:600px)').matches?'list':'map',activities:true,technology:'all'});render();if(tour)window.FutureTour.start();},hide(){ready=false;closeDialogs();observer?.disconnect();window.FutureTour?.cancel();$('experience').hidden=true;$('experience').inert=true;},reset(){window.FutureTour?.cancel();window.FutureQuiz?.reset();clearChatSession();chats.clear();drafts.clear();chatPerson=null;chatTopic=null;chatBusy=false;clearChatProgress();$('chatMessages').innerHTML='';$('chatInput').value='';this.hide();$('mainView').innerHTML='';document.body.classList.remove('is-idle');history.replaceState(null,'',location.pathname+location.search);},state:()=>({...state}),isReady:()=>ready,hasPendingReplies:()=>chatJobs.size>0,select,route,focusTourExample,fitMap:fitGraph,showTourExample(){state.theme='climate';state.selected='leo';state.panel='world';state.view='map';render();}};
+  window.FutureApp={arrive({tour=true}={}){ready=true;$('experience').hidden=false;$('experience').inert=false;document.body.classList.remove('intro-active');document.querySelector('.skip').removeAttribute('tabindex');Object.assign(state,{route:'map',theme:'all',setting:'all',income:'all',education:'all',panel:'world',selected:null,profile:'leo',view:tour?'map':matchMedia('(max-width:600px)').matches?'list':'map',activities:true,technology:'all'});render();window.FuturePersonaRuntime.load().catch(()=>{});if(tour)window.FutureTour.start({required:true});},hide(){ready=false;closeDialogs();observer?.disconnect();window.FutureTour?.cancel();$('experience').hidden=true;$('experience').inert=true;},reset(){clearTimeout(noticeTimer);noticeSeen=false;lastNoticeAt=0;$('chatReminder').hidden=true;window.FutureTour?.cancel();window.FutureQuiz?.reset();clearChatSession();chats.clear();drafts.clear();chatPerson=null;chatTopic=null;chatBusy=false;clearChatProgress();$('chatMessages').innerHTML='';$('chatInput').value='';this.hide();$('mainView').innerHTML='';document.body.classList.remove('is-idle');history.replaceState(null,'',location.pathname+location.search);},state:()=>({...state}),isReady:()=>ready,hasPendingReplies:()=>chatJobs.size>0,select,route,resetMap:clearMap,openChat,focusTourExample,fitMap:fitGraph,showTourExample(){state.theme='climate';state.selected='leo';state.panel='world';state.view='map';render();}};
+  function restoreHandoff(snapshot){
+    if(!snapshot)return;window.FutureIntro.skip();window.FutureQuiz.restore(snapshot.quiz);
+    Object.assign(state,snapshot.page);noticeSeen=false;lastNoticeAt=0;render();
+    worldChatTheme=snapshot.chat.theme;worldChatFocus=snapshot.chat.focus;
+    openChat(snapshot.chat.id,snapshot.chat.theme);
+    $('mainView').scrollTop=snapshot.scroll.main;if($('themePanel'))$('themePanel').scrollTop=snapshot.scroll.panel;
+  }
+  window.addEventListener('DOMContentLoaded',()=>restoreHandoff(incomingHandoff),{once:true});
 })();
