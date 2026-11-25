@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#131034">
+  <meta name="future2048-worker-sha256" content="b458cbd9e45a43439bcd7195fa22096bd2713a2606edae548f3b4f57f4c9c3ce">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="description" content="Explore everyday life in 2048 through five people, their stories, and the forces connecting their world.">
   <title>Welcome to 2048: Everyday futures</title>
@@ -811,16 +812,16 @@ dialog{color:var(--white);background:#151D31;border:1px solid #7AB8D577;border-r
     <header class="privacy-header"><div><span class="eyebrow">ABOUT THIS CHAT</span><h2 id="aiDetailsTitle" tabindex="-1">AI &amp; privacy</h2></div><button type="button" data-close-ai-details class="close-button" aria-label="Close AI and privacy details">×</button></header>
     <div class="privacy-overview">
       <section><h3>This is fiction</h3><p>These are imagined people in 2048. AI replies can be wrong and provide no healthcare or other professional services.</p></section>
-      <section><h3>Your messages stay here</h3><p>Chats and quiz choices stay in this tab and clear when the visit resets. Keep personal details out of chat.</p></section>
+      <section><h3>Your messages stay here</h3><p>Chat messages stay in this tab and clear when the visit resets. Keep personal details out of chat.</p></section>
       <section><h3>Choose your browser</h3><p>Use Edge for AI chat. Other browsers offer prepared topics.</p></section>
     </div>
     <details><summary>How it runs</summary><p>In Edge, the browser fetches bundled WASM and model files and runs them in memory. No chatbot app is installed. Other browsers do not start the model. The site has no chat-upload endpoint, analytics, ad trackers, account system, persistent application model cache, or conversation database.</p></details>
-    <details><summary>Hosting &amp; shared links</summary><p>The web host can process technical requests. GitHub Pages logs visitor IP addresses for security. <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection" target="_blank" rel="noopener noreferrer">GitHub Pages data collection</a>.</p><p>A shared screen link includes navigation and quiz choices, not chats or drafts. Reloading, replaying arrival, or idle reset clears visit state.</p></details>
+    <details><summary>Hosting &amp; shared links</summary><p>The web host can process technical requests. GitHub Pages logs visitor IP addresses for security. <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection" target="_blank" rel="noopener noreferrer">GitHub Pages data collection</a>.</p><p>A screen link includes navigation and quiz choices, not chats or drafts. Short Edge links send those settings to the web host in the URL. Reloading, replaying arrival, or idle reset clears visit state.</p></details>
     <details><summary>Safety &amp; support</summary><p>Recognized self-harm language pauses fiction and shows prepared support, labeled US crisis contacts, and local-service guidance. The automated check can miss wording. Chat is not monitored by a person and provides no therapy or emergency service. For immediate danger, contact local emergency services. No chat text or crisis-notification statistics are collected.</p></details>
     <details id="experienceCredits"><summary>Credits</summary><p>Icons: <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener noreferrer">Uicons by Flaticon</a>. Browser AI: wllama and Hugging Face SmolLM2. Fonts: Roboto. See the bundled runtime, model, and font notices for their licenses.</p></details>
   </dialog>
   <dialog id="truthsDialog" class="truths-dialog" aria-labelledby="truthsTitle"><button type="button" data-close-truths class="close-button" aria-label="Close world truths">×</button><span class="eyebrow">2048 / SHARED WORLD</span><h2 id="truthsTitle" tabindex="-1">World Truths</h2><p>The shared assumptions behind this imagined future. Open a topic to explore it.</p><div id="truthsContent"></div></dialog>
-  <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><button type="button" data-close-help class="close-button" aria-label="Close AI chat help">×</button><span class="eyebrow">HELP / CHATTING WITH AI</span><h2 id="helpTitle" tabindex="-1">Chatting with AI</h2><p>Explore everyday life in 2048 through the World Truths and the people who live here.</p><details open><summary>How quickly will I get a reply?</summary><p>Topic buttons give prepared replies immediately. Your own questions also use prepared content while AI gets ready. Once ready, AI has up to 20 seconds per question, including any queue time. If it takes longer, a relevant prepared reply appears instead. Each reply identifies which kind it is.</p></details><details><summary>What can I ask?</summary><p>Ask naturally about favorites, feelings, daily life, opinions, or what-if situations. Follow-ups are welcome. Characters explore the world through their own perspectives while keeping their ages and backgrounds consistent. Ask for an ethical or civilian analogy if you want to compare ideas. Mathematical theories, formulas, calculations, code, slide decks, songs, and other task deliverables are outside this conversation. Attack planning and terrorist assistance are redirected.</p></details><details id="chatBrowserHelp"><summary>Which browser should I use?</summary><p>Use Microsoft Edge for AI chat. Other browsers offer prepared topics, with AI chat marked unavailable. Browser Options can open your current screen in Edge or copy a link to paste there. Edge must be installed; your device may ask permission or block the app link. The link preserves the page, selected person, filters, lenses, and quiz choices. Chat messages and drafts stay in the original browser.</p></details><details><summary>Slow startup in Edge</summary><p>If AI startup does not finish within 20 seconds, it stops and prepared replies stay available. CPU mode may be slower than graphics mode. You can retry startup below when available.</p></details><details><summary>Switching people or site sections</summary><p>A question already with the AI keeps its original 20-second limit when you explore elsewhere. Return to that conversation to find its reply. Reloading the page or starting another visit clears chats.</p></details><section class="help-runtime-status"><h3>AI chat status</h3><p id="helpRuntimeStatus" role="status"></p><button type="button" data-retry-cpu class="outline-button">RETRY AI ON CPU</button></section></dialog>
+  <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><button type="button" data-close-help class="close-button" aria-label="Close AI chat help">×</button><span class="eyebrow">HELP / CHATTING WITH AI</span><h2 id="helpTitle" tabindex="-1">Chatting with AI</h2><p>Explore everyday life in 2048 through the World Truths and the people who live here.</p><details open><summary>How quickly will I get a reply?</summary><p>Topic buttons give prepared replies immediately. Your own questions also use prepared content while AI gets ready. Once ready, AI has up to 20 seconds per question, including any queue time. If it takes longer, a relevant prepared reply appears instead. Each reply identifies which kind it is.</p></details><details><summary>What can I ask?</summary><p>Ask naturally about favorites, feelings, daily life, opinions, or what-if situations. Follow-ups are welcome. Characters explore the world through their own perspectives while keeping their ages and backgrounds consistent. Ask for an ethical or civilian analogy if you want to compare ideas. Mathematical theories, formulas, calculations, code, slide decks, songs, and other task deliverables are outside this conversation. Attack planning and terrorist assistance are redirected.</p></details><details id="chatBrowserHelp"><summary>Which browser should I use?</summary><p>Use Microsoft Edge for AI chat. Other browsers offer prepared topics, with AI chat marked unavailable. Browser Options can open your current screen in Edge or copy a link to paste there. Edge must be installed; your device may ask permission or block the app link. The link preserves the page, selected person, filters, lenses, and quiz choices. Chat messages and drafts stay in the original browser.</p></details><details><summary>Slow startup in Edge</summary><p>AI loads in the background; the percentage shows download progress. Explore or choose a prepared topic while it loads. A transfer stops after a minute without new data. Once the files finish loading, AI has a separate minute to start. Replies still have a 20-second limit.</p></details><details><summary>Switching people or site sections</summary><p>A question already with the AI keeps its original 20-second limit when you explore elsewhere. Return to that conversation to find its reply. Reloading the page or starting another visit clears chats.</p></details><section class="help-runtime-status"><h3>AI chat status</h3><p id="helpRuntimeStatus" role="status"></p><button type="button" data-retry-cpu class="outline-button">RETRY AI ON CPU</button></section></dialog>
   <dialog id="connectionDialog" class="connection-dialog" aria-labelledby="connectionTitle"><button type="button" data-close-connection class="close-button" aria-label="Close connection">×</button><div id="connectionContent"></div></dialog>
   <div id="siteTour" class="site-tour" hidden><div id="tourSpotlight" class="tour-spotlight"></div><section id="tourCard" class="tour-card" role="dialog" aria-modal="false" aria-labelledby="tourTitle"><header><span id="tourCounter"></span><button type="button" id="closeTour" aria-label="Close navigation tour">×</button></header><span class="tour-speaker">LEO</span><h2 id="tourTitle" class="sr-only" tabindex="-1"></h2><p id="tourText"></p><footer><button type="button" id="previousTour">← BACK</button><button type="button" id="nextTour">NEXT →</button></footer></section></div>
   <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
@@ -2861,13 +2862,28 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
  }
  function screenURL(base,snapshot){
   const value=safe(snapshot),url=new URL(base);if(!value||!/^https?:$/.test(url.protocol))return null;
-  const route=value.page.route,part=route==='people'?value.page.profile:value.page.theme;
-  url.hash='#/'+route+'/'+part+'?handoff='+encodeURIComponent(JSON.stringify(value));return url.href;
+  // App launchers can turn a fragment's # into %23 in the server path. Keep the
+  // launch URL fragment-free and readable, omitting defaults and all chat text.
+  url.search='';url.hash='';const q=url.searchParams,p=value.page,c=value.chat;
+  q.set('chat',c.id);
+  for(const [key,current,standard] of [['page',p.route,'map'],['theme',p.theme,'all'],['person',p.profile,'leo'],['selected',p.selected,null],['panel',p.panel,'world'],['view',p.view,'map'],['setting',p.setting,'all'],['income',p.income,'all'],['education',p.education,'all'],['technology',p.technology,'all'],['worldTheme',c.theme,'all'],['lens',c.focus,'all'],['quizStage',value.quiz.phase,'intro'],['quizStep',value.quiz.index,0],['scroll',value.scroll.main,0],['panelScroll',value.scroll.panel,0]])if(current!==standard)q.set(key,String(current));
+  if(!p.activities)q.set('activities','0');
+  if(value.quiz.answers.some(Boolean))q.set('quiz',value.quiz.answers.map(a=>a||'').join(','));
+  return url.href;
  }
  function parse(base){
-  try{const hash=new URL(base).hash,index=hash.indexOf('?handoff=');if(index<0)return null;const text=hash.slice(index+9);if(text.length>20000)return null;return safe(JSON.parse(decodeURIComponent(text)));}catch{return null;}
+  try{
+   const url=new URL(base);if(!/^https?:$/.test(url.protocol)||url.href.length>20000)return null;
+   const q=url.searchParams;
+   if(q.has('chat')){
+    if(!['world',...personIds].includes(q.get('chat')))return null;
+    return safe({v:1,page:{route:q.get('page')||'map',theme:q.get('theme'),profile:q.get('person'),selected:q.get('selected'),panel:q.get('panel'),view:q.get('view'),setting:q.get('setting'),income:q.get('income'),education:q.get('education'),activities:q.get('activities')!=='0',technology:q.get('technology')},chat:{id:q.get('chat'),theme:q.get('worldTheme'),focus:q.get('lens')},quiz:{phase:q.get('quizStage'),index:Number(q.get('quizStep')||0),answers:(q.get('quiz')||'').split(',')},scroll:{main:Number(q.get('scroll')||0),panel:Number(q.get('panelScroll')||0)}});
+   }
+   // Continue accepting earlier copied links without generating new JSON links.
+   const hash=url.hash,index=hash.indexOf('?handoff=');if(index<0)return null;const text=hash.slice(index+9);if(text.length>20000)return null;return safe(JSON.parse(decodeURIComponent(text)));
+  }catch{return null;}
  }
- function edgeURI(url){try{const parsed=new URL(url);return /^https?:$/.test(parsed.protocol)?'microsoft-edge:'+parsed.href:null;}catch{return null;}}
+ function edgeURI(url){try{const parsed=new URL(url);if(!/^https?:$/.test(parsed.protocol))return null;const snapshot=parse(parsed.href);if(snapshot)return 'microsoft-edge:'+screenURL(parsed.href,snapshot);parsed.hash='';return 'microsoft-edge:'+parsed.href;}catch{return null;}}
  window.FutureChatBrowser={isEdge,safe,screenURL,parse,edgeURI};
 })();
 
@@ -2878,9 +2894,9 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
   let worker=null,state='idle',message='Open conversation uses a bundled browser model.',backend=null,compatibility=false,sequence=0;
   let loadPromise=null,loadResolve=null,loadReject=null,loadTimer=0,graphicsTimer=0,errorCode=null,errorDetail=null,stage=null;
   let epoch=0,releaseLock=null,cleanup=Promise.resolve(),channel=null,warmAssets=null,rebootCPU=null;
-  let timings={},startedAt=0;
-  const pending=new Map(),lockName='future2048-model:'+new URL('.',document.baseURI).pathname,WAIT_LIMIT_MS=20000;
-  function announce(next,text){if(state===next&&message===text)return;state=next;message=text;window.dispatchEvent(new CustomEvent('persona-runtime-status'));}
+  let timings={},startedAt=0,initializingAt=null,download={loaded:0,total:0,percent:0};
+  const pending=new Map(),lockName='future2048-model:'+new URL('.',document.baseURI).pathname,WAIT_LIMIT_MS=20000,TRANSFER_IDLE_MS=60000,INITIALIZE_LIMIT_MS=60000;
+  function announce(next,text,changedProgress=false){if(state===next&&message===text&&!changedProgress)return;state=next;message=text;window.dispatchEvent(new CustomEvent('persona-runtime-status'));}
   function failure(text,code){const error=new Error(text);error.code=code;return error;}
   function clearPending(error){for(const item of pending.values()){clearTimeout(item.timer);if(error)item.reject(error);else item.resolve(null);}pending.clear();}
   function stopWorker({keepLock=false}={}){
@@ -2923,7 +2939,7 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
     const reject=loadReject;loadResolve=loadReject=null;loadPromise=null;
     clearPending(error);stopWorker();backend=null;
     errorCode=error.code||'runtime-init';errorDetail=String(error.message||'No error detail was returned.').slice(0,400);
-    const text=errorCode==='reply-timeout'?'AI reached the 20-second reply limit and stopped. Prepared replies remain available.':errorCode==='load-timeout'?(warmAssets?'The model files loaded, but AI startup did not finish within 20 seconds. Prepared replies are available immediately.':'AI startup did not finish within 20 seconds. Prepared replies are available immediately.'):errorDetail+' Prepared replies remain available.';
+    const text=errorCode==='reply-timeout'?'AI reached the 20-second reply limit and stopped. Prepared replies remain available.':errorCode==='download-timeout'?'The AI model download stopped receiving data for a minute. Try AI again; prepared topics still work.':errorCode==='load-timeout'?'The model files loaded, but AI could not start within one minute. Try AI again; prepared topics still work.':errorDetail+' Prepared replies remain available.';
     announce('error',errorCode==='another-tab'?errorDetail:text);reject?.(error);
   }
   function load({forceCPU=false}={}){
@@ -2932,27 +2948,33 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
     if(state==='ready'&&worker)return Promise.resolve();if(loadPromise){if(forceCPU)void rebootCPU?.();return loadPromise;}
     if(!/^https?:$/.test(location.protocol)){announce('local','For AI conversation, open this page through a local web server (localhost) or the hosted website. Topic buttons work when opening the HTML file directly.');return Promise.reject(failure('AI conversation needs HTTP or HTTPS, including localhost.','not-hosted'));}
     if(typeof Worker!=='function'||typeof WebAssembly!=='object'){const error=failure('This browser does not provide the required Worker and WebAssembly features. Try a current desktop browser.','browser-unsupported');fail(error);return Promise.reject(error);}
-    errorCode=errorDetail=null;stage='startup';backend=null;compatibility=false;timings={};startedAt=performance.now();const token=++epoch;
+    errorCode=errorDetail=null;stage='startup';backend=null;compatibility=false;timings={};startedAt=performance.now();initializingAt=null;download=warmAssets?{loaded:warmAssets.manifest?.model?.size||0,total:warmAssets.manifest?.model?.size||0,percent:100}:{loaded:0,total:0,percent:0};const token=++epoch;
+    const armTransferDeadline=()=>{clearTimeout(loadTimer);loadTimer=setTimeout(()=>{if(token===epoch)fail(failure('The AI model transfer received no new data for one minute during '+stage+'.','download-timeout'));},TRANSFER_IDLE_MS);};
+    const armInitializationDeadline=()=>{if(initializingAt!==null)return;initializingAt=performance.now();clearTimeout(loadTimer);loadTimer=setTimeout(()=>{if(token===epoch)fail(failure('AI model initialization reached its one-minute limit during '+stage+'.','load-timeout'));},INITIALIZE_LIMIT_MS);};
     let cpuRequested=forceCPU,restarting=false,boot=0;
     announce('loading','AI is getting ready in the background. Questions use prepared content until it is ready.');
     loadPromise=new Promise((resolve,reject)=>{loadResolve=resolve;loadReject=reject;});const result=loadPromise;
     const startWorker=async(cpu)=>{
       const attempt=++boot;await cleanup;if(token!==epoch||attempt!==boot)return;
-      const current=new Worker(new URL('persona-worker.js?boot=20261123-3',document.baseURI),{type:'module'});worker=current;
+      const workerVersion=document.querySelector?.('meta[name="future2048-worker-sha256"]')?.content||'20261124-9';
+      const current=new Worker(new URL('persona-worker.js?boot='+workerVersion.slice(0,16),document.baseURI),{type:'module'});worker=current;
       const armGraphicsFallback=(delay)=>{if(!cpu&&!graphicsTimer)graphicsTimer=setTimeout(()=>{if(current===worker)void rebootCPU?.();},delay);};
       current.onmessage=({data})=>{
         if(current!==worker||token!==epoch)return;
         if(data.type==='assets-ready'){
           warmAssets=data.assets;timings.downloadMs=data.downloadMs??0;
+          download={loaded:warmAssets.manifest?.model?.size||download.loaded,total:warmAssets.manifest?.model?.size||download.total,percent:100};armInitializationDeadline();
           if(cpuRequested&&!cpu)void rebootCPU?.();
         }else if(data.type==='progress'){
+          let changedProgress=false;
           stage=data.stage||stage;if(data.backend)backend=data.backend;if(typeof data.compatibility==='boolean')compatibility=data.compatibility;
+          if(initializingAt===null&&Number.isFinite(data.loaded)&&data.loaded>download.loaded){const percent=Math.max(0,Math.min(100,data.percent||0));changedProgress=percent!==download.percent;download={loaded:data.loaded,total:data.total||download.total,percent};armTransferDeadline();}
           if(stage==='adapter')armGraphicsFallback(4000);
           else if(stage==='initialize'){
             if(backend!=='WebGPU'){clearTimeout(graphicsTimer);graphicsTimer=0;}
             else if(!cpu&&data.begin){clearTimeout(graphicsTimer);graphicsTimer=0;armGraphicsFallback(8000);}
           }
-          announce('loading',data.message);
+          announce('loading',data.message,changedProgress);
         }else if(data.type==='retry-cpu')void rebootCPU?.();
         else if(data.type==='ready'){
           clearTimeout(loadTimer);clearTimeout(graphicsTimer);graphicsTimer=0;rebootCPU=null;
@@ -2977,7 +2999,9 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
       announce('loading','Trying CPU startup with the model files already loaded. Prepared replies stay available immediately.');
       try{await stopWorker({keepLock:true});if(token===epoch)await startWorker(true);}catch(error){if(token===epoch)fail(error);}
     };
-    loadTimer=setTimeout(()=>{if(token===epoch)fail(failure('AI startup reached the 20-second limit during '+stage+'.','load-timeout'));},WAIT_LIMIT_MS);
+    // Transfer progress keeps startup alive. Reply requests retain their own
+    // 20-second deadline and use prepared content while this loads in background.
+    if(warmAssets)armInitializationDeadline();else armTransferDeadline();
     (async()=>{try{await reserveModel(token);if(token===epoch)await startWorker(cpuRequested);}catch(error){if(token===epoch)fail(error);}})();return result;
   }
   function retryCPU(){return load({forceCPU:true});}
@@ -2990,7 +3014,7 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
     });
   }
   function dispose({text,error}={}){
-    epoch++;clearTimeout(loadTimer);rebootCPU=null;warmAssets=null;const reject=loadReject;loadResolve=loadReject=null;loadPromise=null;
+    epoch++;clearTimeout(loadTimer);rebootCPU=null;warmAssets=null;initializingAt=null;download={loaded:0,total:0,percent:0};const reject=loadReject;loadResolve=loadReject=null;loadPromise=null;
     const cancellation=error||new DOMException('Cancelled','AbortError');clearPending(cancellation);stopWorker();backend=null;stage=null;errorCode=errorDetail=null;compatibility=false;timings={};
     reject?.(cancellation);announce('idle',text||'Open conversation is off. Load it to ask your own questions, or choose a topic for a prepared reply.');
   }
@@ -3000,7 +3024,7 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
   window.addEventListener?.('pagehide',()=>{pause('Open conversation was released when you left this page. Load it again to continue.');channel?.close();channel=null;});
   window.addEventListener?.('pageshow',event=>{if(event.persisted)pause('This page was restored. Load conversation to reconnect the characters.');ensureChannel();});
   ensureChannel();
-  window.FuturePersonaRuntime={load,retryCPU,status:()=>({state,message,backend,compatibility,errorCode,errorDetail,stage,timings:{...timings}}),generate,cancel,clearSession:()=>dispose(),dispose};
+  window.FuturePersonaRuntime={load,retryCPU,status:()=>({state,message,backend,compatibility,errorCode,errorDetail,stage,download:{...download},timings:{...timings}}),generate,cancel,clearSession:()=>dispose(),dispose};
 })();
 
 </script>
@@ -3314,7 +3338,8 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
       $('chatRuntime').innerHTML='<span class="browser-status-icon" aria-hidden="true">!</span><div class="chat-browser-message"><strong>AI chat unavailable in this browser</strong><span>Use Edge to ask questions, or choose a prepared topic below.</span></div><div class="chat-browser-actions"><a id="openScreenInEdge" data-open-edge class="outline-button">USE EDGE</a><button id="copyScreenButton" type="button" data-copy-screen class="text-button">COPY LINK</button></div><p id="edgeCopyStatus" role="status"></p><details id="edgeFallback" hidden><summary>Edge didn’t open?</summary><p>Edge must be installed. Copy this link and paste it into Edge.</p><label class="sr-only" for="edgeScreenURL">Current screen link</label><input id="edgeScreenURL" type="text" readonly></details>';updateScreenLink();syncChatUI();return;
     }
     $('chatRuntime').classList.remove('is-unavailable');
-    const rt=window.FuturePersonaRuntime.status(),message=rt.state==='ready'?'AI model online and available.':rt.state==='loading'?'AI model starting. You can choose a topic while you wait.':'AI model offline. You can still choose a topic below.';
+    const rt=window.FuturePersonaRuntime.status(),transferring=['startup','checking','download'].includes(rt.stage);
+    const message=rt.state==='ready'?'AI model online and available.':rt.state==='loading'?(transferring?'AI model loading'+(rt.download?.total?': '+rt.download.percent+'%':'')+'. You can explore or choose a topic.':'AI model starting. You can choose a topic while you wait.'):'AI model offline. You can still choose a topic below.';
     if($('chatRuntime').dataset.state===rt.state){$('chatRuntime').querySelector('.chat-model-status').textContent=message;syncChatUI();return;}
     $('chatRuntime').dataset.state=rt.state;
     $('chatRuntime').innerHTML=`<span class="runtime-indicator ${rt.state==='ready'?'is-ready':''}" aria-hidden="true"></span><span class="chat-model-status">${esc(message)}</span>${['idle','error'].includes(rt.state)?`<button type="button" data-load-runtime>${rt.state==='error'?'TRY AI AGAIN':'START AI'}</button>`:rt.state==='loading'?'<button type="button" data-stop-runtime>CANCEL LOADING</button>':''}${rt.state==='error'||rt.state==='loading'?'<button type="button" data-chat-help>HELP</button>':''}`;
@@ -3483,7 +3508,10 @@ window.FutureIcons = {"chat": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox
   window.addEventListener('popstate',e=>{if(!ready||!e.state?.future)return;Object.assign(state,e.state);render(false);});
   window.FutureApp={arrive({tour=true}={}){ready=true;$('experience').hidden=false;$('experience').inert=false;document.body.classList.remove('intro-active');document.querySelector('.skip').removeAttribute('tabindex');Object.assign(state,{route:'map',theme:'all',setting:'all',income:'all',education:'all',panel:'world',selected:null,profile:'leo',view:tour?'map':matchMedia('(max-width:600px)').matches?'list':'map',activities:true,technology:'all'});render();window.FuturePersonaRuntime.load().catch(()=>{});if(tour)window.FutureTour.start({required:true});},hide(){ready=false;closeDialogs();observer?.disconnect();window.FutureTour?.cancel();$('experience').hidden=true;$('experience').inert=true;},reset(){clearTimeout(noticeTimer);noticeSeen=false;lastNoticeAt=0;$('chatReminder').hidden=true;window.FutureTour?.cancel();window.FutureQuiz?.reset();clearChatSession();chats.clear();drafts.clear();chatPerson=null;chatTopic=null;chatBusy=false;clearChatProgress();$('chatMessages').innerHTML='';$('chatInput').value='';this.hide();$('mainView').innerHTML='';document.body.classList.remove('is-idle');history.replaceState(null,'',location.pathname+location.search);},state:()=>({...state}),isReady:()=>ready,hasPendingReplies:()=>chatJobs.size>0,select,route,resetMap:clearMap,openChat,focusTourExample,fitMap:fitGraph,showTourExample(){state.theme='climate';state.selected='leo';state.panel='world';state.view='map';render();}};
   function restoreHandoff(snapshot){
-    if(!snapshot)return;window.FutureIntro.skip();window.FutureQuiz.restore(snapshot.quiz);
+    if(!snapshot)return;
+    // Consume the query once so reloads and later navigation use the live page,
+    // rather than reopening an earlier browser-handoff snapshot.
+    history.replaceState(null,'',location.pathname);window.FutureIntro.skip();window.FutureQuiz.restore(snapshot.quiz);
     Object.assign(state,snapshot.page);noticeSeen=false;lastNoticeAt=0;render();
     worldChatTheme=snapshot.chat.theme;worldChatFocus=snapshot.chat.focus;
     openChat(snapshot.chat.id,snapshot.chat.theme);
