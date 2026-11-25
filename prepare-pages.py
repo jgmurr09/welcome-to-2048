@@ -1,6 +1,6 @@
 """Verify and copy this self-contained prototype to a static Pages folder."""
 from pathlib import Path
-import argparse,hashlib,json,shutil
+import argparse,hashlib,json,re,shutil
 ROOT=Path(__file__).resolve().parent
 
 def sha256(path):
@@ -21,12 +21,17 @@ def verify_runtime():
         p=ROOT/item['path']
         if not p.is_file() or sha256(p)!=item['sha256']:raise ValueError('Runtime asset mismatch: '+item['path'])
 
+def verify_worker(root=ROOT):
+    stamp=re.search(r'<meta name="future2048-worker-sha256" content="([0-9a-f]{64})">',(root/'index.html').read_text())
+    if not stamp:raise ValueError('Entry page has no worker checksum. Rebuild with python3 build-local.py and upload index.html and persona-worker.js together.')
+    if sha256(root/'persona-worker.js')!=stamp.group(1):raise ValueError('index.html and persona-worker.js are different versions. Upload both files from the same package, or rebuild with python3 build-local.py.')
+
 def prepare(destination):
     destination=Path(destination).resolve()
     if destination==ROOT or ROOT.is_relative_to(destination):raise ValueError('Choose a dedicated output folder.')
-    verify_runtime();destination.mkdir(parents=True,exist_ok=True)
+    verify_worker();verify_runtime();destination.mkdir(parents=True,exist_ok=True)
     for name in ['index.html','persona-worker.js']:shutil.copy2(ROOT/name,destination/name)
     for name in ['assets','portraits/supplied','runtime']:shutil.copytree(ROOT/name,destination/name,dirs_exist_ok=True,ignore=shutil.ignore_patterns('.*','__pycache__'))
-    print('Verified bundled model and runtime. Static site ready:',destination)
+    print('Verified matching page/worker, bundled model and runtime. Static site ready:',destination)
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--output',default='public');args=parser.parse_args();prepare(args.output)
